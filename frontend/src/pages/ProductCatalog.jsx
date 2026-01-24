@@ -36,6 +36,66 @@ const ProductCatalog = () => {
     }
   }, [searchParams]);
 
+  // Filtrado local (fallback)
+  const filterProductsLocally = useCallback((query) => {
+    let filtered = products;
+
+    // Filtrar por categoría
+    if (selectedCategory !== 'Todos') {
+      filtered = filtered.filter(p => p.category === selectedCategory);
+    }
+
+    // Filtrar por búsqueda local
+    if (query.trim()) {
+      const q = query.toLowerCase();
+      filtered = filtered.filter(p => 
+        p.name?.toLowerCase().includes(q) ||
+        p.description?.toLowerCase().includes(q) ||
+        p.sku?.toLowerCase().includes(q)
+      );
+    }
+
+    setFilteredProducts(filtered);
+  }, [products, selectedCategory]);
+
+  // Filtrar solo por categoría
+  const filterProductsByCategory = useCallback(() => {
+    let filtered = products;
+
+    if (selectedCategory !== 'Todos') {
+      filtered = filtered.filter(p => p.category === selectedCategory);
+    }
+
+    setFilteredProducts(filtered);
+  }, [products, selectedCategory]);
+
+  // Búsqueda difusa usando el backend
+  const performFuzzySearch = useCallback(async (query) => {
+    if (!query.trim()) {
+      filterProductsByCategory();
+      return;
+    }
+
+    setSearching(true);
+    try {
+      const response = await productService.searchProducts(query, 60);
+      let results = response.products || [];
+
+      // Filtrar por categoría si no es "Todos"
+      if (selectedCategory !== 'Todos') {
+        results = results.filter(p => p.category === selectedCategory);
+      }
+
+      setFilteredProducts(results);
+    } catch (err) {
+      console.error('Error en búsqueda:', err);
+      // Si falla el fuzzy search, usar filtrado local como fallback
+      filterProductsLocally(query);
+    } finally {
+      setSearching(false);
+    }
+  }, [selectedCategory, products, filterProductsByCategory, filterProductsLocally]);
+
   // Usar fuzzy search cuando hay búsqueda activa
   useEffect(() => {
     if (searchQuery.trim()) {
@@ -77,66 +137,6 @@ const ProductCatalog = () => {
     } catch (err) {
       console.error('Error al cargar carrito:', err);
     }
-  };
-
-  // Filtrar solo por categoría
-  const filterProductsByCategory = useCallback(() => {
-    let filtered = products;
-
-    if (selectedCategory !== 'Todos') {
-      filtered = filtered.filter(p => p.category === selectedCategory);
-    }
-
-    setFilteredProducts(filtered);
-  }, [products, selectedCategory]);
-
-  // Búsqueda difusa usando el backend
-  const performFuzzySearch = useCallback(async (query) => {
-    if (!query.trim()) {
-      filterProductsByCategory();
-      return;
-    }
-
-    setSearching(true);
-    try {
-      const response = await productService.searchProducts(query, 60);
-      let results = response.products || [];
-
-      // Filtrar por categoría si no es "Todos"
-      if (selectedCategory !== 'Todos') {
-        results = results.filter(p => p.category === selectedCategory);
-      }
-
-      setFilteredProducts(results);
-    } catch (err) {
-      console.error('Error en búsqueda:', err);
-      // Si falla el fuzzy search, usar filtrado local como fallback
-      filterProductsLocally(query);
-    } finally {
-      setSearching(false);
-    }
-  }, [selectedCategory, products, filterProductsByCategory]);
-
-  // Filtrado local (fallback)
-  const filterProductsLocally = (query) => {
-    let filtered = products;
-
-    // Filtrar por categoría
-    if (selectedCategory !== 'Todos') {
-      filtered = filtered.filter(p => p.category === selectedCategory);
-    }
-
-    // Filtrar por búsqueda local
-    if (query.trim()) {
-      const q = query.toLowerCase();
-      filtered = filtered.filter(p => 
-        p.name?.toLowerCase().includes(q) ||
-        p.description?.toLowerCase().includes(q) ||
-        p.sku?.toLowerCase().includes(q)
-      );
-    }
-
-    setFilteredProducts(filtered);
   };
 
   const handleCategorySelect = (category, search = null) => {
