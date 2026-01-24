@@ -1,0 +1,158 @@
+// =====================================================
+// CONTROLADOR DE AUTENTICACIÓN
+// =====================================================
+
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const pool = require('../config/database');
+
+// =====================================================
+// LOGIN - Iniciar sesión
+// =====================================================
+const login = async (req, res) => {
+  try {
+    const { username, password } = req.body;
+
+    // 1. Validar que vengan los datos
+    if (!username || !password) {
+      return res.status(400).json({ 
+        error: 'Usuario y contraseña son requeridos' 
+      });
+    }
+
+    // 2. Buscar usuario en la base de datos por user_name
+    const result = await pool.query(
+      'SELECT * FROM users WHERE user_name = $1',
+      [username]
+    );
+
+    // Si no existe el usuario
+    if (result.rows.length === 0) {
+      return res.status(401).json({ 
+        error: 'Usuario no encontrado. Verifica el nombre de usuario.' 
+      });
+    }
+
+    const user = result.rows[0];
+
+    // Verificar si el usuario está activo
+    if (!user.active) {
+      return res.status(401).json({ 
+        error: 'Usuario inactivo. Contacta al administrador.' 
+      });
+    }
+
+    // 3. Verificar la contraseña
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
+      return res.status(401).json({ 
+        error: 'Contraseña incorrecta. Verifica tu contraseña.' 
+      });
+    }
+
+    // 4. Generar token JWT
+    const token = jwt.sign(
+      {
+        id: user.id,
+        user_name: user.user_name,
+        email: user.email,
+        role: user.role,
+        client_id: user.client_id
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: '24h' } // El token expira en 24 horas
+    );
+
+    // 5. Responder con el token y datos del usuario
+    res.json({
+      success: true,
+      token,
+      user: {
+        id: user.id,
+        user_name: user.user_name,
+        name: user.name || user.user_name, // Nombre completo o user_name como fallback
+        email: user.email,
+        role: user.role,
+        client_id: user.client_id
+      }
+    });
+
+  } catch (error) {
+    console.error('Error en login:', error);
+    res.status(500).json({ 
+      error: 'Error al iniciar sesión. Intenta nuevamente.' 
+    });
+  }
+};
+
+// =====================================================
+// REGISTER - Registrar nuevo usuario (solo admin)
+// =====================================================
+const register = async (req, res) => {
+  try {
+    const { client_id, user_name, email, password, role } = req.body;
+
+    // 1. Validar datos
+    if (!password || !user_name || !role) {
+      return res.status(400).json({ 
+        error: 'Nombre de usuario, contraseña y rol son requeridos' 
+      });
+    }
+
+    // 2. Verificar si el user_name ya existe
+    const existingUser = await pool.query(
+      'SELECT * FROM users WHERE user_name = $1',
+      [user_name]
+    );
+
+    if (existingUser.rows.length > 0) {
+      return res.status(400).json({ 
+        error: 'El nombre de usuario ya está registrado' 
+      });
+    }
+
+    // 3. Encriptar contraseña
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // 4. Insertar usuario en la base de datos
+    const result = await pool.query(
+      `INSERT INTO users (client_id, user_name, email, password, role) 
+       VALUES ($1, $2, $3, $4, $5) 
+       RETURNING id, user_name, email, role, client_id`,
+      [client_id, user_name, email, hashedPassword, role]
+    );
+
+    const newUser = result.rows[0];
+
+    // 5. Responder con el usuario creado
+    res.status(201).json({
+      success: true,
+      message: 'Usuario creado exitosamente',
+      user: newUser
+    });
+
+  } catch (error) {
+    console.error('Error en register:', error);
+    res.status(500).json({ 
+      error: 'Error al registrar usuario' 
+    });
+  }
+};
+
+// =====================================================
+// VERIFY TOKEN - Verificar si el token es válido
+// =====================================================
+const verifyTokenRoute = async (req, res) => {
+  // Si llegó aquí, el token ya fue verificado por el middleware
+  res.json({
+    success: true,
+    user: req.user
+  });
+};
+
+module.exports = {
+  login,
+  register,
+  verifyTokenRoute
+};

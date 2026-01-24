@@ -1,0 +1,74 @@
+# =====================================================
+# GITIGNORE - CORPORACIÓN ARGOM
+# =====================================================
+
+# Dependencias
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+
+# Variables de entorno (NUNCA subir)
+.env
+.env.local
+.env.production
+.env.*.local
+
+# Archivos del sistema
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDEs
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.iml
+
+# Build y producción
+dist/
+build/
+*.tsbuildinfo
+
+# Testing
+coverage/
+.nyc_output/
+
+# Temporales
+tmp/
+temp/
+*.tmp
+
+# PDFs generados
+generated-pdfs/
+
+# Multimedia temporal
+00. Multimedia/
+
+# Archivos de documentación temporal
+CAMBIOS_URGENTES.txt
+CAMBIO_PRODUCTDETAIL.txt
+INSTRUCCIONES_CAMBIOS.md
+SOLUCION_PORTADA.md
+SOLUCION_RAPIDA.md
+TAREAS_PENDIENTES.md
+RESUMEN_SOLUCION.md
+FUZZY_SEARCH_DOCS.md
+FUZZY_SEARCH_IMPLEMENTADO.md
+CLOUDINARY_SETUP.md
