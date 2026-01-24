@@ -36,8 +36,8 @@ const ProductCatalog = () => {
     }
   }, [searchParams]);
 
-  // Filtrado local (fallback)
-  const filterProductsLocally = useCallback((query) => {
+  // Filtrado local (fallback) - función regular porque usa products y selectedCategory
+  const filterProductsLocally = (query) => {
     let filtered = products;
 
     // Filtrar por categoría
@@ -56,7 +56,7 @@ const ProductCatalog = () => {
     }
 
     setFilteredProducts(filtered);
-  }, [products, selectedCategory]);
+  };
 
   // Filtrar solo por categoría
   const filterProductsByCategory = useCallback(() => {
@@ -94,7 +94,8 @@ const ProductCatalog = () => {
     } finally {
       setSearching(false);
     }
-  }, [selectedCategory, products, filterProductsByCategory, filterProductsLocally]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedCategory, products, filterProductsByCategory]);
 
   // Usar fuzzy search cuando hay búsqueda activa
   useEffect(() => {
