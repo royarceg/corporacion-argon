@@ -11,19 +11,19 @@ const OrderDetail = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
+    const loadOrderDetail = async () => {
+      try {
+        const response = await orderService.getOrderById(id);
+        setOrder(response.order);
+      } catch (err) {
+        setError(err.error || 'Error al cargar detalle de orden');
+      } finally {
+        setLoading(false);
+      }
+    };
+    
     loadOrderDetail();
   }, [id]);
-
-  const loadOrderDetail = async () => {
-    try {
-      const response = await orderService.getOrderById(id);
-      setOrder(response.order);
-    } catch (err) {
-      setError(err.error || 'Error al cargar detalle de orden');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const getStatusBadge = (status) => {
     const statusConfig = {

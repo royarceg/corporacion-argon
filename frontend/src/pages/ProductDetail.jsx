@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import ClientWelcomeBar from '../components/ClientWelcomeBar';
 import ClientNavbar from '../components/ClientNavbar';
@@ -22,14 +22,7 @@ const ProductDetail = () => {
   const [addingToCart, setAddingToCart] = useState(false);
   const [addingToWishlist, setAddingToWishlist] = useState(false);
 
-  useEffect(() => {
-    loadProduct();
-    loadWishlistCount();
-    loadCartCount();
-    checkIfInWishlist();
-  }, [id]);
-
-  const loadProduct = async () => {
+  const loadProduct = useCallback(async () => {
     try {
       setLoading(true);
       const response = await productService.getProductById(id);
@@ -52,7 +45,7 @@ const ProductDetail = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
 
   const loadWishlistCount = async () => {
     try {
@@ -72,7 +65,7 @@ const ProductDetail = () => {
     }
   };
 
-  const checkIfInWishlist = async () => {
+  const checkIfInWishlist = useCallback(async () => {
     try {
       const response = await wishlistService.getWishlist();
       const wishlistItems = response.wishlist || [];
@@ -81,7 +74,14 @@ const ProductDetail = () => {
     } catch (err) {
       console.error('Error al verificar wishlist:', err);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    loadProduct();
+    loadWishlistCount();
+    loadCartCount();
+    checkIfInWishlist();
+  }, [id, loadProduct, checkIfInWishlist]);
 
   const handleAddToCart = async () => {
     if (!selectedColor || !selectedSize) {

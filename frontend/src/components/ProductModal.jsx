@@ -9,6 +9,30 @@ const ProductModal = ({ product, isOpen, onClose, onAddToCart }) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    const loadProductDetails = async () => {
+      setLoading(true);
+      try {
+        // Cargar detalles completos del producto con variantes
+        const response = await productService.getProductById(product.id);
+        const details = response.product;
+        setProductDetails(details);
+        
+        // Pre-seleccionar primer color y talla si existen
+        if (details.available_colors && details.available_colors.length > 0) {
+          setSelectedColor(details.available_colors[0]);
+        }
+        if (details.available_sizes && details.available_sizes.length > 0) {
+          setSelectedSize(details.available_sizes[0]);
+        }
+      } catch (err) {
+        console.error('Error al cargar detalles del producto:', err);
+        // Si falla, usar los datos básicos
+        setProductDetails(product);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     if (product && isOpen) {
       // Limpiar estado anterior inmediatamente
       setProductDetails(null);
@@ -16,30 +40,6 @@ const ProductModal = ({ product, isOpen, onClose, onAddToCart }) => {
       loadProductDetails();
     }
   }, [product, isOpen]);
-
-  const loadProductDetails = async () => {
-    setLoading(true);
-    try {
-      // Cargar detalles completos del producto con variantes
-      const response = await productService.getProductById(product.id);
-      const details = response.product;
-      setProductDetails(details);
-      
-      // Pre-seleccionar primer color y talla si existen
-      if (details.available_colors && details.available_colors.length > 0) {
-        setSelectedColor(details.available_colors[0]);
-      }
-      if (details.available_sizes && details.available_sizes.length > 0) {
-        setSelectedSize(details.available_sizes[0]);
-      }
-    } catch (err) {
-      console.error('Error al cargar detalles del producto:', err);
-      // Si falla, usar los datos básicos
-      setProductDetails(product);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   if (!isOpen || !product) return null;
 
@@ -178,9 +178,9 @@ const ProductModal = ({ product, isOpen, onClose, onAddToCart }) => {
                 </p>
 
                 {/* Ver más detalles */}
-                <a
-                  href="#"
-                  className="inline-block underline"
+                <button
+                  type="button"
+                  className="inline-block underline bg-transparent border-none p-0 cursor-pointer"
                   style={{
                     fontFamily: 'graphik, helvetica, sans-serif',
                     fontStyle: 'normal',
@@ -191,7 +191,7 @@ const ProductModal = ({ product, isOpen, onClose, onAddToCart }) => {
                   }}
                 >
                   Ver más detalles
-                </a>
+                </button>
               </div>
             </div>
           </div>

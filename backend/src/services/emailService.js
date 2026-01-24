@@ -5,31 +5,50 @@
 const nodemailer = require('nodemailer');
 const pool = require('../config/database');
 
-// Configurar transportador de email
-const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_HOST,
-  port: process.env.EMAIL_PORT,
-  secure: false, // true para 465, false para otros puertos
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASSWORD,
-  },
-});
+// Verificar si las variables de email están configuradas
+const isEmailConfigured = () => {
+  return process.env.EMAIL_HOST && 
+         process.env.EMAIL_PORT && 
+         process.env.EMAIL_USER && 
+         process.env.EMAIL_PASSWORD;
+};
 
-// Verificar configuración de email
-transporter.verify((error, success) => {
-  if (error) {
-    console.error('Error en configuración de email:', error);
-  } else {
-    console.log('Servidor de email listo para enviar mensajes');
-  }
-});
+// Configurar transportador de email solo si está configurado
+let transporter = null;
+
+if (isEmailConfigured()) {
+  transporter = nodemailer.createTransport({
+    host: process.env.EMAIL_HOST,
+    port: process.env.EMAIL_PORT,
+    secure: false, // true para 465, false para otros puertos
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASSWORD,
+    },
+  });
+
+  // Verificar configuración de email
+  transporter.verify((error, success) => {
+    if (error) {
+      console.error('⚠️  Error en configuración de email:', error.message);
+    } else {
+      console.log('✅ Servidor de email listo para enviar mensajes');
+    }
+  });
+} else {
+  console.log('⚠️  Email no configurado - Los emails no se enviarán');
+}
 
 // =====================================================
 // ENVIAR ORDER ACKNOWLEDGEMENT
 // =====================================================
 const sendOrderAcknowledgement = async (orderId) => {
   try {
+    // Verificar si email está configurado
+    if (!transporter) {
+      console.log('⚠️  Email no configurado - Saltando envío de Order Acknowledgement');
+      return { success: false, message: 'Email no configurado' };
+    }
     // Obtener información de la orden
     const orderResult = await pool.query(
       `SELECT 
@@ -167,6 +186,11 @@ const sendOrderAcknowledgement = async (orderId) => {
 // =====================================================
 const sendOrderConfirmation = async (orderId) => {
   try {
+    // Verificar si email está configurado
+    if (!transporter) {
+      console.log('⚠️  Email no configurado - Saltando envío de Order Confirmation');
+      return { success: false, message: 'Email no configurado' };
+    }
     // Obtener información de la orden
     const orderResult = await pool.query(
       `SELECT 

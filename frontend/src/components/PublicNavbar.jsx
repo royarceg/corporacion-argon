@@ -8,7 +8,7 @@ const PublicNavbar = () => {
   const [showLanguageMenu, setShowLanguageMenu] = useState(false);
   const [showCategoriesMenu, setShowCategoriesMenu] = useState(false);
   const [categoryButtonRect, setCategoryButtonRect] = useState(null);
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
   const categoryButtonRef = React.useRef(null);

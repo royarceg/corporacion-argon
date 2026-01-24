@@ -98,13 +98,12 @@ const AdminClientProducts = () => {
     if (!selectedClient) return;
     
     try {
-      const response = await fetch(`http://localhost:5001/api/clients/${selectedClient.id}/products/assign-all`, {
+      await fetch(`http://localhost:5001/api/clients/${selectedClient.id}/products/assign-all`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
       });
-      const data = await response.json();
       
       const allProductIds = new Set(products.map(p => p.id));
       setClientProducts(allProductIds);

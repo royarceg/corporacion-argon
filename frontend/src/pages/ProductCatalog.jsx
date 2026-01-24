@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import ClientWelcomeBar from '../components/ClientWelcomeBar';
 import ClientNavbar from '../components/ClientNavbar';
 import CategoryMenu from '../components/CategoryMenu';
@@ -22,7 +22,6 @@ const ProductCatalog = () => {
   const [wishlistCount, setWishlistCount] = useState(0);
   const [cartCount, setCartCount] = useState(0);
   const [wishlistProductIds, setWishlistProductIds] = useState(new Set());
-  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
   useEffect(() => {
@@ -35,7 +34,7 @@ const ProductCatalog = () => {
     if (search) {
       setSearchQuery(search);
     }
-  }, []);
+  }, [searchParams]);
 
   // Usar fuzzy search cuando hay búsqueda activa
   useEffect(() => {
@@ -44,7 +43,7 @@ const ProductCatalog = () => {
     } else {
       filterProductsByCategory();
     }
-  }, [selectedCategory, products, searchQuery]);
+  }, [selectedCategory, products, searchQuery, performFuzzySearch, filterProductsByCategory]);
 
   const loadProducts = async () => {
     try {
@@ -80,8 +79,19 @@ const ProductCatalog = () => {
     }
   };
 
+  // Filtrar solo por categoría
+  const filterProductsByCategory = useCallback(() => {
+    let filtered = products;
+
+    if (selectedCategory !== 'Todos') {
+      filtered = filtered.filter(p => p.category === selectedCategory);
+    }
+
+    setFilteredProducts(filtered);
+  }, [products, selectedCategory]);
+
   // Búsqueda difusa usando el backend
-  const performFuzzySearch = async (query) => {
+  const performFuzzySearch = useCallback(async (query) => {
     if (!query.trim()) {
       filterProductsByCategory();
       return;
@@ -105,7 +115,7 @@ const ProductCatalog = () => {
     } finally {
       setSearching(false);
     }
-  };
+  }, [selectedCategory, products, filterProductsByCategory]);
 
   // Filtrado local (fallback)
   const filterProductsLocally = (query) => {
@@ -124,17 +134,6 @@ const ProductCatalog = () => {
         p.description?.toLowerCase().includes(q) ||
         p.sku?.toLowerCase().includes(q)
       );
-    }
-
-    setFilteredProducts(filtered);
-  };
-
-  // Filtrar solo por categoría
-  const filterProductsByCategory = () => {
-    let filtered = products;
-
-    if (selectedCategory !== 'Todos') {
-      filtered = filtered.filter(p => p.category === selectedCategory);
     }
 
     setFilteredProducts(filtered);

@@ -5,7 +5,15 @@ import PublicProductCard from '../components/PublicProductCard';
 import Footer from '../components/Footer';
 import { useAuth } from '../context/AuthContext';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001/api';
+const categories = [
+  'Uniformes',
+  'Camisas',
+  'Pantalones',
+  'Chalecos',
+  'Accesorios',
+  'Materia Prima',
+  'Drones'
+];
 
 const HomePage = () => {
   const [products, setProducts] = useState([]);
@@ -22,16 +30,6 @@ const HomePage = () => {
       navigate('/productos', { replace: true });
     }
   }, [isAuthenticated, navigate]);
-
-  const categories = [
-    'Uniformes',
-    'Camisas',
-    'Pantalones',
-    'Chalecos',
-    'Accesorios',
-    'Materia Prima',
-    'Drones'
-  ];
 
   const categoryProducts = {
     'Uniformes': [

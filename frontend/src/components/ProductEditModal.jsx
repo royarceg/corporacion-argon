@@ -28,8 +28,6 @@ const ProductEditModal = ({ product, isOpen, onClose, onSave }) => {
   // Estados para archivos EXISTENTES
   const [existingImages, setExistingImages] = useState([]);
   const [existingVideos, setExistingVideos] = useState([]);
-  const [imagesToDelete, setImagesToDelete] = useState([]);
-  const [videosToDelete, setVideosToDelete] = useState([]);
   
   // NUEVO: Estados para colores de imágenes Y VIDEOS
   const [imageColors, setImageColors] = useState({}); // { imageIndex: colorName }
@@ -125,8 +123,6 @@ const ProductEditModal = ({ product, isOpen, onClose, onSave }) => {
       setNewVideos([]);
       setNewImagePreviews([]);
       setNewVideoPreviews([]);
-      setImagesToDelete([]);
-      setVideosToDelete([]);
       setUploadProgress(0);
       setUploadStatus('');
     } else if (isOpen) {
@@ -147,8 +143,6 @@ const ProductEditModal = ({ product, isOpen, onClose, onSave }) => {
       setNewVideos([]);
       setNewImagePreviews([]);
       setNewVideoPreviews([]);
-      setImagesToDelete([]);
-      setVideosToDelete([]);
       setImageColors({});
       setVideoColors({});
       setPrimaryImageIndex(0);
@@ -265,7 +259,6 @@ const ProductEditModal = ({ product, isOpen, onClose, onSave }) => {
 
   // Eliminar imagen EXISTENTE
   const removeExistingImage = (imageId, imageIndex) => {
-    setImagesToDelete(prev => [...prev, imageId]);
     setExistingImages(prev => prev.filter(img => img.id !== imageId));
     
     // Eliminar el color asignado a esta imagen
@@ -338,7 +331,6 @@ const ProductEditModal = ({ product, isOpen, onClose, onSave }) => {
 
   // Eliminar video EXISTENTE
   const removeExistingVideo = (videoId, videoIndex) => {
-    setVideosToDelete(prev => [...prev, videoId]);
     setExistingVideos(prev => prev.filter(vid => vid.id !== videoId));
     
     // Eliminar el color asignado a este video
