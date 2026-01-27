@@ -61,8 +61,8 @@ const AdminProducts = () => {
     if (!window.confirm('¿Estás seguro de eliminar este producto?')) return;
     
     try {
-      // await productService.deleteProduct(productId);
-      alert('Producto eliminado (función pendiente)');
+      await productService.deleteProduct(productId);
+      alert('Producto eliminado exitosamente');
       loadProducts();
     } catch (err) {
       console.error('Error al eliminar producto:', err);

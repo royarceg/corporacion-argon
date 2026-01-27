@@ -61,6 +61,16 @@ const productService = {
     }
   },
 
+  // Eliminar producto (Admin)
+  deleteProduct: async (id) => {
+    try {
+      const response = await api.delete(`/products/admin/${id}`);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || { error: 'Error al eliminar producto' };
+    }
+  },
+
   // Búsqueda difusa de productos (tolerante a errores de tipeo)
   searchProducts: async (query, threshold = 60) => {
     try {
