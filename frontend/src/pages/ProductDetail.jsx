@@ -536,7 +536,7 @@ const ProductDetail = () => {
               </p>
             </div>
 
-            {/* Selector de Color */}
+            {/* Selector de Color (incluye variantes) */}
             {product.available_colors && product.available_colors.length > 0 && (
               <div className="mb-6">
                 <label
@@ -551,6 +551,7 @@ const ProductDetail = () => {
                   Color: <span className="font-normal text-gray-600">{selectedColor}</span>
                 </label>
                 <div className="flex flex-wrap gap-2">
+                  {/* Colores del producto actual */}
                   {product.available_colors.map((color) => (
                     <button
                       key={color}
@@ -568,60 +569,19 @@ const ProductDetail = () => {
                       {color}
                     </button>
                   ))}
-                </div>
-              </div>
-            )}
-
-            {/* Variantes de Color (Productos Relacionados) */}
-            {product.color_variants && product.color_variants.length > 0 && (
-              <div className="mb-6 pb-6 border-b border-gray-200">
-                <label
-                  className="block mb-3"
-                  style={{
-                    fontFamily: 'graphik, helvetica, sans-serif',
-                    fontWeight: 500,
-                    fontSize: '14px',
-                    color: 'rgb(33, 33, 33)'
-                  }}
-                >
-                  Otros colores disponibles
-                </label>
-                <div className="grid grid-cols-3 gap-3">
-                  {product.color_variants.map((variant) => (
+                  
+                  {/* Colores de variantes (otros productos) */}
+                  {product.color_variants && product.color_variants.map((variant) => (
                     <button
                       key={variant.id}
                       onClick={() => navigate(`/productos/${variant.id}`)}
-                      className="group border-2 border-gray-200 rounded-lg overflow-hidden hover:border-gray-900 transition-all"
+                      className="px-4 py-2 rounded-lg border-2 border-gray-300 hover:border-gray-500 transition-all"
+                      style={{
+                        fontFamily: 'graphik, helvetica, sans-serif',
+                        fontSize: '14px'
+                      }}
                     >
-                      {/* Imagen del producto */}
-                      {variant.image_url ? (
-                        <div className="aspect-square bg-gray-100">
-                          <img
-                            src={variant.image_url}
-                            alt={variant.name}
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                      ) : (
-                        <div className="aspect-square bg-gray-100 flex items-center justify-center">
-                          <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                          </svg>
-                        </div>
-                      )}
-                      {/* Información del color */}
-                      <div className="p-2 bg-white text-center">
-                        <p
-                          className="text-sm font-medium group-hover:text-gray-900"
-                          style={{
-                            fontFamily: 'graphik, helvetica, sans-serif',
-                            fontSize: '13px',
-                            color: 'rgb(71, 71, 71)'
-                          }}
-                        >
-                          {variant.color}
-                        </p>
-                      </div>
+                      {variant.color}
                     </button>
                   ))}
                 </div>
