@@ -15,19 +15,33 @@ const pool = new Pool({
   database: process.env.DB_NAME,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
-  max: 20, // Máximo 20 conexiones simultáneas
+  max: 10, // Máximo 10 conexiones simultáneas (optimizado para Railway)
+  min: 2, // Mínimo 2 conexiones siempre abiertas
   idleTimeoutMillis: 30000, // Cierra conexiones inactivas después de 30 segundos
   connectionTimeoutMillis: 10000, // Timeout de 10 segundos si no puede conectar
 });
 
-// Verificar conexión al iniciar
+// Verificar conexión SOLO al iniciar (no en cada query)
+let connected = false;
 pool.on('connect', () => {
-  console.log('✅ Conectado a PostgreSQL');
+  if (!connected) {
+    console.log('✅ Conectado a PostgreSQL');
+    connected = true;
+  }
 });
 
 pool.on('error', (err) => {
   console.error('❌ Error en conexión a PostgreSQL:', err);
-  process.exit(-1);
+  // No salir del proceso, solo loguear
+  connected = false;
+});
+
+// Graceful shutdown
+process.on('SIGTERM', () => {
+  pool.end(() => {
+    console.log('🔌 Pool de PostgreSQL cerrado');
+    process.exit(0);
+  });
 });
 
 module.exports = pool;

@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const ClientProductCard = ({ product, onAddToWishlist, onQuickAdd, isInWishlist }) => {
   const [showAddButton, setShowAddButton] = useState(false);
   const [wishlistActive, setWishlistActive] = useState(isInWishlist);
   const [isHovering, setIsHovering] = useState(false);
-  const navigate = useNavigate();
 
   const handleWishlistClick = async (e) => {
+    e.preventDefault();
     e.stopPropagation();
     const newState = !wishlistActive;
     setWishlistActive(newState);
@@ -15,13 +15,9 @@ const ClientProductCard = ({ product, onAddToWishlist, onQuickAdd, isInWishlist 
   };
 
   const handleQuickAdd = (e) => {
+    e.preventDefault();
     e.stopPropagation();
     onQuickAdd(product);
-  };
-
-  const handleContextMenu = (e) => {
-    // Permitir el click derecho nativo del navegador
-    // No hacemos e.preventDefault(), permitiendo que el navegador abra el menú contextual
   };
 
   const formatPrice = (price) => {
@@ -49,12 +45,11 @@ const ClientProductCard = ({ product, onAddToWishlist, onQuickAdd, isInWishlist 
         setIsHovering(false);
       }}
     >
-      {/* Imagen del producto - clickeable y permite click derecho */}
-      <div 
-        className="relative overflow-hidden cursor-pointer"
+      {/* Imagen del producto - ahora es un Link para permitir click derecho */}
+      <Link 
+        to={`/productos/${product.id}`}
+        className="relative overflow-hidden cursor-pointer block"
         style={{ width: '246px', height: '200px' }}
-        onClick={() => navigate(`/productos/${product.id}`)}
-        onContextMenu={handleContextMenu}
       >
         <img
           src={currentImage}
@@ -104,25 +99,28 @@ const ClientProductCard = ({ product, onAddToWishlist, onQuickAdd, isInWishlist 
             </svg>
           </button>
         )}
-      </div>
+      </Link>
 
       {/* Información del producto */}
       <div className="p-4">
-        <h3
-          className="mb-1 truncate cursor-pointer hover:text-gray-700 transition-colors"
-          style={{
-            fontFamily: 'graphik, helvetica, sans-serif',
-            fontStyle: 'normal',
-            fontWeight: 400,
-            color: 'rgb(51, 51, 51)',
-            fontSize: '16px',
-            lineHeight: '24px'
-          }}
-          onClick={() => navigate(`/productos/${product.id}`)}
-          onContextMenu={handleContextMenu}
+        <Link 
+          to={`/productos/${product.id}`}
+          className="block"
         >
-          {product.name}
-        </h3>
+          <h3
+            className="mb-1 truncate hover:text-gray-700 transition-colors"
+            style={{
+              fontFamily: 'graphik, helvetica, sans-serif',
+              fontStyle: 'normal',
+              fontWeight: 400,
+              color: 'rgb(51, 51, 51)',
+              fontSize: '16px',
+              lineHeight: '24px'
+            }}
+          >
+            {product.name}
+          </h3>
+        </Link>
 
         <p
           style={{

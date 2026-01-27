@@ -1,9 +1,7 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const ProductCarousel = ({ title, products }) => {
-  const navigate = useNavigate();
-
   const formatPrice = (price) => {
     return new Intl.NumberFormat('es-CR', {
       style: 'currency',
@@ -35,10 +33,10 @@ const ProductCarousel = ({ title, products }) => {
       {/* Grid de productos */}
       <div className="grid grid-cols-6 gap-4">
         {products.slice(0, 6).map((product) => (
-          <div
+          <Link
             key={product.id}
-            onClick={() => navigate(`/productos/${product.id}`)}
-            className="bg-white rounded-lg overflow-hidden cursor-pointer hover:shadow-lg transition-shadow group"
+            to={`/productos/${product.id}`}
+            className="bg-white rounded-lg overflow-hidden hover:shadow-lg transition-shadow group block"
           >
             {/* Imagen */}
             <div className="relative overflow-hidden bg-gray-100" style={{ height: '160px' }}>
@@ -75,7 +73,7 @@ const ProductCarousel = ({ title, products }) => {
                 {formatPrice(product.price)}
               </p>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>
