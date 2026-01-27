@@ -4,21 +4,26 @@ import { useNavigate } from 'react-router-dom';
 const ClientProductCard = ({ product, onAddToWishlist, onQuickAdd, isInWishlist }) => {
   const [showAddButton, setShowAddButton] = useState(false);
   const [wishlistActive, setWishlistActive] = useState(isInWishlist);
+  const [isHovering, setIsHovering] = useState(false);
   const navigate = useNavigate();
 
   const handleWishlistClick = async (e) => {
-    e.stopPropagation(); // Evitar que se propague al contenedor
+    e.stopPropagation();
     const newState = !wishlistActive;
     setWishlistActive(newState);
     await onAddToWishlist(product.id, newState);
   };
 
   const handleQuickAdd = (e) => {
-    e.stopPropagation(); // Evitar que se propague al contenedor
+    e.stopPropagation();
     onQuickAdd(product);
   };
 
-  // Formatear precio en colones
+  const handleContextMenu = (e) => {
+    // Permitir el click derecho nativo del navegador
+    // No hacemos e.preventDefault(), permitiendo que el navegador abra el menú contextual
+  };
+
   const formatPrice = (price) => {
     return new Intl.NumberFormat('es-CR', {
       style: 'currency',
@@ -27,20 +32,32 @@ const ClientProductCard = ({ product, onAddToWishlist, onQuickAdd, isInWishlist 
     }).format(price);
   };
 
+  // Determinar qué imagen mostrar: segunda al hover, primera por defecto
+  const currentImage = isHovering && product.images && product.images.length > 1
+    ? product.images[1]
+    : (product.image_url || '/assets/images/Nuevo1.png');
+
   return (
     <div 
       className="relative bg-white rounded-lg overflow-hidden group"
-      onMouseEnter={() => setShowAddButton(true)}
-      onMouseLeave={() => setShowAddButton(false)}
+      onMouseEnter={() => {
+        setShowAddButton(true);
+        setIsHovering(true);
+      }}
+      onMouseLeave={() => {
+        setShowAddButton(false);
+        setIsHovering(false);
+      }}
     >
-      {/* Imagen del producto - clickeable */}
+      {/* Imagen del producto - clickeable y permite click derecho */}
       <div 
         className="relative overflow-hidden cursor-pointer"
         style={{ width: '246px', height: '200px' }}
         onClick={() => navigate(`/productos/${product.id}`)}
+        onContextMenu={handleContextMenu}
       >
         <img
-          src={product.image_url || '/assets/images/Nuevo1.png'}
+          src={currentImage}
           alt={product.name}
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
         />
@@ -102,6 +119,7 @@ const ClientProductCard = ({ product, onAddToWishlist, onQuickAdd, isInWishlist 
             lineHeight: '24px'
           }}
           onClick={() => navigate(`/productos/${product.id}`)}
+          onContextMenu={handleContextMenu}
         >
           {product.name}
         </h3>

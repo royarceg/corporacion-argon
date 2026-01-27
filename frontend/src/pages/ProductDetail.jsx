@@ -2,9 +2,11 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import ClientWelcomeBar from '../components/ClientWelcomeBar';
 import ClientNavbar from '../components/ClientNavbar';
+import ProductCarousel from '../components/ProductCarousel';
 import productService from '../services/productService';
 import wishlistService from '../services/wishlistService';
 import cartService from '../services/cartService';
+import { useRecentlyViewed } from '../hooks/useRecentlyViewed';
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -21,6 +23,11 @@ const ProductDetail = () => {
   const [isInWishlist, setIsInWishlist] = useState(false);
   const [addingToCart, setAddingToCart] = useState(false);
   const [addingToWishlist, setAddingToWishlist] = useState(false);
+  const [allProducts, setAllProducts] = useState([]);
+  const [relatedProducts, setRelatedProducts] = useState([]);
+
+  // Hook para productos vistos recientemente
+  const { addToRecentlyViewed, getRecentlyViewed } = useRecentlyViewed();
 
   const loadProduct = useCallback(async () => {
     try {
@@ -32,6 +39,9 @@ const ProductDetail = () => {
       console.log('VideosByColor:', response.product.videosByColor);
       console.log('VideosWithColors:', response.product.videosWithColors);
       setProduct(response.product);
+      
+      // Agregar al historial de productos vistos
+      addToRecentlyViewed(response.product);
       
       // Pre-seleccionar primer color y talla
       if (response.product.available_colors?.length > 0) {
@@ -45,7 +55,26 @@ const ProductDetail = () => {
     } finally {
       setLoading(false);
     }
-  }, [id]);
+  }, [id, addToRecentlyViewed]);
+
+  const loadAllProducts = useCallback(async () => {
+    try {
+      const response = await productService.getProducts();
+      setAllProducts(response.products);
+    } catch (err) {
+      console.error('Error al cargar productos:', err);
+    }
+  }, []);
+
+  const loadRelatedProducts = useCallback(() => {
+    if (!product || !allProducts.length) return;
+    
+    // Filtrar productos de la misma categoría, excluyendo el actual
+    const related = allProducts
+      .filter(p => p.category === product.category && p.id !== product.id)
+      .slice(0, 6);
+    setRelatedProducts(related);
+  }, [product, allProducts]);
 
   const loadWishlistCount = async () => {
     try {
@@ -81,7 +110,12 @@ const ProductDetail = () => {
     loadWishlistCount();
     loadCartCount();
     checkIfInWishlist();
-  }, [id, loadProduct, checkIfInWishlist]);
+    loadAllProducts();
+  }, [id, loadProduct, checkIfInWishlist, loadAllProducts]);
+
+  useEffect(() => {
+    loadRelatedProducts();
+  }, [loadRelatedProducts]);
 
   const handleAddToCart = async () => {
     if (!selectedColor || !selectedSize) {
@@ -750,6 +784,27 @@ const ProductDetail = () => {
           </div>
         </div>
       </div>
+
+      {/* Secciones de productos relacionados */}
+      {!loading && product && (
+        <div className="container mx-auto px-6 py-12" style={{ maxWidth: '1420px' }}>
+          {/* También podría interesarte */}
+          {relatedProducts.length > 0 && (
+            <ProductCarousel 
+              title="También podría interesarte" 
+              products={relatedProducts} 
+            />
+          )}
+          
+          {/* Visto recientemente */}
+          {getRecentlyViewed(product.id).length > 0 && (
+            <ProductCarousel 
+              title="Visto recientemente" 
+              products={getRecentlyViewed(product.id)} 
+            />
+          )}
+        </div>
+      )}
     </div>
   );
 };

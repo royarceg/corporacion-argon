@@ -39,17 +39,19 @@ const getProducts = async (req, res) => {
       [client_id]
     );
 
-    // Para cada producto, obtener su imagen principal
+    // Para cada producto, obtener sus imágenes
     const products = await Promise.all(
       productsResult.rows.map(async (product) => {
-        // Obtener imagen principal
-        const imageResult = await pool.query(
-          `SELECT image_url 
+        // Obtener TODAS las imágenes ordenadas
+        const imagesResult = await pool.query(
+          `SELECT image_url, is_primary 
            FROM product_images 
-           WHERE product_id = $1 AND is_primary = true
-           LIMIT 1`,
+           WHERE product_id = $1
+           ORDER BY is_primary DESC, display_order ASC`,
           [product.id]
         );
+
+        const images = imagesResult.rows.map(r => r.image_url);
 
         // Obtener colores disponibles (únicos)
         const colorsResult = await pool.query(
@@ -71,7 +73,8 @@ const getProducts = async (req, res) => {
 
         return {
           ...product,
-          image_url: imageResult.rows[0]?.image_url || null,
+          image_url: images[0] || null,
+          images: images, // NUEVO: Array con todas las imágenes
           colors: colorsResult.rows.map(r => r.color),
           sizes: sizesResult.rows.map(r => r.size)
         };
@@ -384,13 +387,16 @@ const getProductsByCategory = async (req, res) => {
 
     const products = await Promise.all(
       productsResult.rows.map(async (product) => {
-        const imageResult = await pool.query(
-          `SELECT image_url 
+        // Obtener TODAS las imágenes
+        const imagesResult = await pool.query(
+          `SELECT image_url, is_primary 
            FROM product_images 
-           WHERE product_id = $1 AND is_primary = true
-           LIMIT 1`,
+           WHERE product_id = $1
+           ORDER BY is_primary DESC, display_order ASC`,
           [product.id]
         );
+
+        const images = imagesResult.rows.map(r => r.image_url);
 
         const colorsResult = await pool.query(
           `SELECT DISTINCT color 
@@ -410,7 +416,8 @@ const getProductsByCategory = async (req, res) => {
 
         return {
           ...product,
-          image_url: imageResult.rows[0]?.image_url || null,
+          image_url: images[0] || null,
+          images: images, // Array con todas las imágenes
           colors: colorsResult.rows.map(r => r.color),
           sizes: sizesResult.rows.map(r => r.size)
         };
@@ -887,16 +894,19 @@ const searchProducts = async (req, res) => {
       products = fuzzySearch(products, q, parseInt(threshold));
     }
 
-    // Para cada producto, obtener imagen principal
+    // Para cada producto, obtener imágenes
     const productsWithImages = await Promise.all(
       products.map(async (product) => {
-        const imageResult = await pool.query(
-          `SELECT image_url 
+        // Obtener TODAS las imágenes
+        const imagesResult = await pool.query(
+          `SELECT image_url, is_primary 
            FROM product_images 
-           WHERE product_id = $1 AND is_primary = true
-           LIMIT 1`,
+           WHERE product_id = $1
+           ORDER BY is_primary DESC, display_order ASC`,
           [product.id]
         );
+
+        const images = imagesResult.rows.map(r => r.image_url);
 
         const colorsResult = await pool.query(
           `SELECT DISTINCT color 
@@ -916,7 +926,8 @@ const searchProducts = async (req, res) => {
 
         return {
           ...product,
-          image_url: imageResult.rows[0]?.image_url || null,
+          image_url: images[0] || null,
+          images: images, // Array con todas las imágenes
           colors: colorsResult.rows.map(r => r.color),
           sizes: sizesResult.rows.map(r => r.size)
         };
