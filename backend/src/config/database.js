@@ -15,9 +15,9 @@ const pool = new Pool({
   database: process.env.DB_NAME,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
-  max: 5, // Máximo 5 conexiones simultáneas (optimizado para B2B)
-  min: 0, // Sin conexiones mínimas - libera recursos cuando no hay uso
-  idleTimeoutMillis: 15000, // Cierra conexiones inactivas después de 15 segundos
+  max: 10, // Máximo 10 conexiones simultáneas (optimizado para Railway)
+  min: 2, // Mínimo 2 conexiones siempre abiertas
+  idleTimeoutMillis: 30000, // Cierra conexiones inactivas después de 30 segundos
   connectionTimeoutMillis: 10000, // Timeout de 10 segundos si no puede conectar
 });
 

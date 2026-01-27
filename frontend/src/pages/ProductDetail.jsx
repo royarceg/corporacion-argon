@@ -105,17 +105,21 @@ const ProductDetail = () => {
     }
   }, [id]);
 
+  // FIX: Solo depende de 'id', eliminamos las funciones de las dependencias para evitar loop infinito
   useEffect(() => {
     loadProduct();
     loadWishlistCount();
     loadCartCount();
     checkIfInWishlist();
     loadAllProducts();
-  }, [id, loadProduct, checkIfInWishlist, loadAllProducts]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
+  // FIX: Depende de product y allProducts, no de la función loadRelatedProducts
   useEffect(() => {
     loadRelatedProducts();
-  }, [loadRelatedProducts]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product, allProducts]);
 
   const handleAddToCart = async () => {
     if (!selectedColor || !selectedSize) {
