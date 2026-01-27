@@ -126,6 +126,7 @@ const getProductById = async (req, res) => {
         p.name,
         p.description,
         p.category,
+        p.variant_group,
         COALESCE(cpp.price, p.reference_price) as price,
         p.reference_price
       FROM products p
@@ -221,6 +222,32 @@ const getProductById = async (req, res) => {
       [id]
     );
 
+    // NUEVO: Obtener variantes de color (productos relacionados)
+    let colorVariants = [];
+    if (product.variant_group) {
+      const colorVariantsResult = await pool.query(
+        `SELECT 
+          p.id,
+          p.sku,
+          p.name,
+          pv.color,
+          pi.image_url
+        FROM products p
+        INNER JOIN client_products cp ON p.id = cp.product_id
+        LEFT JOIN product_variants pv ON p.id = pv.product_id
+        LEFT JOIN product_images pi ON p.id = pi.product_id AND pi.is_primary = true
+        WHERE p.variant_group = $1 
+          AND p.id != $2
+          AND cp.client_id = $3
+          AND cp.active = true
+          AND p.active = true
+        GROUP BY p.id, p.sku, p.name, pv.color, pi.image_url
+        ORDER BY p.sku`,
+        [product.variant_group, id, client_id]
+      );
+      colorVariants = colorVariantsResult.rows;
+    }
+
     res.json({
       success: true,
       product: {
@@ -231,7 +258,8 @@ const getProductById = async (req, res) => {
         videos: variantVideosResult.rows.length > 0 ? [...generalVideos, ...Object.values(videosByColor).flat()] : videosFallback, // Todos los videos
         videosByColor: videosByColor, // NUEVO: Videos agrupados por color
         available_colors: colorsResult.rows.map(r => r.color),
-        available_sizes: sizesResult.rows.map(r => r.size)
+        available_sizes: sizesResult.rows.map(r => r.size),
+        color_variants: colorVariants // NUEVO: Variantes de color
       }
     });
 
