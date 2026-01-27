@@ -27,6 +27,10 @@ router.put('/admin/:id', verifyToken, verifyAdmin, productController.updateProdu
 // Crear nuevo producto (solo admin)
 router.post('/admin', verifyToken, verifyAdmin, productController.createProduct);
 
+// DELETE /api/products/admin/:id
+// Eliminar producto (solo admin)
+router.delete('/admin/:id', verifyToken, verifyAdmin, productController.deleteProduct);
+
 // =====================================================
 // RUTAS DE CLIENTES
 // =====================================================

@@ -938,6 +938,63 @@ const searchProducts = async (req, res) => {
   }
 };
 
+// =====================================================
+// DELETE PRODUCT (ADMIN) - Eliminar producto
+// =====================================================
+const deleteProduct = async (req, res) => {
+  const client = await pool.connect();
+  
+  try {
+    const { id } = req.params;
+
+    console.log('=== ELIMINANDO PRODUCTO ===');
+    console.log('ID:', id);
+
+    await client.query('BEGIN');
+
+    // 1. Verificar que el producto existe
+    const productCheck = await client.query(
+      'SELECT id FROM products WHERE id = $1',
+      [id]
+    );
+
+    if (productCheck.rows.length === 0) {
+      await client.query('ROLLBACK');
+      return res.status(404).json({ 
+        error: 'Producto no encontrado' 
+      });
+    }
+
+    // 2. Eliminar datos relacionados
+    await client.query('DELETE FROM product_variants WHERE product_id = $1', [id]);
+    await client.query('DELETE FROM product_images WHERE product_id = $1', [id]);
+    await client.query('DELETE FROM variant_images WHERE product_id = $1', [id]);
+    await client.query('DELETE FROM product_videos WHERE product_id = $1', [id]);
+    await client.query('DELETE FROM variant_videos WHERE product_id = $1', [id]);
+    await client.query('DELETE FROM client_products WHERE product_id = $1', [id]);
+    await client.query('DELETE FROM client_product_prices WHERE product_id = $1', [id]);
+    
+    // 3. Eliminar el producto
+    await client.query('DELETE FROM products WHERE id = $1', [id]);
+
+    await client.query('COMMIT');
+
+    res.json({
+      success: true,
+      message: 'Producto eliminado exitosamente'
+    });
+
+  } catch (error) {
+    await client.query('ROLLBACK');
+    console.error('Error en deleteProduct:', error);
+    res.status(500).json({ 
+      error: 'Error al eliminar producto' 
+    });
+  } finally {
+    client.release();
+  }
+};
+
 module.exports = {
   getProducts,
   getProductById,
@@ -946,5 +1003,6 @@ module.exports = {
   getProductsByCategory,
   updateProduct,
   createProduct,
-  searchProducts
+  searchProducts,
+  deleteProduct
 };
