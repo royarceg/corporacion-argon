@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
+import ScrollRestoration from './components/ScrollRestoration';
 
 import HomePage from './pages/HomePage';
 import Login from './pages/Login';
@@ -20,6 +21,7 @@ function App() {
   return (
     <AuthProvider>
       <Router>
+        <ScrollRestoration />
         <Routes>
           {/* Ruta pública - Landing Page */}
           <Route path="/" element={<HomePage />} />
