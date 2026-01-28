@@ -1,7 +1,0 @@
-﻿ID,SKU,Nombre,Categoria,Precio,Activo,Colores,Tallas,Total Variantes,Imagenes
-1,"UNI001","Camisa Polo Corporativa","Uniformes",15000.00,Si,"Azul, Negro, Rojo","L, M, S",8,"/assets/images/Nuevo1.png; /assets/images/Nuevo2.png; /assets/images/Nuevo3.png"
-2,"PAN001","Pantalón Cargo Multibolsillos","Pantalones",25000.00,Si,"Caqui, Negro","L, M",4,"/assets/images/Nuevo4.png; /assets/images/Nuevo5.png"
-3,"ACC001","Gorra Deportiva Bordada","Accesorios",8000.00,Si,"Azul, Blanco, Negro","Única",3,"/assets/images/Nuevo6.png"
-4,"UNI002","Chaleco Ejecutivo","Uniformes",35000.00,Si,"","",0,"/assets/images/Nuevo2.png"
-5,"CAM001","Camisa Oxford","Camisas",18000.00,Si,"","",0,"/assets/images/Nuevo1.png"
-6,"TAC001","Ballistic Helmet","Accesorios",120000.00,Si,"","",0,"/assets/images/Nuevo1.png"

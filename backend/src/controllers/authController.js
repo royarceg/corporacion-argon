@@ -5,6 +5,14 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const pool = require('../config/database');
+const {
+  validateRequired,
+  validateEmail,
+  validateRole,
+  validatePassword,
+  validateLength,
+  validateUsername
+} = require('../middleware/validators');
 
 // =====================================================
 // LOGIN - Iniciar sesión
@@ -14,10 +22,17 @@ const login = async (req, res) => {
     const { username, password } = req.body;
 
     // 1. Validar que vengan los datos
-    if (!username || !password) {
-      return res.status(400).json({ 
-        error: 'Usuario y contraseña son requeridos' 
-      });
+    const errors = [];
+    
+    if (!validateRequired(username)) {
+      errors.push('Usuario es requerido');
+    }
+    if (!validateRequired(password)) {
+      errors.push('Contraseña es requerida');
+    }
+    
+    if (errors.length > 0) {
+      return res.status(400).json({ errors });
     }
 
     // 2. Buscar usuario en la base de datos por user_name
@@ -29,7 +44,7 @@ const login = async (req, res) => {
     // Si no existe el usuario
     if (result.rows.length === 0) {
       return res.status(401).json({ 
-        error: 'Usuario no encontrado. Verifica el nombre de usuario.' 
+        error: 'Credenciales incorrectas' 
       });
     }
 
@@ -47,7 +62,7 @@ const login = async (req, res) => {
 
     if (!isPasswordValid) {
       return res.status(401).json({ 
-        error: 'Contraseña incorrecta. Verifica tu contraseña.' 
+        error: 'Credenciales incorrectas' 
       });
     }
 
@@ -94,10 +109,32 @@ const register = async (req, res) => {
     const { client_id, user_name, email, password, role } = req.body;
 
     // 1. Validar datos
-    if (!password || !user_name || !role) {
-      return res.status(400).json({ 
-        error: 'Nombre de usuario, contraseña y rol son requeridos' 
-      });
+    const errors = [];
+    
+    if (!validateRequired(user_name)) {
+      errors.push('Nombre de usuario es requerido');
+    } else if (!validateUsername(user_name)) {
+      errors.push('Nombre de usuario debe ser alfanumérico (3-50 caracteres)');
+    }
+    
+    if (!validateRequired(password)) {
+      errors.push('Contraseña es requerida');
+    } else if (!validatePassword(password)) {
+      errors.push('Contraseña debe tener al menos 6 caracteres');
+    }
+    
+    if (!validateRequired(role)) {
+      errors.push('Rol es requerido');
+    } else if (!validateRole(role)) {
+      errors.push('Rol no válido. Debe ser client_user o master_admin');
+    }
+    
+    if (email && !validateEmail(email)) {
+      errors.push('Formato de email inválido');
+    }
+    
+    if (errors.length > 0) {
+      return res.status(400).json({ errors });
     }
 
     // 2. Verificar si el user_name ya existe

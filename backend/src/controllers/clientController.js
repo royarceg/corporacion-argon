@@ -4,6 +4,7 @@
 // =====================================================
 
 const pool = require('../config/database');
+const { validateNumericId } = require('../middleware/validators');
 
 // =====================================================
 // GET ALL CLIENTS - Obtener todos los clientes
@@ -40,6 +41,11 @@ const getAllClients = async (req, res) => {
 const getClientProducts = async (req, res) => {
   try {
     const { clientId } = req.params;
+
+    // Validar ID
+    if (!validateNumericId(clientId)) {
+      return res.status(400).json({ error: 'ID de cliente inválido' });
+    }
 
     const result = await pool.query(
       `SELECT 
@@ -79,6 +85,14 @@ const getClientProducts = async (req, res) => {
 const assignProductToClient = async (req, res) => {
   try {
     const { clientId, productId } = req.params;
+
+    // Validar IDs
+    if (!validateNumericId(clientId)) {
+      return res.status(400).json({ error: 'ID de cliente inválido' });
+    }
+    if (!validateNumericId(productId)) {
+      return res.status(400).json({ error: 'ID de producto inválido' });
+    }
 
     // Verificar si ya existe la asignación
     const existingResult = await pool.query(
@@ -124,6 +138,14 @@ const unassignProductFromClient = async (req, res) => {
   try {
     const { clientId, productId } = req.params;
 
+    // Validar IDs
+    if (!validateNumericId(clientId)) {
+      return res.status(400).json({ error: 'ID de cliente inválido' });
+    }
+    if (!validateNumericId(productId)) {
+      return res.status(400).json({ error: 'ID de producto inválido' });
+    }
+
     await pool.query(
       `UPDATE client_products 
        SET active = false 
@@ -150,6 +172,11 @@ const unassignProductFromClient = async (req, res) => {
 const assignAllProductsToClient = async (req, res) => {
   try {
     const { clientId } = req.params;
+
+    // Validar ID
+    if (!validateNumericId(clientId)) {
+      return res.status(400).json({ error: 'ID de cliente inválido' });
+    }
 
     // Obtener todos los productos activos
     const productsResult = await pool.query(
@@ -203,6 +230,11 @@ const assignAllProductsToClient = async (req, res) => {
 const unassignAllProductsFromClient = async (req, res) => {
   try {
     const { clientId } = req.params;
+
+    // Validar ID
+    if (!validateNumericId(clientId)) {
+      return res.status(400).json({ error: 'ID de cliente inválido' });
+    }
 
     const result = await pool.query(
       `UPDATE client_products 

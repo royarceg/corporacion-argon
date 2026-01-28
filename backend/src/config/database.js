@@ -36,12 +36,4 @@ pool.on('error', (err) => {
   connected = false;
 });
 
-// Graceful shutdown
-process.on('SIGTERM', () => {
-  pool.end(() => {
-    console.log('🔌 Pool de PostgreSQL cerrado');
-    process.exit(0);
-  });
-});
-
 module.exports = pool;

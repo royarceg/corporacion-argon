@@ -1,15 +1,15 @@
 -- =====================================================
 -- CORPORACIÓN ARGOM - DATABASE SCHEMA
 -- =====================================================
+-- 
+-- ⚠️  IMPORTANTE: Este archivo es SOLO DOCUMENTACIÓN
+--     NO ejecutar en producción - solo es referencia
+--     de la estructura actual de la base de datos.
+--
+-- Base de datos: PostgreSQL (Railway)
+-- Última actualización: Enero 2025
+-- =====================================================
 
--- Eliminar tablas si existen (para desarrollo)
-DROP TABLE IF EXISTS order_items CASCADE;
-DROP TABLE IF EXISTS purchase_orders CASCADE;
-DROP TABLE IF EXISTS client_product_prices CASCADE;
-DROP TABLE IF EXISTS client_products CASCADE;
-DROP TABLE IF EXISTS products CASCADE;
-DROP TABLE IF EXISTS users CASCADE;
-DROP TABLE IF EXISTS clients CASCADE;
 
 -- =====================================================
 -- TABLA: clients
@@ -26,6 +26,7 @@ CREATE TABLE clients (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+
 -- =====================================================
 -- TABLA: users
 -- Descripción: Usuarios del sistema (clientes y admin)
@@ -34,6 +35,7 @@ CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     client_id INTEGER REFERENCES clients(id) ON DELETE CASCADE,
     user_name VARCHAR(255) UNIQUE NOT NULL,
+    name VARCHAR(255),                      -- Nombre completo del usuario
     email VARCHAR(255),
     password VARCHAR(255) NOT NULL,
     role VARCHAR(50) NOT NULL CHECK (role IN ('client_user', 'master_admin')),
@@ -41,6 +43,7 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
 
 -- =====================================================
 -- TABLA: products
@@ -51,13 +54,96 @@ CREATE TABLE products (
     sku VARCHAR(100) UNIQUE NOT NULL,
     name VARCHAR(255) NOT NULL,
     description TEXT,
-    size VARCHAR(50),
-    color VARCHAR(50),
-    image_url TEXT,
+    category VARCHAR(100),
+    reference_price DECIMAL(10, 2),
+    variant_group VARCHAR(100),             -- Agrupa productos relacionados (ej: ZAP)
     active BOOLEAN DEFAULT true,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+
+-- =====================================================
+-- TABLA: product_images
+-- Descripción: Imágenes de productos (compatibilidad)
+-- =====================================================
+CREATE TABLE product_images (
+    id SERIAL PRIMARY KEY,
+    product_id INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+    image_url TEXT NOT NULL,
+    public_id TEXT,                         -- ID de Cloudinary
+    is_primary BOOLEAN DEFAULT false,
+    display_order INTEGER DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+-- =====================================================
+-- TABLA: variant_images
+-- Descripción: Imágenes asociadas a colores específicos
+-- =====================================================
+CREATE TABLE variant_images (
+    id SERIAL PRIMARY KEY,
+    product_id INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+    image_url TEXT NOT NULL,
+    color VARCHAR(50),                      -- NULL = imagen para todos los colores
+    is_primary BOOLEAN DEFAULT false,
+    display_order INTEGER DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+-- =====================================================
+-- TABLA: product_videos
+-- Descripción: Videos de productos (compatibilidad)
+-- =====================================================
+CREATE TABLE product_videos (
+    id SERIAL PRIMARY KEY,
+    product_id INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+    video_url TEXT NOT NULL,
+    public_id TEXT,                         -- ID de Cloudinary
+    thumbnail_url TEXT,
+    duration INTEGER,
+    display_order INTEGER DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+-- =====================================================
+-- TABLA: variant_videos
+-- Descripción: Videos asociados a colores específicos
+-- =====================================================
+CREATE TABLE variant_videos (
+    id SERIAL PRIMARY KEY,
+    product_id INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+    video_url TEXT NOT NULL,
+    color VARCHAR(50),                      -- NULL = video para todos los colores
+    thumbnail_url TEXT,
+    display_order INTEGER DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+-- =====================================================
+-- TABLA: product_variants
+-- Descripción: Variantes de color y talla por producto
+-- =====================================================
+CREATE TABLE product_variants (
+    id SERIAL PRIMARY KEY,
+    product_id INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+    color VARCHAR(50),
+    size VARCHAR(50),
+    sku_variant VARCHAR(100) UNIQUE,
+    stock_quantity INTEGER DEFAULT 0,
+    active BOOLEAN DEFAULT true,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(product_id, color, size)
+);
+
 
 -- =====================================================
 -- TABLA: client_products
@@ -71,9 +157,10 @@ CREATE TABLE client_products (
     UNIQUE(client_id, product_id)
 );
 
+
 -- =====================================================
 -- TABLA: client_product_prices
--- Descripción: Último precio confirmado por cliente/producto
+-- Descripción: Precios personalizados por cliente
 -- =====================================================
 CREATE TABLE client_product_prices (
     id SERIAL PRIMARY KEY,
@@ -84,6 +171,36 @@ CREATE TABLE client_product_prices (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(client_id, product_id)
 );
+
+
+-- =====================================================
+-- TABLA: wishlist
+-- Descripción: Lista de deseos por usuario
+-- =====================================================
+CREATE TABLE wishlist (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    product_id INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+    added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(user_id, product_id)
+);
+
+
+-- =====================================================
+-- TABLA: cart_items
+-- Descripción: Carrito de compras
+-- =====================================================
+CREATE TABLE cart_items (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    product_id INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+    variant_id INTEGER REFERENCES product_variants(id) ON DELETE CASCADE,
+    quantity INTEGER NOT NULL DEFAULT 1,
+    unit_price DECIMAL(10, 2),
+    added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 
 -- =====================================================
 -- TABLA: purchase_orders
@@ -104,6 +221,7 @@ CREATE TABLE purchase_orders (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+
 -- =====================================================
 -- TABLA: order_items
 -- Descripción: Detalle de productos en cada orden
@@ -112,6 +230,7 @@ CREATE TABLE order_items (
     id SERIAL PRIMARY KEY,
     purchase_order_id INTEGER NOT NULL REFERENCES purchase_orders(id) ON DELETE CASCADE,
     product_id INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+    variant_id INTEGER REFERENCES product_variants(id) ON DELETE SET NULL,
     quantity_requested INTEGER NOT NULL,
     quantity_confirmed INTEGER,
     unit_price_initial DECIMAL(10, 2) NOT NULL,
@@ -120,19 +239,33 @@ CREATE TABLE order_items (
     line_total_confirmed DECIMAL(10, 2)
 );
 
+
 -- =====================================================
--- ÍNDICES para mejorar performance
+-- ÍNDICES
 -- =====================================================
 CREATE INDEX idx_users_client_id ON users(client_id);
 CREATE INDEX idx_users_user_name ON users(user_name);
+CREATE INDEX idx_products_category ON products(category);
+CREATE INDEX idx_products_variant_group ON products(variant_group);
+CREATE INDEX idx_product_images_product_id ON product_images(product_id);
+CREATE INDEX idx_product_images_primary ON product_images(product_id, is_primary);
+CREATE INDEX idx_variant_images_product_id ON variant_images(product_id);
+CREATE INDEX idx_variant_images_color ON variant_images(product_id, color);
+CREATE INDEX idx_product_videos_product_id ON product_videos(product_id);
+CREATE INDEX idx_variant_videos_product_id ON variant_videos(product_id);
+CREATE INDEX idx_variant_videos_color ON variant_videos(product_id, color);
+CREATE INDEX idx_product_variants_product_id ON product_variants(product_id);
+CREATE INDEX idx_wishlist_user_id ON wishlist(user_id);
+CREATE INDEX idx_cart_items_user_id ON cart_items(user_id);
 CREATE INDEX idx_client_products_client_id ON client_products(client_id);
 CREATE INDEX idx_client_products_product_id ON client_products(product_id);
 CREATE INDEX idx_purchase_orders_client_id ON purchase_orders(client_id);
 CREATE INDEX idx_purchase_orders_status ON purchase_orders(status);
 CREATE INDEX idx_order_items_purchase_order_id ON order_items(purchase_order_id);
 
+
 -- =====================================================
--- FOREIGN KEY para client_product_prices
+-- FOREIGN KEYS ADICIONALES
 -- =====================================================
 ALTER TABLE client_product_prices 
 ADD CONSTRAINT fk_last_order 
@@ -140,44 +273,6 @@ FOREIGN KEY (last_order_id)
 REFERENCES purchase_orders(id) 
 ON DELETE SET NULL;
 
--- =====================================================
--- DATOS INICIALES DE PRUEBA
--- =====================================================
-
--- Insertar clientes
-INSERT INTO clients (company_name, email, phone, address) VALUES
-('Carnes Doradas de Costa Rica S.A.', 'info@carnesDoradas.cr', '2222-3333', 'San José, Costa Rica'),
-('COMINSA S.A.', 'info@cominsa.cr', '2222-4444', 'Heredia, Costa Rica'),
-('Finca 8 del Norte S.A.', 'info@finca8.cr', '2222-5555', 'Alajuela, Costa Rica'),
-('K-9 Internacional S.A.', 'info@k9intl.cr', '2222-6666', 'Cartago, Costa Rica');
-
--- Insertar usuario maestro (admin)
--- Contraseña: admin123 (debe ser cambiada)
-INSERT INTO users (client_id, user_name, email, password, role) VALUES
-(NULL, 'admin_master', 'admin@corporacionargom.com', '$2a$10$placeholder', 'master_admin');
-
--- Insertar usuarios de clientes
--- Contraseña: password123 (debe ser cambiada)
-INSERT INTO users (client_id, user_name, email, password, role) VALUES
-(1, 'carnes_doradas', 'carnes@doradas.cr', '$2a$10$placeholder', 'client_user'),
-(2, 'wendell_montero', 'wendell@cominsa.cr', '$2a$10$placeholder', 'client_user'),
-(3, 'finca_8_del_norte', 'finca8@norte.cr', '$2a$10$placeholder', 'client_user'),
-(4, 'francisco_gutierrez', 'francisco@k9intl.cr', '$2a$10$placeholder', 'client_user'),
-(4, 'carolina_sibaja', 'carolina@k9intl.cr', '$2a$10$placeholder', 'client_user'),
-(4, 'christian_asi', 'christian@k9intl.cr', '$2a$10$placeholder', 'client_user');
-
--- Insertar productos de ejemplo
-INSERT INTO products (sku, name, description, size, color, image_url) VALUES
-('PROD001', 'Camisa Polo', 'Camisa polo para uniforme', 'M', 'Rojo', '/images/camisa-roja.jpg'),
-('PROD002', 'Pantalón Cargo', 'Pantalón cargo resistente', 'L', 'Negro', '/images/pantalon-negro.jpg'),
-('PROD003', 'Gorra Deportiva', 'Gorra con logo bordado', 'Única', 'Azul', '/images/gorra-azul.jpg');
-
--- Asignar productos a clientes (ejemplo: todos los clientes ven todos los productos)
-INSERT INTO client_products (client_id, product_id) VALUES
-(1, 1), (1, 2), (1, 3),
-(2, 1), (2, 2),
-(3, 1), (3, 3),
-(4, 1), (4, 2), (4, 3);
 
 -- =====================================================
 -- FIN DEL SCHEMA

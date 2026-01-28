@@ -3,6 +3,11 @@
 // =====================================================
 
 const pool = require('../config/database');
+const { 
+  validateNumericId, 
+  validatePositiveNumber,
+  validateRequired 
+} = require('../middleware/validators');
 
 // =====================================================
 // GET CART - Obtener carrito del usuario
@@ -99,10 +104,23 @@ const addToCart = async (req, res) => {
       });
     }
 
-    if (!product_id || !quantity || quantity < 1) {
-      return res.status(400).json({ 
-        error: 'product_id y quantity son requeridos' 
-      });
+    // Validaciones
+    const errors = [];
+    
+    if (!validateNumericId(product_id)) {
+      errors.push('product_id es requerido y debe ser un número válido');
+    }
+    
+    if (!validatePositiveNumber(quantity)) {
+      errors.push('quantity debe ser un número mayor a 0');
+    }
+    
+    if (variant_id && !validateNumericId(variant_id)) {
+      errors.push('variant_id debe ser un número válido');
+    }
+    
+    if (errors.length > 0) {
+      return res.status(400).json({ errors });
     }
 
     // Verificar que el producto exista y el cliente tenga acceso
@@ -206,10 +224,14 @@ const updateCartItem = async (req, res) => {
     const { cart_item_id } = req.params;
     const { quantity } = req.body;
 
-    if (!quantity || quantity < 1) {
-      return res.status(400).json({ 
-        error: 'quantity debe ser mayor a 0' 
-      });
+    // Validar ID del item
+    if (!validateNumericId(cart_item_id)) {
+      return res.status(400).json({ error: 'ID de item inválido' });
+    }
+
+    // Validar cantidad
+    if (!validatePositiveNumber(quantity)) {
+      return res.status(400).json({ error: 'quantity debe ser un número mayor a 0' });
     }
 
     // Verificar que el item pertenezca al usuario y obtener variante
@@ -271,6 +293,11 @@ const removeFromCart = async (req, res) => {
   try {
     const { id: user_id } = req.user;
     const { cart_item_id } = req.params;
+
+    // Validar ID del item
+    if (!validateNumericId(cart_item_id)) {
+      return res.status(400).json({ error: 'ID de item inválido' });
+    }
 
     const result = await pool.query(
       `DELETE FROM cart_items 

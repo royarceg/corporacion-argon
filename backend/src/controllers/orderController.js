@@ -4,6 +4,14 @@
 
 const pool = require('../config/database');
 const emailService = require('../services/emailService');
+const { 
+  validateNumericId, 
+  validateRequired,
+  validateDate,
+  validatePositiveNumber,
+  validateLength,
+  sanitizeString
+} = require('../middleware/validators');
 
 // =====================================================
 // CREATE ORDER - Crear nueva orden de compra
@@ -16,10 +24,24 @@ const createOrder = async (req, res) => {
     const { customer_po, wanted_date, items } = req.body;
 
     // Validar datos
-    if (!customer_po || !items || items.length === 0) {
-      return res.status(400).json({ 
-        error: 'Faltan datos requeridos' 
-      });
+    const errors = [];
+    
+    if (!validateRequired(customer_po)) {
+      errors.push('customer_po es requerido');
+    } else if (!validateLength(customer_po, 1, 100)) {
+      errors.push('customer_po debe tener entre 1 y 100 caracteres');
+    }
+    
+    if (!items || !Array.isArray(items) || items.length === 0) {
+      errors.push('items es requerido y debe contener al menos un producto');
+    }
+    
+    if (wanted_date && !validateDate(wanted_date)) {
+      errors.push('wanted_date debe tener formato YYYY-MM-DD');
+    }
+    
+    if (errors.length > 0) {
+      return res.status(400).json({ errors });
     }
 
     // Verificar que sea un cliente
@@ -166,6 +188,11 @@ const getOrderById = async (req, res) => {
     const { client_id } = req.user;
     const { id } = req.params;
 
+    // Validar ID
+    if (!validateNumericId(id)) {
+      return res.status(400).json({ error: 'ID de orden inválido' });
+    }
+
     if (!client_id) {
       return res.status(403).json({ 
         error: 'Solo clientes pueden ver órdenes' 
@@ -239,11 +266,14 @@ const confirmOrder = async (req, res) => {
     const { id } = req.params;
     const { items } = req.body;
 
+    // Validar ID
+    if (!validateNumericId(id)) {
+      return res.status(400).json({ error: 'ID de orden inválido' });
+    }
+
     // Validar datos
-    if (!items || items.length === 0) {
-      return res.status(400).json({ 
-        error: 'Faltan items para confirmar' 
-      });
+    if (!items || !Array.isArray(items) || items.length === 0) {
+      return res.status(400).json({ error: 'items es requerido y debe contener al menos un producto' });
     }
 
     await client.query('BEGIN');

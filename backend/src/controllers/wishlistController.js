@@ -3,6 +3,7 @@
 // =====================================================
 
 const pool = require('../config/database');
+const { validateNumericId, validateRequired } = require('../middleware/validators');
 
 // =====================================================
 // GET WISHLIST - Obtener lista de deseos del usuario
@@ -81,10 +82,9 @@ const addToWishlist = async (req, res) => {
       });
     }
 
-    if (!product_id) {
-      return res.status(400).json({ 
-        error: 'product_id es requerido' 
-      });
+    // Validar product_id
+    if (!validateNumericId(product_id)) {
+      return res.status(400).json({ error: 'product_id es requerido y debe ser un número válido' });
     }
 
     // Verificar que el producto exista y el cliente tenga acceso
@@ -141,6 +141,11 @@ const removeFromWishlist = async (req, res) => {
     const { id: user_id } = req.user;
     const { product_id } = req.params;
 
+    // Validar product_id
+    if (!validateNumericId(product_id)) {
+      return res.status(400).json({ error: 'ID de producto inválido' });
+    }
+
     // Eliminar el producto de la wishlist
     const result = await pool.query(
       `DELETE FROM wishlist 
@@ -175,6 +180,11 @@ const checkWishlist = async (req, res) => {
   try {
     const { id: user_id } = req.user;
     const { product_id } = req.params;
+
+    // Validar product_id
+    if (!validateNumericId(product_id)) {
+      return res.status(400).json({ error: 'ID de producto inválido' });
+    }
 
     const result = await pool.query(
       `SELECT id FROM wishlist 

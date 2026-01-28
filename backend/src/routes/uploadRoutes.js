@@ -4,20 +4,99 @@ const multer = require('multer');
 const { uploadImage, uploadVideo, deleteFile } = require('../config/cloudinary');
 const { authenticateToken, isMasterAdmin } = require('../middleware/authMiddleware');
 
-// Configurar Multer para manejar archivos en memoria
+// =====================================================
+// CONFIGURACIÓN DE TIPOS DE ARCHIVO PERMITIDOS
+// =====================================================
+
+// Tipos MIME permitidos para imágenes
+const ALLOWED_IMAGE_TYPES = [
+  'image/jpeg',
+  'image/jpg', 
+  'image/png',
+  'image/gif',
+  'image/webp'
+];
+
+// Tipos MIME permitidos para videos
+const ALLOWED_VIDEO_TYPES = [
+  'video/mp4',
+  'video/mpeg',
+  'video/quicktime',  // .mov
+  'video/x-msvideo',  // .avi
+  'video/webm'
+];
+
+// =====================================================
+// FILTROS DE ARCHIVO
+// =====================================================
+
+// Filtro para imágenes
+const imageFileFilter = (req, file, cb) => {
+  if (ALLOWED_IMAGE_TYPES.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(new Error(`Tipo de archivo no permitido. Solo se aceptan: ${ALLOWED_IMAGE_TYPES.map(t => t.split('/')[1]).join(', ')}`), false);
+  }
+};
+
+// Filtro para videos
+const videoFileFilter = (req, file, cb) => {
+  if (ALLOWED_VIDEO_TYPES.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(new Error(`Tipo de archivo no permitido. Solo se aceptan: ${ALLOWED_VIDEO_TYPES.map(t => t.split('/')[1]).join(', ')}`), false);
+  }
+};
+
+// =====================================================
+// CONFIGURACIÓN DE MULTER
+// =====================================================
+
 const storage = multer.memoryStorage();
-const upload = multer({
+
+// Multer para imágenes (máx 10MB)
+const uploadImageMulter = multer({
   storage: storage,
   limits: {
-    fileSize: 50 * 1024 * 1024 // 50MB máximo
-  }
+    fileSize: 10 * 1024 * 1024 // 10MB para imágenes
+  },
+  fileFilter: imageFileFilter
 });
+
+// Multer para videos (máx 50MB)
+const uploadVideoMulter = multer({
+  storage: storage,
+  limits: {
+    fileSize: 50 * 1024 * 1024 // 50MB para videos
+  },
+  fileFilter: videoFileFilter
+});
+
+// =====================================================
+// MIDDLEWARE PARA MANEJAR ERRORES DE MULTER
+// =====================================================
+
+const handleMulterError = (err, req, res, next) => {
+  if (err instanceof multer.MulterError) {
+    if (err.code === 'LIMIT_FILE_SIZE') {
+      return res.status(400).json({ error: 'El archivo excede el tamaño máximo permitido' });
+    }
+    return res.status(400).json({ error: err.message });
+  } else if (err) {
+    return res.status(400).json({ error: err.message });
+  }
+  next();
+};
+
+// =====================================================
+// RUTAS DE UPLOAD
+// =====================================================
 
 /**
  * POST /api/upload/image
  * Subir una imagen a Cloudinary
  */
-router.post('/image', authenticateToken, isMasterAdmin, upload.single('file'), async (req, res) => {
+router.post('/image', authenticateToken, isMasterAdmin, uploadImageMulter.single('file'), handleMulterError, async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: 'No se proporcionó ningún archivo' });
@@ -52,7 +131,7 @@ router.post('/image', authenticateToken, isMasterAdmin, upload.single('file'), a
  * POST /api/upload/images
  * Subir múltiples imágenes a Cloudinary
  */
-router.post('/images', authenticateToken, isMasterAdmin, upload.array('files', 10), async (req, res) => {
+router.post('/images', authenticateToken, isMasterAdmin, uploadImageMulter.array('files', 10), handleMulterError, async (req, res) => {
   try {
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ error: 'No se proporcionaron archivos' });
@@ -95,7 +174,7 @@ router.post('/images', authenticateToken, isMasterAdmin, upload.array('files', 1
  * POST /api/upload/video
  * Subir un video a Cloudinary
  */
-router.post('/video', authenticateToken, isMasterAdmin, upload.single('file'), async (req, res) => {
+router.post('/video', authenticateToken, isMasterAdmin, uploadVideoMulter.single('file'), handleMulterError, async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: 'No se proporcionó ningún archivo' });
@@ -131,7 +210,7 @@ router.post('/video', authenticateToken, isMasterAdmin, upload.single('file'), a
  * POST /api/upload/videos
  * Subir múltiples videos a Cloudinary
  */
-router.post('/videos', authenticateToken, isMasterAdmin, upload.array('files', 5), async (req, res) => {
+router.post('/videos', authenticateToken, isMasterAdmin, uploadVideoMulter.array('files', 5), handleMulterError, async (req, res) => {
   try {
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ error: 'No se proporcionaron archivos' });

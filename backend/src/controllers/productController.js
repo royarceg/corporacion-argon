@@ -5,9 +5,18 @@
 
 const pool = require('../config/database');
 const { fuzzySearch } = require('../services/fuzzySearch');
+const { 
+  validateNumericId, 
+  validateRequired,
+  validateSku,
+  validateLength,
+  validateNonNegativeNumber,
+  sanitizeString
+} = require('../middleware/validators');
 
 // =====================================================
 // GET PRODUCTS - Obtener productos del cliente
+// OPTIMIZADO: Usa 4 queries en lugar de N+1
 // =====================================================
 const getProducts = async (req, res) => {
   try {
@@ -20,7 +29,7 @@ const getProducts = async (req, res) => {
       });
     }
 
-    // Buscar productos asignados a este cliente
+    // Query 1: Obtener todos los productos del cliente
     const productsResult = await pool.query(
       `SELECT 
         p.id,
@@ -39,47 +48,77 @@ const getProducts = async (req, res) => {
       [client_id]
     );
 
-    // Para cada producto, obtener sus imágenes
-    const products = await Promise.all(
-      productsResult.rows.map(async (product) => {
-        // Obtener TODAS las imágenes ordenadas
-        const imagesResult = await pool.query(
-          `SELECT image_url, is_primary 
-           FROM product_images 
-           WHERE product_id = $1
-           ORDER BY is_primary DESC, display_order ASC`,
-          [product.id]
-        );
+    // Si no hay productos, retornar vacío
+    if (productsResult.rows.length === 0) {
+      return res.json({ success: true, products: [] });
+    }
 
-        const images = imagesResult.rows.map(r => r.image_url);
+    // Extraer IDs de productos para las siguientes queries
+    const productIds = productsResult.rows.map(p => p.id);
 
-        // Obtener colores disponibles (únicos)
-        const colorsResult = await pool.query(
-          `SELECT DISTINCT color 
-           FROM product_variants 
-           WHERE product_id = $1 AND active = true AND color IS NOT NULL
-           ORDER BY color`,
-          [product.id]
-        );
-
-        // Obtener tallas disponibles (únicas)
-        const sizesResult = await pool.query(
-          `SELECT DISTINCT size 
-           FROM product_variants 
-           WHERE product_id = $1 AND active = true AND size IS NOT NULL
-           ORDER BY size`,
-          [product.id]
-        );
-
-        return {
-          ...product,
-          image_url: images[0] || null,
-          images: images, // NUEVO: Array con todas las imágenes
-          colors: colorsResult.rows.map(r => r.color),
-          sizes: sizesResult.rows.map(r => r.size)
-        };
-      })
+    // Query 2: Obtener TODAS las imágenes de todos los productos en una sola query
+    const imagesResult = await pool.query(
+      `SELECT product_id, image_url, is_primary 
+       FROM product_images 
+       WHERE product_id = ANY($1)
+       ORDER BY product_id, is_primary DESC, display_order ASC`,
+      [productIds]
     );
+
+    // Query 3: Obtener TODOS los colores de todos los productos
+    const colorsResult = await pool.query(
+      `SELECT DISTINCT product_id, color 
+       FROM product_variants 
+       WHERE product_id = ANY($1) AND active = true AND color IS NOT NULL
+       ORDER BY product_id, color`,
+      [productIds]
+    );
+
+    // Query 4: Obtener TODAS las tallas de todos los productos
+    const sizesResult = await pool.query(
+      `SELECT DISTINCT product_id, size 
+       FROM product_variants 
+       WHERE product_id = ANY($1) AND active = true AND size IS NOT NULL
+       ORDER BY product_id, size`,
+      [productIds]
+    );
+
+    // Crear mapas para acceso rápido O(1)
+    const imagesMap = {};
+    imagesResult.rows.forEach(row => {
+      if (!imagesMap[row.product_id]) {
+        imagesMap[row.product_id] = [];
+      }
+      imagesMap[row.product_id].push(row.image_url);
+    });
+
+    const colorsMap = {};
+    colorsResult.rows.forEach(row => {
+      if (!colorsMap[row.product_id]) {
+        colorsMap[row.product_id] = [];
+      }
+      colorsMap[row.product_id].push(row.color);
+    });
+
+    const sizesMap = {};
+    sizesResult.rows.forEach(row => {
+      if (!sizesMap[row.product_id]) {
+        sizesMap[row.product_id] = [];
+      }
+      sizesMap[row.product_id].push(row.size);
+    });
+
+    // Combinar datos (sin queries adicionales)
+    const products = productsResult.rows.map(product => {
+      const images = imagesMap[product.id] || [];
+      return {
+        ...product,
+        image_url: images[0] || null,
+        images: images,
+        colors: colorsMap[product.id] || [],
+        sizes: sizesMap[product.id] || []
+      };
+    });
 
     res.json({
       success: true,
@@ -101,6 +140,11 @@ const getProductById = async (req, res) => {
   try {
     const { client_id } = req.user;
     const { id } = req.params;
+
+    // Validar ID
+    if (!validateNumericId(id)) {
+      return res.status(400).json({ error: 'ID de producto inválido' });
+    }
 
     if (!client_id) {
       return res.status(403).json({ 
@@ -276,9 +320,11 @@ const getProductById = async (req, res) => {
 
 // =====================================================
 // GET ALL PRODUCTS (ADMIN) - Obtener todos los productos
+// OPTIMIZADO: Usa 5 queries en lugar de N+1
 // =====================================================
 const getAllProducts = async (req, res) => {
   try {
+    // Query 1: Obtener todos los productos
     const productsResult = await pool.query(
       `SELECT 
         id,
@@ -292,52 +338,83 @@ const getAllProducts = async (req, res) => {
       ORDER BY name`
     );
 
-    const products = await Promise.all(
-      productsResult.rows.map(async (product) => {
-        // Obtener imagen principal
-        const imageResult = await pool.query(
-          `SELECT image_url 
-           FROM product_images 
-           WHERE product_id = $1 AND is_primary = true
-           LIMIT 1`,
-          [product.id]
-        );
+    // Si no hay productos, retornar vacío
+    if (productsResult.rows.length === 0) {
+      return res.json({ success: true, products: [] });
+    }
 
-        // Obtener colores
-        const colorsResult = await pool.query(
-          `SELECT DISTINCT color 
-           FROM product_variants 
-           WHERE product_id = $1 AND color IS NOT NULL
-           ORDER BY color`,
-          [product.id]
-        );
+    const productIds = productsResult.rows.map(p => p.id);
 
-        // Obtener tallas
-        const sizesResult = await pool.query(
-          `SELECT DISTINCT size 
-           FROM product_variants 
-           WHERE product_id = $1 AND size IS NOT NULL
-           ORDER BY size`,
-          [product.id]
-        );
-
-        // Obtener conteo de variantes
-        const variantsCountResult = await pool.query(
-          `SELECT COUNT(*) as count 
-           FROM product_variants 
-           WHERE product_id = $1`,
-          [product.id]
-        );
-
-        return {
-          ...product,
-          image_url: imageResult.rows[0]?.image_url || null,
-          colors: colorsResult.rows.map(r => r.color),
-          sizes: sizesResult.rows.map(r => r.size),
-          variants_count: parseInt(variantsCountResult.rows[0].count)
-        };
-      })
+    // Query 2: Obtener imágenes principales de todos los productos
+    const imagesResult = await pool.query(
+      `SELECT DISTINCT ON (product_id) product_id, image_url 
+       FROM product_images 
+       WHERE product_id = ANY($1) AND is_primary = true`,
+      [productIds]
     );
+
+    // Query 3: Obtener colores de todos los productos
+    const colorsResult = await pool.query(
+      `SELECT DISTINCT product_id, color 
+       FROM product_variants 
+       WHERE product_id = ANY($1) AND color IS NOT NULL
+       ORDER BY product_id, color`,
+      [productIds]
+    );
+
+    // Query 4: Obtener tallas de todos los productos
+    const sizesResult = await pool.query(
+      `SELECT DISTINCT product_id, size 
+       FROM product_variants 
+       WHERE product_id = ANY($1) AND size IS NOT NULL
+       ORDER BY product_id, size`,
+      [productIds]
+    );
+
+    // Query 5: Obtener conteo de variantes por producto
+    const variantsCountResult = await pool.query(
+      `SELECT product_id, COUNT(*) as count 
+       FROM product_variants 
+       WHERE product_id = ANY($1)
+       GROUP BY product_id`,
+      [productIds]
+    );
+
+    // Crear mapas para acceso rápido O(1)
+    const imagesMap = {};
+    imagesResult.rows.forEach(row => {
+      imagesMap[row.product_id] = row.image_url;
+    });
+
+    const colorsMap = {};
+    colorsResult.rows.forEach(row => {
+      if (!colorsMap[row.product_id]) {
+        colorsMap[row.product_id] = [];
+      }
+      colorsMap[row.product_id].push(row.color);
+    });
+
+    const sizesMap = {};
+    sizesResult.rows.forEach(row => {
+      if (!sizesMap[row.product_id]) {
+        sizesMap[row.product_id] = [];
+      }
+      sizesMap[row.product_id].push(row.size);
+    });
+
+    const variantsCountMap = {};
+    variantsCountResult.rows.forEach(row => {
+      variantsCountMap[row.product_id] = parseInt(row.count);
+    });
+
+    // Combinar datos (sin queries adicionales)
+    const products = productsResult.rows.map(product => ({
+      ...product,
+      image_url: imagesMap[product.id] || null,
+      colors: colorsMap[product.id] || [],
+      sizes: sizesMap[product.id] || [],
+      variants_count: variantsCountMap[product.id] || 0
+    }));
 
     res.json({
       success: true,
@@ -354,6 +431,7 @@ const getAllProducts = async (req, res) => {
 
 // =====================================================
 // GET PRODUCTS BY CATEGORY - Filtrar por categoría
+// OPTIMIZADO: Usa 4 queries en lugar de N+1
 // =====================================================
 const getProductsByCategory = async (req, res) => {
   try {
@@ -366,6 +444,7 @@ const getProductsByCategory = async (req, res) => {
       });
     }
 
+    // Query 1: Obtener productos de la categoría
     const productsResult = await pool.query(
       `SELECT 
         p.id,
@@ -385,44 +464,76 @@ const getProductsByCategory = async (req, res) => {
       [client_id, category]
     );
 
-    const products = await Promise.all(
-      productsResult.rows.map(async (product) => {
-        // Obtener TODAS las imágenes
-        const imagesResult = await pool.query(
-          `SELECT image_url, is_primary 
-           FROM product_images 
-           WHERE product_id = $1
-           ORDER BY is_primary DESC, display_order ASC`,
-          [product.id]
-        );
+    // Si no hay productos, retornar vacío
+    if (productsResult.rows.length === 0) {
+      return res.json({ success: true, products: [] });
+    }
 
-        const images = imagesResult.rows.map(r => r.image_url);
+    const productIds = productsResult.rows.map(p => p.id);
 
-        const colorsResult = await pool.query(
-          `SELECT DISTINCT color 
-           FROM product_variants 
-           WHERE product_id = $1 AND active = true AND color IS NOT NULL
-           ORDER BY color`,
-          [product.id]
-        );
-
-        const sizesResult = await pool.query(
-          `SELECT DISTINCT size 
-           FROM product_variants 
-           WHERE product_id = $1 AND active = true AND size IS NOT NULL
-           ORDER BY size`,
-          [product.id]
-        );
-
-        return {
-          ...product,
-          image_url: images[0] || null,
-          images: images, // Array con todas las imágenes
-          colors: colorsResult.rows.map(r => r.color),
-          sizes: sizesResult.rows.map(r => r.size)
-        };
-      })
+    // Query 2: Obtener TODAS las imágenes
+    const imagesResult = await pool.query(
+      `SELECT product_id, image_url, is_primary 
+       FROM product_images 
+       WHERE product_id = ANY($1)
+       ORDER BY product_id, is_primary DESC, display_order ASC`,
+      [productIds]
     );
+
+    // Query 3: Obtener colores
+    const colorsResult = await pool.query(
+      `SELECT DISTINCT product_id, color 
+       FROM product_variants 
+       WHERE product_id = ANY($1) AND active = true AND color IS NOT NULL
+       ORDER BY product_id, color`,
+      [productIds]
+    );
+
+    // Query 4: Obtener tallas
+    const sizesResult = await pool.query(
+      `SELECT DISTINCT product_id, size 
+       FROM product_variants 
+       WHERE product_id = ANY($1) AND active = true AND size IS NOT NULL
+       ORDER BY product_id, size`,
+      [productIds]
+    );
+
+    // Crear mapas para acceso rápido O(1)
+    const imagesMap = {};
+    imagesResult.rows.forEach(row => {
+      if (!imagesMap[row.product_id]) {
+        imagesMap[row.product_id] = [];
+      }
+      imagesMap[row.product_id].push(row.image_url);
+    });
+
+    const colorsMap = {};
+    colorsResult.rows.forEach(row => {
+      if (!colorsMap[row.product_id]) {
+        colorsMap[row.product_id] = [];
+      }
+      colorsMap[row.product_id].push(row.color);
+    });
+
+    const sizesMap = {};
+    sizesResult.rows.forEach(row => {
+      if (!sizesMap[row.product_id]) {
+        sizesMap[row.product_id] = [];
+      }
+      sizesMap[row.product_id].push(row.size);
+    });
+
+    // Combinar datos (sin queries adicionales)
+    const products = productsResult.rows.map(product => {
+      const images = imagesMap[product.id] || [];
+      return {
+        ...product,
+        image_url: images[0] || null,
+        images: images,
+        colors: colorsMap[product.id] || [],
+        sizes: sizesMap[product.id] || []
+      };
+    });
 
     res.json({
       success: true,
@@ -443,6 +554,11 @@ const getProductsByCategory = async (req, res) => {
 const getProductByIdAdmin = async (req, res) => {
   try {
     const { id } = req.params;
+
+    // Validar ID
+    if (!validateNumericId(id)) {
+      return res.status(400).json({ error: 'ID de producto inválido' });
+    }
 
     // Buscar producto
     const productResult = await pool.query(
@@ -579,6 +695,35 @@ const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
     const { sku, name, description, category, reference_price, active, colors, sizes, images, videos, imagesWithColors, videosWithColors } = req.body;
+
+    // Validar ID
+    if (!validateNumericId(id)) {
+      return res.status(400).json({ error: 'ID de producto inválido' });
+    }
+
+    // Validaciones
+    const errors = [];
+    
+    if (!validateRequired(sku)) {
+      errors.push('SKU es requerido');
+    } else if (!validateSku(sku)) {
+      errors.push('SKU debe ser alfanumérico con guiones (2-50 caracteres)');
+    }
+    
+    if (!validateRequired(name)) {
+      errors.push('Nombre es requerido');
+    } else if (!validateLength(name, 1, 255)) {
+      errors.push('Nombre debe tener entre 1 y 255 caracteres');
+    }
+    
+    if (reference_price !== undefined && !validateNonNegativeNumber(reference_price)) {
+      errors.push('Precio de referencia debe ser un número válido');
+    }
+    
+    if (errors.length > 0) {
+      client.release();
+      return res.status(400).json({ errors });
+    }
 
     console.log('=== ACTUALIZANDO PRODUCTO ===');
     console.log('ID:', id);
@@ -726,6 +871,30 @@ const createProduct = async (req, res) => {
   try {
     const { sku, name, description, category, reference_price, active, colors, sizes, images, videos, imagesWithColors, videosWithColors } = req.body;
 
+    // Validaciones
+    const errors = [];
+    
+    if (!validateRequired(sku)) {
+      errors.push('SKU es requerido');
+    } else if (!validateSku(sku)) {
+      errors.push('SKU debe ser alfanumérico con guiones (2-50 caracteres)');
+    }
+    
+    if (!validateRequired(name)) {
+      errors.push('Nombre es requerido');
+    } else if (!validateLength(name, 1, 255)) {
+      errors.push('Nombre debe tener entre 1 y 255 caracteres');
+    }
+    
+    if (reference_price !== undefined && !validateNonNegativeNumber(reference_price)) {
+      errors.push('Precio de referencia debe ser un número válido');
+    }
+    
+    if (errors.length > 0) {
+      client.release();
+      return res.status(400).json({ errors });
+    }
+
     console.log('=== CREANDO PRODUCTO ===');
     console.log('Imágenes recibidas:', images?.length || 0);
     console.log('Imágenes con colores:', imagesWithColors?.length || 0);
@@ -857,6 +1026,7 @@ const createProduct = async (req, res) => {
 
 // =====================================================
 // SEARCH PRODUCTS - Búsqueda difusa de productos
+// OPTIMIZADO: Usa 4 queries en lugar de N+1
 // =====================================================
 const searchProducts = async (req, res) => {
   try {
@@ -869,7 +1039,7 @@ const searchProducts = async (req, res) => {
       });
     }
 
-    // Obtener TODOS los productos del cliente
+    // Query 1: Obtener TODOS los productos del cliente
     const productsResult = await pool.query(
       `SELECT 
         p.id,
@@ -894,45 +1064,81 @@ const searchProducts = async (req, res) => {
       products = fuzzySearch(products, q, parseInt(threshold));
     }
 
-    // Para cada producto, obtener imágenes
-    const productsWithImages = await Promise.all(
-      products.map(async (product) => {
-        // Obtener TODAS las imágenes
-        const imagesResult = await pool.query(
-          `SELECT image_url, is_primary 
-           FROM product_images 
-           WHERE product_id = $1
-           ORDER BY is_primary DESC, display_order ASC`,
-          [product.id]
-        );
+    // Si no hay productos después del filtro, retornar vacío
+    if (products.length === 0) {
+      return res.json({
+        success: true,
+        products: [],
+        query: q,
+        total_results: 0
+      });
+    }
 
-        const images = imagesResult.rows.map(r => r.image_url);
+    const productIds = products.map(p => p.id);
 
-        const colorsResult = await pool.query(
-          `SELECT DISTINCT color 
-           FROM product_variants 
-           WHERE product_id = $1 AND active = true AND color IS NOT NULL
-           ORDER BY color`,
-          [product.id]
-        );
-
-        const sizesResult = await pool.query(
-          `SELECT DISTINCT size 
-           FROM product_variants 
-           WHERE product_id = $1 AND active = true AND size IS NOT NULL
-           ORDER BY size`,
-          [product.id]
-        );
-
-        return {
-          ...product,
-          image_url: images[0] || null,
-          images: images, // Array con todas las imágenes
-          colors: colorsResult.rows.map(r => r.color),
-          sizes: sizesResult.rows.map(r => r.size)
-        };
-      })
+    // Query 2: Obtener TODAS las imágenes
+    const imagesResult = await pool.query(
+      `SELECT product_id, image_url, is_primary 
+       FROM product_images 
+       WHERE product_id = ANY($1)
+       ORDER BY product_id, is_primary DESC, display_order ASC`,
+      [productIds]
     );
+
+    // Query 3: Obtener colores
+    const colorsResult = await pool.query(
+      `SELECT DISTINCT product_id, color 
+       FROM product_variants 
+       WHERE product_id = ANY($1) AND active = true AND color IS NOT NULL
+       ORDER BY product_id, color`,
+      [productIds]
+    );
+
+    // Query 4: Obtener tallas
+    const sizesResult = await pool.query(
+      `SELECT DISTINCT product_id, size 
+       FROM product_variants 
+       WHERE product_id = ANY($1) AND active = true AND size IS NOT NULL
+       ORDER BY product_id, size`,
+      [productIds]
+    );
+
+    // Crear mapas para acceso rápido O(1)
+    const imagesMap = {};
+    imagesResult.rows.forEach(row => {
+      if (!imagesMap[row.product_id]) {
+        imagesMap[row.product_id] = [];
+      }
+      imagesMap[row.product_id].push(row.image_url);
+    });
+
+    const colorsMap = {};
+    colorsResult.rows.forEach(row => {
+      if (!colorsMap[row.product_id]) {
+        colorsMap[row.product_id] = [];
+      }
+      colorsMap[row.product_id].push(row.color);
+    });
+
+    const sizesMap = {};
+    sizesResult.rows.forEach(row => {
+      if (!sizesMap[row.product_id]) {
+        sizesMap[row.product_id] = [];
+      }
+      sizesMap[row.product_id].push(row.size);
+    });
+
+    // Combinar datos (sin queries adicionales)
+    const productsWithImages = products.map(product => {
+      const images = imagesMap[product.id] || [];
+      return {
+        ...product,
+        image_url: images[0] || null,
+        images: images,
+        colors: colorsMap[product.id] || [],
+        sizes: sizesMap[product.id] || []
+      };
+    });
 
     res.json({
       success: true,
@@ -957,6 +1163,12 @@ const deleteProduct = async (req, res) => {
   
   try {
     const { id } = req.params;
+
+    // Validar ID
+    if (!validateNumericId(id)) {
+      client.release();
+      return res.status(400).json({ error: 'ID de producto inválido' });
+    }
 
     console.log('=== ELIMINANDO PRODUCTO ===');
     console.log('ID:', id);

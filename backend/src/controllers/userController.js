@@ -1,5 +1,14 @@
 const pool = require('../config/database');
 const bcrypt = require('bcryptjs');
+const {
+  validateRequired,
+  validateEmail,
+  validateRole,
+  validatePassword,
+  validateNumericId,
+  validateUsername,
+  validateLength
+} = require('../middleware/validators');
 
 // Obtener todos los usuarios
 const getAllUsers = async (req, res) => {
@@ -32,6 +41,11 @@ const getAllUsers = async (req, res) => {
 const getUserById = async (req, res) => {
   try {
     const { id } = req.params;
+
+    // Validar ID
+    if (!validateNumericId(id)) {
+      return res.status(400).json({ error: 'ID de usuario inválido' });
+    }
 
     const result = await pool.query(`
       SELECT 
@@ -67,13 +81,17 @@ const resetUserPassword = async (req, res) => {
     const { id } = req.params;
     const { newPassword } = req.body;
 
-    // Validar que se proporcione la nueva contraseña
-    if (!newPassword) {
-      return res.status(400).json({ error: 'Se requiere una nueva contraseña' });
+    // Validar ID
+    if (!validateNumericId(id)) {
+      return res.status(400).json({ error: 'ID de usuario inválido' });
     }
 
-    // Validar longitud mínima
-    if (newPassword.length < 6) {
+    // Validar contraseña
+    if (!validateRequired(newPassword)) {
+      return res.status(400).json({ error: 'Se requiere una nueva contraseña' });
+    }
+    
+    if (!validatePassword(newPassword)) {
       return res.status(400).json({ error: 'La contraseña debe tener al menos 6 caracteres' });
     }
 
@@ -111,6 +129,11 @@ const toggleUserStatus = async (req, res) => {
     const { id } = req.params;
     const { active } = req.body;
 
+    // Validar ID
+    if (!validateNumericId(id)) {
+      return res.status(400).json({ error: 'ID de usuario inválido' });
+    }
+
     // Verificar que el usuario existe
     const userCheck = await pool.query('SELECT id, active FROM users WHERE id = $1', [id]);
     if (userCheck.rows.length === 0) {
@@ -142,9 +165,39 @@ const createUser = async (req, res) => {
   try {
     const { client_id, user_name, email, password, role } = req.body;
 
-    // Validaciones básicas
-    if (!user_name || !email || !password || !role) {
-      return res.status(400).json({ error: 'Todos los campos son requeridos' });
+    // Validaciones
+    const errors = [];
+    
+    if (!validateRequired(user_name)) {
+      errors.push('Nombre de usuario es requerido');
+    } else if (!validateUsername(user_name)) {
+      errors.push('Nombre de usuario debe ser alfanumérico (3-50 caracteres)');
+    }
+    
+    if (!validateRequired(email)) {
+      errors.push('Email es requerido');
+    } else if (!validateEmail(email)) {
+      errors.push('Formato de email inválido');
+    }
+    
+    if (!validateRequired(password)) {
+      errors.push('Contraseña es requerida');
+    } else if (!validatePassword(password)) {
+      errors.push('Contraseña debe tener al menos 6 caracteres');
+    }
+    
+    if (!validateRequired(role)) {
+      errors.push('Rol es requerido');
+    } else if (!validateRole(role)) {
+      errors.push('Rol no válido. Debe ser client_user o master_admin');
+    }
+    
+    if (client_id && !validateNumericId(client_id)) {
+      errors.push('ID de cliente inválido');
+    }
+    
+    if (errors.length > 0) {
+      return res.status(400).json({ errors });
     }
 
     // Verificar si el usuario ya existe
@@ -187,6 +240,30 @@ const updateUser = async (req, res) => {
   try {
     const { id } = req.params;
     const { name, email, user_name } = req.body;
+
+    // Validar ID
+    if (!validateNumericId(id)) {
+      return res.status(400).json({ error: 'ID de usuario inválido' });
+    }
+
+    // Validaciones de campos
+    const errors = [];
+    
+    if (user_name && !validateUsername(user_name)) {
+      errors.push('Nombre de usuario debe ser alfanumérico (3-50 caracteres)');
+    }
+    
+    if (email && !validateEmail(email)) {
+      errors.push('Formato de email inválido');
+    }
+    
+    if (name && !validateLength(name, 1, 255)) {
+      errors.push('Nombre debe tener entre 1 y 255 caracteres');
+    }
+    
+    if (errors.length > 0) {
+      return res.status(400).json({ errors });
+    }
 
     // Verificar que el usuario existe
     const userCheck = await pool.query('SELECT id FROM users WHERE id = $1', [id]);
