@@ -1,6 +1,6 @@
 {
   "name": "corporacion-argom-backend",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Backend para sistema de órdenes de compra - Corporación Argom",
   "main": "src/server.js",
   "scripts": {
