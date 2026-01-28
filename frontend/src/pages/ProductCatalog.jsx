@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useSearchParams, useLocation } from 'react-router-dom';
 import ClientWelcomeBar from '../components/ClientWelcomeBar';
 import ClientNavbar from '../components/ClientNavbar';
 import CategoryMenu from '../components/CategoryMenu';
@@ -28,6 +28,10 @@ const ProductCatalog = () => {
   const [cartCount, setCartCount] = useState(0);
   const [wishlistProductIds, setWishlistProductIds] = useState(new Set());
   const [searchParams] = useSearchParams();
+  const location = useLocation();
+  
+  // Ref para evitar restaurar scroll múltiples veces
+  const scrollRestored = useRef(false);
   
   // Estado para Toast
   const [toastVisible, setToastVisible] = useState(false);
@@ -35,6 +39,32 @@ const ProductCatalog = () => {
 
   // Hook para productos vistos recientemente
   const { getRecentlyViewed } = useRecentlyViewed();
+
+  // Restaurar scroll cuando los productos terminen de cargar
+  useEffect(() => {
+    if (!loading && products.length > 0 && !scrollRestored.current) {
+      const savedPosition = sessionStorage.getItem(`scrollPos:${location.pathname}`);
+      
+      if (savedPosition) {
+        try {
+          const { x, y } = JSON.parse(savedPosition);
+          // Pequeño delay para asegurar que el DOM esté completamente renderizado
+          requestAnimationFrame(() => {
+            window.scrollTo(x, y);
+          });
+        } catch (e) {
+          console.error('Error al restaurar posición de scroll:', e);
+        }
+      }
+      
+      scrollRestored.current = true;
+    }
+  }, [loading, products, location.pathname]);
+
+  // Resetear el flag cuando cambie la ruta
+  useEffect(() => {
+    scrollRestored.current = false;
+  }, [location.pathname]);
 
   useEffect(() => {
     loadProducts();

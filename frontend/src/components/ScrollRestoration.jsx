@@ -1,47 +1,37 @@
 import { useEffect } from 'react';
-import { useLocation, useNavigationType } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 /**
- * Componente que maneja el scroll:
- * - Guarda posición constantemente en sessionStorage
- * - Restaura posición en navegaciones hacia atrás
- * - Scroll al inicio en navegaciones hacia adelante
+ * Componente que guarda la posición de scroll por ruta.
+ * La restauración se hace manualmente en cada página cuando el contenido está listo.
  */
 const ScrollRestoration = () => {
   const location = useLocation();
-  const navigationType = useNavigationType();
 
   useEffect(() => {
-    const currentPath = location.pathname;
-
-    if (navigationType === 'POP') {
-      // Navegación hacia atrás: restaurar posición guardada
-      const savedPosition = sessionStorage.getItem(`scroll_${currentPath}`);
-      if (savedPosition) {
-        const position = parseInt(savedPosition, 10);
-        // Esperar un poco para que el DOM esté listo
-        setTimeout(() => {
-          window.scrollTo(0, position);
-        }, 0);
-      }
-    } else {
-      // Navegación hacia adelante: ir al inicio
-      window.scrollTo(0, 0);
+    // Deshabilitar el comportamiento automático del navegador
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
     }
 
-    // Guardar posición del scroll cada vez que el usuario hace scroll
-    const handleScroll = () => {
-      sessionStorage.setItem(`scroll_${currentPath}`, window.scrollY.toString());
+    // Guardar posición en cada scroll
+    const saveScrollPosition = () => {
+      const scrollPos = {
+        x: window.scrollX,
+        y: window.scrollY,
+      };
+      sessionStorage.setItem(
+        `scrollPos:${location.pathname}`,
+        JSON.stringify(scrollPos)
+      );
     };
 
-    // Agregar listener de scroll
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', saveScrollPosition, { passive: true });
 
-    // Limpiar listener al desmontar
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', saveScrollPosition);
     };
-  }, [location.pathname, navigationType]);
+  }, [location.pathname]);
 
   return null;
 };
