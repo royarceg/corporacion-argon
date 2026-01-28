@@ -24,8 +24,10 @@ const ScrollRestoration = () => {
       }
     } else {
       // Si es una navegación hacia adelante, guardar la posición actual antes de navegar
+      // Copiar la referencia a una variable local para el cleanup
+      const positions = scrollPositions.current;
       return () => {
-        scrollPositions.current[currentPath] = window.scrollY;
+        positions[currentPath] = window.scrollY;
       };
     }
   }, [location.pathname, navigationType]);
