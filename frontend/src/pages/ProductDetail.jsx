@@ -7,7 +7,6 @@ import productService from '../services/productService';
 import wishlistService from '../services/wishlistService';
 import cartService from '../services/cartService';
 import { useRecentlyViewed } from '../hooks/useRecentlyViewed';
-import { useScrollToTop } from '../hooks/useScrollToTop';
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -29,9 +28,6 @@ const ProductDetail = () => {
 
   // Hook para productos vistos recientemente
   const { addToRecentlyViewed, getRecentlyViewed } = useRecentlyViewed();
-  
-  // Hook para hacer scroll al inicio cuando se carga un producto
-  useScrollToTop();
 
   const loadProduct = useCallback(async () => {
     try {

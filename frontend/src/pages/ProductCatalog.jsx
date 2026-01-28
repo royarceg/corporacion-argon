@@ -12,7 +12,6 @@ import productService from '../services/productService';
 import wishlistService from '../services/wishlistService';
 import cartService from '../services/cartService';
 import { useRecentlyViewed } from '../hooks/useRecentlyViewed';
-import { useScrollToTop } from '../hooks/useScrollToTop';
 
 const ProductCatalog = () => {
   const [products, setProducts] = useState([]);
@@ -36,9 +35,6 @@ const ProductCatalog = () => {
 
   // Hook para productos vistos recientemente
   const { getRecentlyViewed } = useRecentlyViewed();
-  
-  // Hook para hacer scroll al inicio cuando se carga el catálogo
-  useScrollToTop();
 
   useEffect(() => {
     loadProducts();
