@@ -1,0 +1,128 @@
+@import "tailwindcss";
+
+/* ── Fonts ── */
+@font-face {
+  font-family: "Graphik";
+  src: url("/fonts/Graphik-Light.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Graphik";
+  src: url("/fonts/Graphik-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Graphik";
+  src: url("/fonts/Graphik-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Graphik";
+  src: url("/fonts/Graphik-Semibold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Graphik";
+  src: url("/fonts/Graphik-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Nantes";
+  src: url("/fonts/Nantes-Light.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Nantes";
+  src: url("/fonts/Nantes-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Nantes";
+  src: url("/fonts/Nantes-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "SelfModern";
+  src: url("/fonts/SelfModern-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "AkkuratMono";
+  src: url("/fonts/AkkuratMono-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ── Design tokens (Allbirds-style) ── */
+:root {
+  --color-charcoal: #212121;
+  --color-light-charcoal: #575757;
+  --color-natural-white: #ece9e2;
+  --color-white: #ffffff;
+  --color-hero-blue: #13406b;
+  --color-sale: #9c0f0f;
+  --color-featured-bg: #e0dacf;
+  --ease-snappy: cubic-bezier(0.2, 0, 0, 1);
+  --ease-sine-in-out: cubic-bezier(0.37, 0, 0.63, 1);
+  --global-banner-height: 32px;
+}
+
+@theme inline {
+  --color-background: var(--color-natural-white);
+  --color-foreground: var(--color-charcoal);
+}
+
+/* ── Base ── */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--color-natural-white);
+  color: var(--color-charcoal);
+  font-family: "Graphik", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Scrollbar hidden ── */
+.scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Scroll-reveal ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s var(--ease-sine-in-out),
+    transform 0.5s var(--ease-sine-in-out);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
