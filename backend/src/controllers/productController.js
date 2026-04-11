@@ -44,7 +44,7 @@ const getProducts = async (req, res) => {
       WHERE cp.client_id = $1 
         AND cp.active = true 
         AND p.active = true
-      ORDER BY p.name`,
+      ORDER BY p.category, p.name`,
       [client_id]
     );
 
