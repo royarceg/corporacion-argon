@@ -1,0 +1,425 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { ApiProduct, ApiVariant, productService } from "@/services/productService";
+import { useCart } from "@/context/CartContext";
+
+interface Props {
+  product: ApiProduct;
+  onClose: () => void;
+}
+
+export default function QuickViewModal({ product, onClose }: Props) {
+  const router = useRouter();
+  const { addToCart } = useCart();
+
+  const [variants, setVariants] = useState<ApiVariant[]>([]);
+  const [loadingVariants, setLoadingVariants] = useState(true);
+
+  const [selectedImage, setSelectedImage] = useState(0);
+  const [selectedColor, setSelectedColor] = useState<string | null>(
+    product.colors?.[0] ?? null
+  );
+  const [selectedSize, setSelectedSize] = useState<string | null>(null);
+  const [adding, setAdding] = useState(false);
+  const [added, setAdded] = useState(false);
+
+  const colors = product.colors ?? [];
+  const sizes = sortSizes(product.sizes ?? []);
+  const images = product.images ?? [];
+
+  // Fetch variantes completas (con id y sku_variant) al abrir el modal
+  useEffect(() => {
+    productService.getProductById(product.id)
+      .then((detail) => setVariants(detail.variants ?? []))
+      .catch(() => setVariants([]))
+      .finally(() => setLoadingVariants(false));
+  }, [product.id]);
+
+  // Encontrar el variant_id según color + talla seleccionados
+  function resolveVariantId(): number | undefined {
+    if (variants.length === 0) return undefined;
+    const match = variants.find(
+      (v) =>
+        (selectedSize ? v.size === selectedSize : true) &&
+        (selectedColor ? v.color === selectedColor : true)
+    );
+    return match?.id;
+  }
+
+  // Código de variante a mostrar al cliente
+  function resolveSkuVariant(): string | null {
+    if (variants.length === 0) return null;
+    const match = variants.find(
+      (v) =>
+        (selectedSize ? v.size === selectedSize : true) &&
+        (selectedColor ? v.color === selectedColor : true)
+    );
+    return match?.sku_variant ?? null;
+  }
+
+  const price = parseFloat(product.price).toLocaleString("es-CR", {
+    style: "currency",
+    currency: "CRC",
+    minimumFractionDigits: 0,
+  });
+
+  async function handleAddToCart() {
+    setAdding(true);
+    try {
+      const variantId = resolveVariantId();
+      await addToCart(product.id, 1, variantId);
+      setAdded(true);
+      setTimeout(() => {
+        setAdded(false);
+        onClose();
+      }, 1500);
+    } finally {
+      setAdding(false);
+    }
+  }
+
+  const skuVariant = resolveSkuVariant();
+
+  return (
+    <>
+      {/* Overlay */}
+      <div
+        onClick={onClose}
+        style={{
+          position: "fixed",
+          inset: 0,
+          backgroundColor: "rgba(0,0,0,0.45)",
+          zIndex: 200,
+        }}
+      />
+
+      {/* Modal */}
+      <div
+        style={{
+          position: "fixed",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          backgroundColor: "#ffffff",
+          zIndex: 201,
+          width: "min(860px, 92vw)",
+          maxHeight: "90vh",
+          display: "flex",
+          overflow: "hidden",
+        }}
+      >
+        {/* Close button */}
+        <button
+          onClick={onClose}
+          aria-label="Cerrar"
+          style={{
+            position: "absolute",
+            top: "16px",
+            right: "16px",
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            padding: "4px",
+            zIndex: 1,
+            lineHeight: 0,
+          }}
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="1.5">
+            <path d="M18 6 6 18M6 6l12 12" />
+          </svg>
+        </button>
+
+        {/* LEFT — Images */}
+        <div
+          style={{
+            flex: "0 0 55%",
+            display: "flex",
+            backgroundColor: "#f5f4f4",
+            overflow: "hidden",
+          }}
+        >
+          {/* Thumbnail strip */}
+          {images.length > 1 && (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "6px",
+                padding: "16px",
+                width: "60px",
+                flexShrink: 0,
+                overflowY: "auto",
+              }}
+            >
+              {images.map((img, i) => (
+                <div
+                  key={i}
+                  onClick={() => setSelectedImage(i)}
+                  style={{
+                    width: "44px",
+                    height: "54px",
+                    backgroundColor: "#eae9e9",
+                    overflow: "hidden",
+                    cursor: "pointer",
+                    flexShrink: 0,
+                    border: selectedImage === i
+                      ? "1.5px solid #000"
+                      : "1.5px solid transparent",
+                  }}
+                >
+                  <img
+                    src={img}
+                    alt={product.name}
+                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Main image */}
+          <div style={{ flex: 1, overflow: "hidden", minHeight: "420px" }}>
+            {images[selectedImage] ? (
+              <img
+                src={images[selectedImage]}
+                alt={product.name}
+                style={{ width: "100%", height: "100%", objectFit: "contain" }}
+              />
+            ) : (
+              <div style={{ width: "100%", height: "100%" }} />
+            )}
+          </div>
+        </div>
+
+        {/* RIGHT — Info */}
+        <div
+          style={{
+            flex: "0 0 45%",
+            padding: "40px 36px 36px 32px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "20px",
+            overflowY: "auto",
+          }}
+        >
+          {/* Name + Price */}
+          <div>
+            <h2
+              style={{
+                fontFamily: "Graphik, sans-serif",
+                fontSize: "20px",
+                fontWeight: 400,
+                color: "#000",
+                margin: "0 0 10px 0",
+                lineHeight: 1.3,
+                letterSpacing: "-0.01em",
+                paddingRight: "20px",
+              }}
+            >
+              {product.name}
+            </h2>
+            <p
+              style={{
+                fontFamily: "Graphik, sans-serif",
+                fontSize: "15px",
+                fontWeight: 400,
+                color: "#000",
+                margin: 0,
+              }}
+            >
+              {price}
+            </p>
+          </div>
+
+          {/* Color */}
+          {colors.length > 0 && (
+            <div>
+              <p
+                style={{
+                  fontFamily: "Graphik, sans-serif",
+                  fontSize: "12px",
+                  fontWeight: 500,
+                  color: "#000",
+                  margin: "0 0 3px 0",
+                }}
+              >
+                Color: <span style={{ fontWeight: 400 }}>{selectedColor}</span>
+              </p>
+              <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginTop: "8px" }}>
+                {colors.map((color) => (
+                  <button
+                    key={color}
+                    title={color}
+                    onClick={() => { setSelectedColor(color); setSelectedSize(null); }}
+                    style={{
+                      width: "26px",
+                      height: "26px",
+                      borderRadius: "50%",
+                      backgroundColor: colorToHex(color),
+                      border:
+                        selectedColor === color
+                          ? "2px solid #000"
+                          : "1px solid rgba(0,0,0,0.2)",
+                      cursor: "pointer",
+                      padding: 0,
+                      outline: "none",
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Size */}
+          {sizes.length > 0 && (
+            <div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "baseline",
+                  marginBottom: "10px",
+                }}
+              >
+                <p
+                  style={{
+                    fontFamily: "Graphik, sans-serif",
+                    fontSize: "12px",
+                    fontWeight: 500,
+                    color: "#000",
+                    margin: 0,
+                  }}
+                >
+                  Talla:
+                </p>
+              </div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+                {sizes.map((size) => (
+                  <button
+                    key={size}
+                    onClick={() =>
+                      setSelectedSize((prev) => (prev === size ? null : size))
+                    }
+                    style={{
+                      fontFamily: "Graphik, sans-serif",
+                      fontSize: "12px",
+                      color: selectedSize === size ? "#fff" : "#000",
+                      backgroundColor: selectedSize === size ? "#000" : "#fff",
+                      border: "1px solid rgba(0,0,0,0.25)",
+                      padding: "6px 12px",
+                      cursor: "pointer",
+                      minWidth: "40px",
+                      textAlign: "center",
+                      transition: "all 0.1s ease",
+                    }}
+                  >
+                    {size}
+                  </button>
+                ))}
+              </div>
+
+              {/* Código de variante */}
+              {!loadingVariants && skuVariant && (
+                <p style={{
+                  fontFamily: "Graphik, sans-serif",
+                  fontSize: "11px",
+                  color: "rgba(0,0,0,0.45)",
+                  margin: "10px 0 0 0",
+                  letterSpacing: "0.04em",
+                }}>
+                  Código: <span style={{ color: "#000", fontWeight: 500 }}>{skuVariant}</span>
+                </p>
+              )}
+            </div>
+          )}
+
+          {/* Add to Bag */}
+          <button
+            onClick={handleAddToCart}
+            disabled={adding}
+            style={{
+              fontFamily: "Graphik, sans-serif",
+              fontSize: "13px",
+              fontWeight: 500,
+              color: "#fff",
+              backgroundColor: added
+                ? "#3a6b3a"
+                : adding
+                ? "rgba(0,0,0,0.4)"
+                : "#000",
+              border: "none",
+              padding: "14px",
+              cursor: adding ? "not-allowed" : "pointer",
+              letterSpacing: "0.06em",
+              textTransform: "uppercase",
+              transition: "background-color 0.2s",
+              marginTop: "4px",
+            }}
+          >
+            {added ? "✓ Agregado" : adding ? "Agregando..." : "Add to Bag"}
+          </button>
+
+          {/* View Full Details */}
+          <button
+            onClick={() => {
+              onClose();
+              router.push(`/productos/${product.id}`);
+            }}
+            style={{
+              fontFamily: "Graphik, sans-serif",
+              fontSize: "13px",
+              color: "#000",
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              textDecoration: "underline",
+              padding: 0,
+              textAlign: "left",
+              marginTop: "-8px",
+            }}
+          >
+            View Full Details
+          </button>
+        </div>
+      </div>
+    </>
+  );
+}
+
+const SIZE_ORDER = ["S","M","L","XL","XXL","XXXL","XXXXL"];
+
+function sortSizes(sizes: string[]): string[] {
+  const allNumeric = sizes.every((s) => !isNaN(Number(s)));
+  if (allNumeric) return [...sizes].sort((a, b) => Number(a) - Number(b));
+  return [...sizes].sort((a, b) => {
+    const ia = SIZE_ORDER.indexOf(a.toUpperCase());
+    const ib = SIZE_ORDER.indexOf(b.toUpperCase());
+    if (ia === -1 && ib === -1) return a.localeCompare(b);
+    if (ia === -1) return 1;
+    if (ib === -1) return -1;
+    return ia - ib;
+  });
+}
+
+function colorToHex(color: string): string {
+  const map: Record<string, string> = {
+    NEGRO: "#1a1a1a",
+    BEIGE: "#d4b896",
+    "BEIGE-KHAKI": "#c8b88a",
+    BLANCO: "#f5f5f5",
+    GRIS: "#9e9e9e",
+    AZUL: "#2d6a9f",
+    "AZUL OSCURO": "#1a3a5c",
+    ROJO: "#9c2121",
+    VERDE: "#3a6b3a",
+    "VERDE OSCURO": "#2a4a2a",
+    NARANJA: "#d4612a",
+    AMARILLO: "#d4c12a",
+    "AMARILLO FOSFORESCENTE": "#e8e020",
+    CAFE: "#7a5c3a",
+    MARRON: "#7a5c3a",
+  };
+  return map[color.toUpperCase()] ?? "#cccccc";
+}

@@ -214,6 +214,22 @@ const getProductById = async (req, res) => {
       }
     });
 
+    // Fallback: si no hay imágenes generales, usar todas las de variant_images
+    // y si tampoco, usar product_images
+    let displayImages = generalImages;
+    if (displayImages.length === 0) {
+      displayImages = variantImagesResult.rows.map(r => r.image_url);
+    }
+    if (displayImages.length === 0) {
+      const productImagesResult = await pool.query(
+        `SELECT image_url FROM product_images
+         WHERE product_id = $1
+         ORDER BY is_primary DESC, display_order ASC`,
+        [id]
+      );
+      displayImages = productImagesResult.rows.map(r => r.image_url);
+    }
+
     // Obtener TODOS los videos del producto con sus colores desde variant_videos
     const variantVideosResult = await pool.query(
       `SELECT video_url, color, thumbnail_url
@@ -251,21 +267,12 @@ const getProductById = async (req, res) => {
       videosFallback = videosResult.rows.map(r => r.video_url);
     }
 
-    // Obtener colores disponibles
-    const colorsResult = await pool.query(
-      `SELECT DISTINCT color 
-       FROM product_variants 
-       WHERE product_id = $1 AND active = true AND color IS NOT NULL
-       ORDER BY color`,
-      [id]
-    );
-
-    // Obtener tallas disponibles
-    const sizesResult = await pool.query(
-      `SELECT DISTINCT size 
-       FROM product_variants 
-       WHERE product_id = $1 AND active = true AND size IS NOT NULL
-       ORDER BY size`,
+    // Obtener todas las variantes con id, talla, color y sku_variant
+    const variantsResult = await pool.query(
+      `SELECT id, size, color, sku_variant
+       FROM product_variants
+       WHERE product_id = $1 AND active = true
+       ORDER BY color NULLS LAST, size`,
       [id]
     );
 
@@ -299,14 +306,15 @@ const getProductById = async (req, res) => {
       success: true,
       product: {
         ...product,
-        images: generalImages, // Imágenes generales (sin color)
-        imagesByColor: imagesByColor, // Imágenes agrupadas por color
-        image_url: generalImages[0] || variantImagesResult.rows[0]?.image_url || null,
+        images: displayImages,
+        imagesByColor: imagesByColor,
+        image_url: displayImages[0] || null,
         videos: variantVideosResult.rows.length > 0 ? [...generalVideos, ...Object.values(videosByColor).flat()] : videosFallback, // Todos los videos
         videosByColor: videosByColor, // NUEVO: Videos agrupados por color
-        available_colors: colorsResult.rows.map(r => r.color),
-        available_sizes: sizesResult.rows.map(r => r.size),
-        color_variants: colorVariants // NUEVO: Variantes de color
+        variants: variantsResult.rows,
+        colors: [...new Set(variantsResult.rows.map(r => r.color).filter(Boolean))],
+        sizes: [...new Set(variantsResult.rows.map(r => r.size).filter(Boolean))],
+        color_variants: colorVariants
       }
     });
 

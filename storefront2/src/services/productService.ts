@@ -12,7 +12,15 @@ export interface ApiProduct {
   sizes: string[];
 }
 
+export interface ApiVariant {
+  id: number;
+  size: string | null;
+  color: string | null;
+  sku_variant: string;
+}
+
 export interface ApiProductDetail extends ApiProduct {
+  variants: ApiVariant[];
   variant_images: Record<string, string[]>;
   videos: string[];
 }

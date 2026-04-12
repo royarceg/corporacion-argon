@@ -8,6 +8,7 @@ import AnnouncementBar from "@/components/layout/AnnouncementBar";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import ProductCard from "@/components/products/ProductCard";
+import QuickViewModal from "@/components/products/QuickViewModal";
 
 type SortOption = "featured" | "best-selling" | "price-asc" | "price-desc";
 
@@ -23,6 +24,7 @@ export default function ProductosPage() {
   const [filterOpen, setFilterOpen] = useState(false);
   const [activeColors, setActiveColors] = useState<string[]>([]);
   const [activeSizes, setActiveSizes] = useState<string[]>([]);
+  const [quickViewProduct, setQuickViewProduct] = useState<ApiProduct | null>(null);
 
   useEffect(() => {
     if (!loading) {
@@ -54,14 +56,28 @@ export default function ProductosPage() {
   );
 
   const displayed = useMemo(() => {
-    let list = products;
+    let list = [...products];
     if (activeCategory !== "All") list = list.filter((p) => p.category === activeCategory);
     if (activeColors.length) list = list.filter((p) => p.colors.some((c) => activeColors.includes(c)));
     if (activeSizes.length) list = list.filter((p) => p.sizes.some((s) => activeSizes.includes(s)));
-    if (sort === "featured") list = [...list].sort((a, b) => (a.category ?? "").localeCompare(b.category ?? ""));
-    if (sort === "price-asc") list = [...list].sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
-    if (sort === "price-desc") list = [...list].sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
-    return list;
+    if (sort === "price-asc") return list.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
+    if (sort === "price-desc") return list.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
+    const UNIFORME_ROPA = ["ABRIGO", "CAMISA", "CAPA", "CHALECO", "JACKET", "PANTALON", "SET"];
+    const isRopa = (name: string) => UNIFORME_ROPA.some((r) => name.toUpperCase().startsWith(r));
+
+    return list.sort((a, b) => {
+      const catA = a.category || "";
+      const catB = b.category || "";
+      if (catA < catB) return -1;
+      if (catA > catB) return 1;
+      if (catA === "UNIFORME") {
+        const aRopa = isRopa(a.name);
+        const bRopa = isRopa(b.name);
+        if (aRopa && !bRopa) return -1;
+        if (!aRopa && bRopa) return 1;
+      }
+      return (a.name || "").localeCompare(b.name || "");
+    });
   }, [products, activeCategory, activeColors, activeSizes, sort]);
 
   const sortLabels: Record<SortOption, string> = {
@@ -233,7 +249,11 @@ export default function ProductosPage() {
         ) : (
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "40px 20px" }}>
             {displayed.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard
+                key={product.id}
+                product={product}
+                onQuickView={(p) => setQuickViewProduct(p)}
+              />
             ))}
           </div>
         )}
@@ -373,6 +393,14 @@ export default function ProductosPage() {
       {/* Close sort on outside click */}
       {sortOpen && (
         <div onClick={() => setSortOpen(false)} style={{ position: "fixed", inset: 0, zIndex: 49 }} />
+      )}
+
+      {/* Quick View Modal */}
+      {quickViewProduct && (
+        <QuickViewModal
+          product={quickViewProduct}
+          onClose={() => setQuickViewProduct(null)}
+        />
       )}
     </div>
   );

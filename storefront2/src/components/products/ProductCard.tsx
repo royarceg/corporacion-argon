@@ -6,9 +6,10 @@ import { ApiProduct } from "@/services/productService";
 interface Props {
   product: ApiProduct;
   onAddToCart?: (product: ApiProduct) => void;
+  onQuickView?: (product: ApiProduct) => void;
 }
 
-export default function ProductCard({ product, onAddToCart }: Props) {
+export default function ProductCard({ product, onAddToCart, onQuickView }: Props) {
   const [hovered, setHovered] = useState(false);
   const [wishlisted, setWishlisted] = useState(false);
 
@@ -24,16 +25,16 @@ export default function ProductCard({ product, onAddToCart }: Props) {
       style={{ position: "relative", cursor: "pointer" }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      onClick={() => window.location.href = `/productos/${product.id}`}
+      onClick={() => onQuickView?.(product)}
     >
       {/* Image container */}
       <div
         style={{
           position: "relative",
           aspectRatio: "3/4",
-          backgroundColor: "#f5f4f4",
+          backgroundColor: "#F0EFEF",
           overflow: "hidden",
-          marginBottom: "12px",
+          marginBottom: "10px",
         }}
       >
         {image ? (
@@ -43,28 +44,28 @@ export default function ProductCard({ product, onAddToCart }: Props) {
             style={{
               width: "100%",
               height: "100%",
-              objectFit: "cover",
+              objectFit: "contain",
               transition: "transform 0.4s ease",
               transform: hovered ? "scale(1.03)" : "scale(1)",
             }}
           />
         ) : (
-          <div style={{ width: "100%", height: "100%", backgroundColor: "#f5f4f4" }} />
+          <div style={{ width: "100%", height: "100%", backgroundColor: "#F0EFEF" }} />
         )}
 
-        {/* Wishlist button */}
+        {/* Wishlist — always visible, like Figma */}
         <button
           onClick={(e) => { e.stopPropagation(); setWishlisted(!wishlisted); }}
-          aria-label="Agregar a wishlist"
+          aria-label="Add to wishlist"
           style={{
             position: "absolute",
-            top: "12px",
-            right: "12px",
+            top: "10px",
+            right: "10px",
             background: "none",
             border: "none",
             cursor: "pointer",
             padding: 0,
-            opacity: hovered || wishlisted ? 1 : 0,
+            opacity: wishlisted ? 1 : 0.45,
             transition: "opacity 0.2s ease",
           }}
         >
@@ -73,14 +74,14 @@ export default function ProductCard({ product, onAddToCart }: Props) {
           </svg>
         </button>
 
-        {/* Add to cart button */}
+        {/* Quick add "+" — appears on hover, bottom-right */}
         <button
           onClick={(e) => { e.stopPropagation(); onAddToCart?.(product); }}
-          aria-label="Agregar al carrito"
+          aria-label="Quick add"
           style={{
             position: "absolute",
-            bottom: "12px",
-            right: "12px",
+            bottom: "10px",
+            right: "10px",
             width: "28px",
             height: "28px",
             backgroundColor: "#ffffff",
@@ -99,19 +100,23 @@ export default function ProductCard({ product, onAddToCart }: Props) {
           </svg>
         </button>
 
-        {/* Color swatches */}
-        {product.colors.length > 0 && (
+        {/* Color swatches overlay — bottom-left, on hover */}
+        {product.colors.length > 1 && (
           <div
             style={{
               position: "absolute",
-              bottom: "12px",
-              left: "12px",
+              bottom: "10px",
+              left: "10px",
               display: "flex",
+              alignItems: "center",
               gap: "4px",
               opacity: hovered ? 1 : 0,
               transition: "opacity 0.2s ease",
             }}
           >
+            <span style={{ fontFamily: "Graphik, sans-serif", fontSize: "11px", color: "#000", marginRight: "4px" }}>
+              {product.colors[0]}
+            </span>
             {product.colors.slice(0, 4).map((color) => (
               <div
                 key={color}
@@ -121,7 +126,7 @@ export default function ProductCard({ product, onAddToCart }: Props) {
                   height: "12px",
                   borderRadius: "50%",
                   backgroundColor: colorToHex(color),
-                  border: "1px solid rgba(0,0,0,0.15)",
+                  border: "1px solid rgba(0,0,0,0.2)",
                 }}
               />
             ))}
@@ -129,25 +134,27 @@ export default function ProductCard({ product, onAddToCart }: Props) {
         )}
       </div>
 
-      {/* Product info */}
+      {/* Product name */}
       <p
         style={{
           fontFamily: "Graphik, sans-serif",
           fontSize: "13px",
           fontWeight: 400,
           color: "#000000",
-          margin: "0 0 4px 0",
+          margin: "0 0 2px 0",
           lineHeight: 1.4,
         }}
       >
         {product.name}
       </p>
+
+      {/* Price */}
       <p
         style={{
           fontFamily: "Graphik, sans-serif",
           fontSize: "13px",
           fontWeight: 400,
-          color: "rgba(0,0,0,0.6)",
+          color: "#000000",
           margin: 0,
         }}
       >
@@ -159,17 +166,10 @@ export default function ProductCard({ product, onAddToCart }: Props) {
 
 function colorToHex(color: string): string {
   const map: Record<string, string> = {
-    NEGRO: "#1a1a1a",
-    BEIGE: "#d4b896",
-    BLANCO: "#ffffff",
-    GRIS: "#9e9e9e",
-    AZUL: "#2d6a9f",
-    ROJO: "#9c2121",
-    VERDE: "#3a6b3a",
-    NARANJA: "#d4612a",
-    AMARILLO: "#d4c12a",
-    CAFE: "#7a5c3a",
-    MARRON: "#7a5c3a",
+    NEGRO: "#1a1a1a", BEIGE: "#d4b896", BLANCO: "#f5f5f5",
+    GRIS: "#9e9e9e", AZUL: "#2d6a9f", ROJO: "#9c2121",
+    VERDE: "#3a6b3a", NARANJA: "#d4612a", AMARILLO: "#d4c12a",
+    CAFE: "#7a5c3a", MARRON: "#7a5c3a",
   };
   return map[color.toUpperCase()] ?? "#cccccc";
 }
