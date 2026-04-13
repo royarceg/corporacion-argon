@@ -151,7 +151,7 @@ export default function ProductoPage() {
             gap: "16px",
           }}
         >
-          [
+          {[
             { img: "/images/ai-originals/image/ai-image-13.png", label: "Producto del Catálogo" },
             { img: "/images/ai-originals/image/ai-image-11.png", label: "Producto del Catálogo" },
             { img: "/images/ai-originals/image/ai-image-04.png", label: "Producto del Catálogo" },
