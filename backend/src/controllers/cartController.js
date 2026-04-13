@@ -156,12 +156,7 @@ const addToCart = async (req, res) => {
         });
       }
 
-      if (variantCheck.rows[0].stock_quantity < quantity) {
-        return res.status(400).json({ 
-          error: 'Stock insuficiente',
-          available_stock: variantCheck.rows[0].stock_quantity
-        });
-      }
+      // Stock check omitido: plataforma B2B — ARGON confirma disponibilidad antes de procesar
     }
 
     // Verificar si ya existe este producto/variante en el carrito

@@ -142,9 +142,21 @@ export default function ProductDetailPage() {
               margin: "0 0 20px 0",
               letterSpacing: "0.02em",
             }}>
-              <a href="/productos" style={{ color: "inherit", textDecoration: "none" }}>
-                Catálogo
-              </a>
+              <button
+                onClick={() => router.back()}
+                style={{
+                  fontFamily: "Graphik, sans-serif",
+                  fontSize: "11px",
+                  color: "rgba(0,0,0,0.4)",
+                  letterSpacing: "0.02em",
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  padding: 0,
+                }}
+              >
+                ← Catálogo
+              </button>
               {" / "}
               <span style={{ textTransform: "capitalize" }}>{product.category?.toLowerCase()}</span>
             </p>
