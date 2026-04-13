@@ -146,7 +146,7 @@ const sendOrderAcknowledgement = async (orderId) => {
           <hr style="border: none; border-top: 1px solid #ddd; margin: 30px 0;">
           
           <p style="color: #7f8c8d; font-size: 12px;">
-            <strong>Corporación Argom</strong><br>
+            <strong>Corporación Argon</strong><br>
             Este es un mensaje automático, por favor no responda directamente a este correo electrónico.
           </p>
         </body>
@@ -327,7 +327,7 @@ const sendOrderConfirmation = async (orderId) => {
           <hr style="border: none; border-top: 1px solid #ddd; margin: 30px 0;">
           
           <p style="color: #7f8c8d; font-size: 12px;">
-            <strong>Corporación Argom</strong><br>
+            <strong>Corporación Argon</strong><br>
             Este es un mensaje automático, por favor no responda directamente a este correo electrónico.
           </p>
         </body>

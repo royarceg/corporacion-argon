@@ -7,6 +7,12 @@ export default function ShoppingBagDrawer() {
 
   if (!drawerOpen) return null;
 
+  const formattedTotal = parseFloat(total).toLocaleString("es-CR", {
+    style: "currency",
+    currency: "CRC",
+    minimumFractionDigits: 0,
+  });
+
   return (
     <>
       {/* Overlay */}
@@ -35,11 +41,11 @@ export default function ShoppingBagDrawer() {
           padding: "24px 24px 20px 24px",
           borderBottom: "1px solid rgba(0,0,0,0.08)",
         }}>
-          <h2 style={{ fontFamily: "Graphik, sans-serif", fontSize: "16px", fontWeight: 400, margin: 0 }}>
-            Shopping Bag
+          <h2 style={{ fontFamily: "Graphik, sans-serif", fontSize: "15px", fontWeight: 400, margin: 0 }}>
+            Shopping Bag {count > 0 && <span style={{ color: "rgba(0,0,0,0.4)", fontWeight: 400 }}>({count})</span>}
           </h2>
-          <button onClick={closeDrawer} style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="1.5">
+          <button onClick={closeDrawer} style={{ background: "none", border: "none", cursor: "pointer", padding: "4px", lineHeight: 0 }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="1.5">
               <path d="M18 6 6 18M6 6l12 12" />
             </svg>
           </button>
@@ -53,7 +59,7 @@ export default function ShoppingBagDrawer() {
                 Tu carrito está vacío.
               </p>
               <a href="/productos" onClick={closeDrawer} style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "#000", textDecoration: "underline" }}>
-                Ver productos
+                Ver catálogo
               </a>
             </div>
           ) : (
@@ -62,7 +68,7 @@ export default function ShoppingBagDrawer() {
                 display: "flex",
                 gap: "16px",
                 padding: "20px 0",
-                borderBottom: "1px solid rgba(0,0,0,0.08)",
+                borderBottom: "1px solid rgba(0,0,0,0.07)",
               }}>
                 {/* Image */}
                 <div style={{ width: "80px", height: "100px", backgroundColor: "#f5f4f4", flexShrink: 0, overflow: "hidden" }}>
@@ -73,36 +79,44 @@ export default function ShoppingBagDrawer() {
 
                 {/* Info */}
                 <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "4px" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
                     <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", fontWeight: 400, margin: 0, maxWidth: "200px", lineHeight: 1.4 }}>
                       {item.product_name}
                     </p>
                     <button
                       onClick={() => removeItem(item.id)}
-                      style={{ background: "none", border: "none", cursor: "pointer", padding: 0, flexShrink: 0 }}
+                      style={{ background: "none", border: "none", cursor: "pointer", padding: "2px", flexShrink: 0, lineHeight: 0 }}
                     >
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="1.5">
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="rgba(0,0,0,0.4)" strokeWidth="1.5">
                         <path d="M18 6 6 18M6 6l12 12" />
                       </svg>
                     </button>
                   </div>
-                  {item.color && <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "12px", color: "rgba(0,0,0,0.5)", margin: 0 }}>{item.color}{item.size ? ` / ${item.size}` : ""}</p>}
+
+                  {(item.color || item.size) && (
+                    <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "12px", color: "rgba(0,0,0,0.45)", margin: 0 }}>
+                      {item.color}{item.size ? ` / ${item.size}` : ""}
+                    </p>
+                  )}
+
                   <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", margin: 0 }}>
-                    ₡{parseFloat(item.unit_price).toLocaleString("es-CR")}
+                    {parseFloat(item.unit_price).toLocaleString("es-CR", { style: "currency", currency: "CRC", minimumFractionDigits: 0 })}
                   </p>
 
                   {/* Qty controls */}
-                  <div style={{ display: "flex", alignItems: "center", gap: "12px", marginTop: "8px" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0", marginTop: "8px", border: "1px solid rgba(0,0,0,0.15)", width: "fit-content" }}>
                     <button
                       onClick={() => item.quantity > 1 ? updateItem(item.id, item.quantity - 1) : removeItem(item.id)}
-                      style={{ width: "24px", height: "24px", border: "1px solid rgba(0,0,0,0.2)", background: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
+                      style={{ width: "28px", height: "28px", border: "none", background: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
                     >
                       <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2"><line x1="5" y1="12" x2="19" y2="12" /></svg>
                     </button>
-                    <span style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px" }}>{item.quantity}</span>
+                    <span style={{ fontFamily: "Graphik, sans-serif", fontSize: "12px", minWidth: "28px", textAlign: "center", borderLeft: "1px solid rgba(0,0,0,0.15)", borderRight: "1px solid rgba(0,0,0,0.15)", height: "28px", lineHeight: "28px" }}>
+                      {item.quantity}
+                    </span>
                     <button
                       onClick={() => updateItem(item.id, item.quantity + 1)}
-                      style={{ width: "24px", height: "24px", border: "1px solid rgba(0,0,0,0.2)", background: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
+                      style={{ width: "28px", height: "28px", border: "none", background: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
                     >
                       <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
                     </button>
@@ -115,33 +129,28 @@ export default function ShoppingBagDrawer() {
 
         {/* Footer */}
         {items.length > 0 && (
-          <div style={{ padding: "20px 24px", borderTop: "1px solid rgba(0,0,0,0.08)" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "16px" }}>
-              <span style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.5)" }}>Subtotal ({count} items)</span>
-              <span style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", fontWeight: 500 }}>
-                ₡{parseFloat(total).toLocaleString("es-CR")}
-              </span>
-            </div>
+          <div style={{ padding: "16px 24px 24px", borderTop: "1px solid rgba(0,0,0,0.08)" }}>
+            <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "11px", color: "rgba(0,0,0,0.4)", textAlign: "center", margin: "0 0 14px 0", letterSpacing: "0.01em" }}>
+              Los precios son estimados — ARGON confirmará antes de procesar
+            </p>
             <a
               href="/carrito"
               onClick={closeDrawer}
               style={{
-                display: "block",
-                width: "100%",
-                textAlign: "center",
-                fontFamily: "Graphik, sans-serif",
-                fontSize: "13px",
-                fontWeight: 500,
-                color: "#ffffff",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                padding: "14px 16px",
                 backgroundColor: "#000000",
-                padding: "14px",
                 textDecoration: "none",
-                letterSpacing: "0.04em",
-                textTransform: "uppercase",
-                boxSizing: "border-box",
               }}
             >
-              Crear Orden
+              <span style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", fontWeight: 500, color: "#fff", letterSpacing: "0.06em", textTransform: "uppercase" }}>
+                Crear Orden
+              </span>
+              <span style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.8)" }}>
+                {formattedTotal}
+              </span>
             </a>
           </div>
         )}

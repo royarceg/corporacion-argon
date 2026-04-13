@@ -66,7 +66,7 @@ const generateOrderAcknowledgementPDF = async (orderId) => {
 
     // Información de la empresa
     doc.fontSize(10)
-       .text('Corporación Argom', { align: 'right' })
+       .text('Corporación Argon', { align: 'right' })
        .fontSize(8)
        .text('Costa Rica', { align: 'right' })
        .moveDown();
@@ -236,7 +236,7 @@ const generateOrderConfirmationPDF = async (orderId) => {
 
     // Información de la empresa
     doc.fontSize(10)
-       .text('Corporación Argom', { align: 'right' })
+       .text('Corporación Argon', { align: 'right' })
        .fontSize(8)
        .text('Costa Rica', { align: 'right' })
        .moveDown();

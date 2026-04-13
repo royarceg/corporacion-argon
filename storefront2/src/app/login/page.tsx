@@ -65,7 +65,7 @@ export default function LoginPage() {
             letterSpacing: "-0.02em",
           }}
         >
-          ARGOM.
+          ARGON.
         </a>
       </header>
 
@@ -109,7 +109,7 @@ export default function LoginPage() {
               margin: "0 0 32px 0",
             }}
           >
-            Accedé a tu cuenta de cliente ARGOM.
+            Accedé a tu cuenta de cliente ARGON.
           </p>
 
           <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
@@ -259,7 +259,7 @@ export default function LoginPage() {
               href="mailto:info@corporacionargom.com"
               style={{ color: "#000000", textDecoration: "underline" }}
             >
-              Contactá a ARGOM
+              Contactá a ARGON
             </a>{" "}
             para solicitar acceso.
           </p>

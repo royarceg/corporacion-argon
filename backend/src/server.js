@@ -1,5 +1,5 @@
 // =====================================================
-// SERVIDOR PRINCIPAL - CORPORACIÓN ARGOM
+// SERVIDOR PRINCIPAL - CORPORACIÓN ARGON
 // =====================================================
 
 const express = require('express');
@@ -98,7 +98,7 @@ app.get('/health', async (req, res) => {
 // Ruta de información de la API
 app.get('/', (req, res) => {
   res.json({ 
-    message: 'API Corporación Argom funcionando',
+    message: 'API Corporación Argon funcionando',
     version: '1.0.0',
     environment: process.env.NODE_ENV || 'development',
     health: '/health'
@@ -143,7 +143,7 @@ app.use(errorHandler);
 
 const server = app.listen(PORT, '0.0.0.0', () => {
   console.log('\n========================================');
-  console.log('✅ CORPORACIÓN ARGOM - API');
+  console.log('✅ CORPORACIÓN ARGON - API');
   console.log('========================================');
   console.log(`🚀 Servidor:     Puerto ${PORT}`);
   console.log(`🌐 Ambiente:     ${process.env.NODE_ENV || 'development'}`);
