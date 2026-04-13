@@ -1,8 +1,34 @@
+"use client";
+
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 import AnnouncementBar from "@/components/layout/AnnouncementBar";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 
 export default function ProductoPage() {
+  const { isAuthenticated, loading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && isAuthenticated()) {
+      router.replace("/productos");
+    }
+  }, [loading, isAuthenticated, router]);
+
+  // Mientras carga la sesión, no mostrar nada
+  if (loading) {
+    return (
+      <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.4)" }}>
+          Cargando...
+        </p>
+      </div>
+    );
+  }
+
+  // Usuario no autenticado — mostrar pantalla de acceso
   return (
     <div
       style={{
@@ -24,7 +50,6 @@ export default function ProductoPage() {
           flex: 1,
         }}
       >
-        {/* Page title */}
         <h1
           style={{
             fontFamily: "Graphik, sans-serif",
@@ -38,10 +63,8 @@ export default function ProductoPage() {
           Área Exclusiva para Clientes
         </h1>
 
-        {/* Divider */}
         <div style={{ width: "100%", height: "1px", backgroundColor: "rgba(0,0,0,0.1)", marginBottom: "80px" }} />
 
-        {/* Restricted content — centered */}
         <div
           style={{
             display: "flex",
@@ -53,13 +76,11 @@ export default function ProductoPage() {
             textAlign: "center",
           }}
         >
-          {/* Lock icon */}
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="1.2">
             <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
             <path d="M7 11V7a5 5 0 0 1 10 0v4" />
           </svg>
 
-          {/* Message */}
           <p
             style={{
               fontFamily: "Graphik, sans-serif",
@@ -88,7 +109,6 @@ export default function ProductoPage() {
             Creá tu cuenta o iniciá sesión para acceder a nuestro catálogo completo con precios y disponibilidad.
           </p>
 
-          {/* CTAs */}
           <div style={{ display: "flex", gap: "12px", marginTop: "8px" }}>
             <a
               href="/registro"
@@ -126,10 +146,8 @@ export default function ProductoPage() {
           </div>
         </div>
 
-        {/* Divider */}
         <div style={{ width: "100%", height: "1px", backgroundColor: "rgba(0,0,0,0.1)", marginBottom: "48px" }} />
 
-        {/* "También te puede interesar" section */}
         <h2
           style={{
             fontFamily: "Graphik, sans-serif",
@@ -143,7 +161,6 @@ export default function ProductoPage() {
           También te puede interesar
         </h2>
 
-        {/* Product placeholders */}
         <div
           style={{
             display: "grid",
@@ -173,26 +190,10 @@ export default function ProductoPage() {
                   style={{ width: "100%", height: "100%", objectFit: "cover" }}
                 />
               </div>
-              <p
-                style={{
-                  fontFamily: "Graphik, sans-serif",
-                  fontSize: "13px",
-                  fontWeight: 400,
-                  color: "#000000",
-                  margin: "0 0 4px 0",
-                }}
-              >
+              <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", fontWeight: 400, color: "#000000", margin: "0 0 4px 0" }}>
                 {item.label}
               </p>
-              <p
-                style={{
-                  fontFamily: "Graphik, sans-serif",
-                  fontSize: "13px",
-                  fontWeight: 400,
-                  color: "rgba(0,0,0,0.5)",
-                  margin: 0,
-                }}
-              >
+              <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", fontWeight: 400, color: "rgba(0,0,0,0.5)", margin: 0 }}>
                 — — —
               </p>
             </div>
