@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
+import { useWishlist } from "@/context/WishlistContext";
 
 const navLinks = [
   { label: "Tienda", href: "/producto/acceso", hasDropdown: true },
@@ -48,6 +49,7 @@ const dropdownColumns = [
 export default function Header() {
   const { isAuthenticated, isAdmin, user } = useAuth();
   const { count, openDrawer } = useCart();
+  const { count: wishlistCount } = useWishlist();
   const router = useRouter();
   const [searchOpen, setSearchOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -181,7 +183,7 @@ export default function Header() {
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="1.5">
                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
               </svg>
-              <span style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", fontWeight: 400, color: "#000000" }}>0</span>
+              <span style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", fontWeight: 400, color: "#000000" }}>{wishlistCount}</span>
             </button>
 
             <button onClick={openDrawer} aria-label="Cart" style={{ background: "none", border: "none", cursor: "pointer", padding: 0, display: "flex", alignItems: "center", gap: "4px" }}>

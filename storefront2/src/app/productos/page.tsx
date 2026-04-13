@@ -9,6 +9,8 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import ProductCard from "@/components/products/ProductCard";
 import QuickViewModal from "@/components/products/QuickViewModal";
+import { useCart } from "@/context/CartContext";
+import { useWishlist } from "@/context/WishlistContext";
 
 type SortOption = "featured" | "best-selling" | "price-asc" | "price-desc";
 
@@ -36,6 +38,8 @@ function ProductosContent() {
   const [quickViewProduct, setQuickViewProduct] = useState<ApiProduct | null>(null);
 
   const searchQuery = searchParams.get("q") ?? "";
+  const { addToCart } = useCart();
+  const { wishlistedIds } = useWishlist();
 
   useEffect(() => {
     if (!loading) {
@@ -75,25 +79,38 @@ function ProductosContent() {
     if (activeCategory !== "All") list = list.filter((p) => p.category === activeCategory);
     if (activeColors.length) list = list.filter((p) => p.colors.some((c) => activeColors.includes(c)));
     if (activeSizes.length) list = list.filter((p) => p.sizes.some((s) => activeSizes.includes(s)));
-    if (sort === "price-asc") return list.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
-    if (sort === "price-desc") return list.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
-    const UNIFORME_ROPA = ["ABRIGO", "CAMISA", "CAPA", "CHALECO", "JACKET", "PANTALON", "SET"];
-    const isRopa = (name: string) => UNIFORME_ROPA.some((r) => name.toUpperCase().startsWith(r));
+    // Primary sort
+    if (sort === "price-asc") {
+      list.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
+    } else if (sort === "price-desc") {
+      list.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
+    } else {
+      const UNIFORME_ROPA = ["ABRIGO", "CAMISA", "CAPA", "CHALECO", "JACKET", "PANTALON", "SET"];
+      const isRopa = (name: string) => UNIFORME_ROPA.some((r) => name.toUpperCase().startsWith(r));
+      list.sort((a, b) => {
+        const catA = a.category || "";
+        const catB = b.category || "";
+        if (catA < catB) return -1;
+        if (catA > catB) return 1;
+        if (catA === "UNIFORME") {
+          const aRopa = isRopa(a.name);
+          const bRopa = isRopa(b.name);
+          if (aRopa && !bRopa) return -1;
+          if (!aRopa && bRopa) return 1;
+        }
+        return (a.name || "").localeCompare(b.name || "");
+      });
+    }
 
-    return list.sort((a, b) => {
-      const catA = a.category || "";
-      const catB = b.category || "";
-      if (catA < catB) return -1;
-      if (catA > catB) return 1;
-      if (catA === "UNIFORME") {
-        const aRopa = isRopa(a.name);
-        const bRopa = isRopa(b.name);
-        if (aRopa && !bRopa) return -1;
-        if (!aRopa && bRopa) return 1;
-      }
-      return (a.name || "").localeCompare(b.name || "");
+    // Favoritos siempre al tope (sort estable secundario)
+    list.sort((a, b) => {
+      const aFav = wishlistedIds.has(a.id) ? 0 : 1;
+      const bFav = wishlistedIds.has(b.id) ? 0 : 1;
+      return aFav - bFav;
     });
-  }, [products, searchQuery, activeCategory, activeColors, activeSizes, sort]);
+
+    return list;
+  }, [products, searchQuery, wishlistedIds, activeCategory, activeColors, activeSizes, sort]);
 
   const sortLabels: Record<SortOption, string> = {
     featured: "Featured",
@@ -268,6 +285,7 @@ function ProductosContent() {
                 key={product.id}
                 product={product}
                 onQuickView={(p) => setQuickViewProduct(p)}
+                onAddToCart={(p) => addToCart(p.id)}
               />
             ))}
           </div>

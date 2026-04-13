@@ -1,10 +1,20 @@
 import api from "./api";
-import { ApiProduct } from "./productService";
+
+export interface WishlistItem {
+  wishlist_id: number;
+  product_id: number;
+  sku: string;
+  name: string;
+  category: string;
+  price: string;
+  image_url: string | null;
+  added_at: string;
+}
 
 export const wishlistService = {
-  async getWishlist(): Promise<ApiProduct[]> {
-    const { data } = await api.get<{ success: boolean; products: ApiProduct[] }>("/wishlist");
-    return data.products;
+  async getWishlist(): Promise<WishlistItem[]> {
+    const { data } = await api.get<{ success: boolean; wishlist: WishlistItem[] }>("/wishlist");
+    return data.wishlist ?? [];
   },
 
   async add(product_id: number): Promise<void> {

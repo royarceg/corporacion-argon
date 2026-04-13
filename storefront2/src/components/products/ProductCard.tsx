@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ApiProduct } from "@/services/productService";
+import { useWishlist } from "@/context/WishlistContext";
 
 interface Props {
   product: ApiProduct;
@@ -11,7 +12,8 @@ interface Props {
 
 export default function ProductCard({ product, onAddToCart, onQuickView }: Props) {
   const [hovered, setHovered] = useState(false);
-  const [wishlisted, setWishlisted] = useState(false);
+  const { isWishlisted, toggle } = useWishlist();
+  const wishlisted = isWishlisted(product.id);
 
   const image = product.images?.[0] ?? null;
   const price = parseFloat(product.price).toLocaleString("es-CR", {
@@ -55,7 +57,7 @@ export default function ProductCard({ product, onAddToCart, onQuickView }: Props
 
         {/* Wishlist — always visible, like Figma */}
         <button
-          onClick={(e) => { e.stopPropagation(); setWishlisted(!wishlisted); }}
+          onClick={(e) => { e.stopPropagation(); toggle(product.id); }}
           aria-label="Add to wishlist"
           style={{
             position: "absolute",

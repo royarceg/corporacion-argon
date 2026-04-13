@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { CartProvider } from "@/context/CartContext";
+import { WishlistProvider } from "@/context/WishlistContext";
 import ShoppingBagDrawer from "@/components/cart/ShoppingBagDrawer";
 
 export const metadata: Metadata = {
@@ -20,8 +21,10 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col antialiased">
         <AuthProvider>
           <CartProvider>
-            {children}
-            <ShoppingBagDrawer />
+            <WishlistProvider>
+              {children}
+              <ShoppingBagDrawer />
+            </WishlistProvider>
           </CartProvider>
         </AuthProvider>
       </body>
