@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { productService, ApiProduct } from "@/services/productService";
 import AnnouncementBar from "@/components/layout/AnnouncementBar";
@@ -15,6 +15,7 @@ type SortOption = "featured" | "best-selling" | "price-asc" | "price-desc";
 export default function ProductosPage() {
   const { isAuthenticated, isClient, loading } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const [products, setProducts] = useState<ApiProduct[]>([]);
   const [fetching, setFetching] = useState(true);
@@ -25,6 +26,8 @@ export default function ProductosPage() {
   const [activeColors, setActiveColors] = useState<string[]>([]);
   const [activeSizes, setActiveSizes] = useState<string[]>([]);
   const [quickViewProduct, setQuickViewProduct] = useState<ApiProduct | null>(null);
+
+  const searchQuery = searchParams.get("q") ?? "";
 
   useEffect(() => {
     if (!loading) {
@@ -57,6 +60,10 @@ export default function ProductosPage() {
 
   const displayed = useMemo(() => {
     let list = [...products];
+    if (searchQuery.trim()) {
+      const q = searchQuery.trim().toLowerCase();
+      list = list.filter((p) => p.name.toLowerCase().includes(q) || (p.sku ?? "").toLowerCase().includes(q));
+    }
     if (activeCategory !== "All") list = list.filter((p) => p.category === activeCategory);
     if (activeColors.length) list = list.filter((p) => p.colors.some((c) => activeColors.includes(c)));
     if (activeSizes.length) list = list.filter((p) => p.sizes.some((s) => activeSizes.includes(s)));
@@ -78,7 +85,7 @@ export default function ProductosPage() {
       }
       return (a.name || "").localeCompare(b.name || "");
     });
-  }, [products, activeCategory, activeColors, activeSizes, sort]);
+  }, [products, searchQuery, activeCategory, activeColors, activeSizes, sort]);
 
   const sortLabels: Record<SortOption, string> = {
     featured: "Featured",
@@ -120,7 +127,7 @@ export default function ProductosPage() {
           margin: "0 0 20px 0",
           letterSpacing: "-0.01em",
         }}>
-          Shop
+          {searchQuery.trim() ? `Resultados para "${searchQuery.trim()}"` : "Catálogo"}
         </h1>
 
         {/* Filters row */}
@@ -244,7 +251,7 @@ export default function ProductosPage() {
         {/* Product grid */}
         {displayed.length === 0 ? (
           <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.4)", padding: "60px 0" }}>
-            No products found.
+            {searchQuery.trim() ? `Sin resultados para "${searchQuery.trim()}".` : "No se encontraron productos."}
           </p>
         ) : (
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "40px 20px" }}>

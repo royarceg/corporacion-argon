@@ -109,7 +109,7 @@ export default function LoginPage() {
               margin: "0 0 32px 0",
             }}
           >
-            Accedé a tu cuenta de cliente ARGON.
+            Accedé a tu cuenta de cliente en CORPORACION ARGON.
           </p>
 
           <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
@@ -164,17 +164,15 @@ export default function LoginPage() {
                 >
                   Contraseña
                 </label>
-                <a
-                  href="/recuperar-contrasena"
+                <span
                   style={{
                     fontFamily: "Graphik, sans-serif",
                     fontSize: "11px",
                     color: "rgba(0,0,0,0.5)",
-                    textDecoration: "none",
                   }}
                 >
-                  ¿Olvidaste tu contraseña?
-                </a>
+                  ¿Olvidaste tu contraseña? Contactá a CORPORACION ARGON.
+                </span>
               </div>
               <input
                 type="password"
@@ -259,7 +257,7 @@ export default function LoginPage() {
               href="mailto:info@corporacionargom.com"
               style={{ color: "#000000", textDecoration: "underline" }}
             >
-              Contactá a ARGON
+              Contactá a CORPORACION ARGON
             </a>{" "}
             para solicitar acceso.
           </p>

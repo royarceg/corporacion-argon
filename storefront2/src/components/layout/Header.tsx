@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
 
@@ -47,12 +48,21 @@ const dropdownColumns = [
 export default function Header() {
   const { isAuthenticated, isAdmin, user } = useAuth();
   const { count, openDrawer } = useCart();
+  const router = useRouter();
   const [searchOpen, setSearchOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   function openSearch() { setSearchOpen(true); setDropdownOpen(false); }
-  function closeSearch() { setSearchOpen(false); }
-  function closeAll() { setSearchOpen(false); setDropdownOpen(false); }
+  function closeSearch() { setSearchOpen(false); setSearchQuery(""); }
+  function closeAll() { setSearchOpen(false); setDropdownOpen(false); setSearchQuery(""); }
+
+  function handleSearchKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Enter" && searchQuery.trim()) {
+      closeSearch();
+      router.push(`/productos?q=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  }
 
   return (
     <>
@@ -209,7 +219,10 @@ export default function Header() {
             <input
               autoFocus
               type="text"
-              placeholder="Search..."
+              placeholder="Buscar productos..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={handleSearchKeyDown}
               style={{
                 flex: 1,
                 border: "none",

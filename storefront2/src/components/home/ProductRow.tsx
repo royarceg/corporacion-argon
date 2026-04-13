@@ -1,11 +1,11 @@
 import Image from "next/image";
 
 const products = [
-  { name: "Classic Easy Zipper Tote", price: "$298", img: "/images/web/product-row-03.svg" },
-  { name: "Concertina Phone Bag", price: "$248", img: "/images/web/product-row-05.svg" },
-  { name: "Wool Cashmere Sweater Coat", price: "$398", img: "/images/web/product-row-01.svg" },
-  { name: "Single-Origin Cashmere Beanie", price: "$98", img: "/images/web/product-row-04.svg" },
-  { name: "Alpaca Wool Cropped Cardigan", price: "$248", img: "/images/web/product-row-02.svg" },
+  { name: "GORRO CHAVITO PROTECTOR AZUL", img: "https://res.cloudinary.com/dj0i57kxn/image/upload/v1776101345/productos/GOC-01.png" },
+  { name: "NEUMÁTICO 21\"", img: "https://res.cloudinary.com/dj0i57kxn/image/upload/v1776101379/productos/NEU-21.png" },
+  { name: "PANTALÓN HOMBRE AZUL OSCURO", img: "https://res.cloudinary.com/dj0i57kxn/image/upload/v1776101388/productos/PAN-02.png" },
+  { name: "CADENA PIÑONES MOTO", img: "https://res.cloudinary.com/dj0i57kxn/image/upload/v1776101278/productos/CAD-SPRO.png" },
+  { name: "PARCHE K-9 LETRAS", img: "https://res.cloudinary.com/dj0i57kxn/image/upload/v1776101403/productos/PCH-04.png" },
 ];
 
 export default function ProductRow() {
