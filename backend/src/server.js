@@ -47,10 +47,10 @@ app.use(express.urlencoded({ extended: true }));
 // RATE LIMITING (Protección contra fuerza bruta)
 // =====================================================
 
-// Limitador para login: máximo 5 intentos por minuto por IP
+// Limitador para login: máximo 20 intentos por minuto por IP
 const loginLimiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1 minuto
-  max: 5, // 5 intentos
+  max: 20, // 20 intentos
   message: {
     error: 'Demasiados intentos de inicio de sesión. Intenta de nuevo en 1 minuto.'
   },
