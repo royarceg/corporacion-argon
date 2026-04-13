@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { productService, ApiProduct } from "@/services/productService";
@@ -13,6 +13,14 @@ import QuickViewModal from "@/components/products/QuickViewModal";
 type SortOption = "featured" | "best-selling" | "price-asc" | "price-desc";
 
 export default function ProductosPage() {
+  return (
+    <Suspense>
+      <ProductosContent />
+    </Suspense>
+  );
+}
+
+function ProductosContent() {
   const { isAuthenticated, isClient, loading } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
