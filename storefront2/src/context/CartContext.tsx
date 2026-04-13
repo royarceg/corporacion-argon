@@ -45,6 +45,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     await cartService.addToCart(product_id, quantity, variant_id);
     await refresh();
     setDrawerOpen(true);
+    // Nota: si cartService.addToCart lanza, el error se propaga al llamador
   }
 
   async function updateItem(cart_item_id: number, quantity: number) {

@@ -24,6 +24,7 @@ export default function QuickViewModal({ product, onClose }: Props) {
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [adding, setAdding] = useState(false);
   const [added, setAdded] = useState(false);
+  const [addError, setAddError] = useState<string | null>(null);
 
   const colors = product.colors ?? [];
   const sizes = sortSizes(product.sizes ?? []);
@@ -67,6 +68,7 @@ export default function QuickViewModal({ product, onClose }: Props) {
 
   async function handleAddToCart() {
     setAdding(true);
+    setAddError(null);
     try {
       const variantId = resolveVariantId();
       await addToCart(product.id, 1, variantId);
@@ -75,6 +77,9 @@ export default function QuickViewModal({ product, onClose }: Props) {
         setAdded(false);
         onClose();
       }, 1500);
+    } catch (err: any) {
+      const msg = err?.response?.data?.error ?? "No se pudo agregar al carrito";
+      setAddError(msg);
     } finally {
       setAdding(false);
     }
@@ -360,6 +365,18 @@ export default function QuickViewModal({ product, onClose }: Props) {
           >
             {added ? "✓ Agregado" : adding ? "Agregando..." : "Add to Bag"}
           </button>
+
+          {/* Add error */}
+          {addError && (
+            <p style={{
+              fontFamily: "Graphik, sans-serif",
+              fontSize: "12px",
+              color: "#9c2121",
+              margin: "-12px 0 0 0",
+            }}>
+              {addError}
+            </p>
+          )}
 
           {/* View Full Details */}
           <button
