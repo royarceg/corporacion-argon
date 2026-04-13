@@ -28,6 +28,7 @@ export default function HomePage() {
       <ProductRow />
       <div style={{ height: "48px" }} />
       <TwoColumnBanners />
+      <div style={{ height: "48px" }} />
       <QuoteSection />
       <div style={{ height: "48px" }} />
       <ImageGallery />

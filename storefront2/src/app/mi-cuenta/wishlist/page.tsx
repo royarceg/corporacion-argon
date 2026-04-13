@@ -26,7 +26,17 @@ export default function WishlistPage() {
   useEffect(() => {
     if (!loading && isAuthenticated()) {
       wishlistService.getWishlist()
-        .then(setProducts)
+        .then((items) => setProducts(items.map((item) => ({
+          id: item.product_id,
+          sku: item.sku,
+          name: item.name,
+          category: item.category,
+          price: item.price,
+          description: "",
+          images: item.image_url ? [item.image_url] : [],
+          colors: [],
+          sizes: [],
+        }))))
         .catch(console.error)
         .finally(() => setFetching(false));
     }
