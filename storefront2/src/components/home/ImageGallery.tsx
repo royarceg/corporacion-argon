@@ -1,10 +1,9 @@
-import Image from "next/image";
-
-const photos = [
-  { src: "/images/web/banner-guantes.jpg", alt: "Guantes de protección" },
-  { src: "/images/web/banner-uniforme.jpg", alt: "Uniforme de trabajo" },
-  { src: "/images/web/banner-bujias.jpg", alt: "Bujías DENSO" },
-  { src: "/images/web/banner-bulto.jpg", alt: "Bolso / mochila" },
+const videos = [
+  "/images/web/gallery-product-01.mp4",
+  "/images/web/gallery-product-02.mp4",
+  "/images/web/gallery-product-03.mp4",
+  "/images/web/gallery-product-04.mp4",
+  "/images/web/gallery-product-05.mp4",
 ];
 
 export default function ImageGallery() {
@@ -14,7 +13,7 @@ export default function ImageGallery() {
         width: "100%",
         maxWidth: "1400px",
         margin: "0 auto",
-        padding: "80px 32px 0 32px",
+        padding: "0 32px",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -42,7 +41,7 @@ export default function ImageGallery() {
         </h2>
       </div>
 
-      {/* 4 product photos */}
+      {/* 5 product videos */}
       <div
         style={{
           width: "1336px",
@@ -52,24 +51,28 @@ export default function ImageGallery() {
           justifyContent: "center",
         }}
       >
-        {photos.map((photo, index) => (
+        {videos.map((src, index) => (
           <div
             key={index}
             style={{
-              flex: 1,
-              height: "320px",
+              width: "251px",
+              height: "251px",
               borderRadius: "4px",
               overflow: "hidden",
               flexShrink: 0,
-              position: "relative",
             }}
           >
-            <Image
-              src={photo.src}
-              alt={photo.alt}
-              fill
-              className="object-cover"
-              sizes="(max-width: 1400px) 25vw, 320px"
+            <video
+              src={src}
+              autoPlay
+              muted
+              loop
+              playsInline
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+              }}
             />
           </div>
         ))}

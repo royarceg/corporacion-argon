@@ -188,8 +188,89 @@ const verifyTokenRoute = async (req, res) => {
   });
 };
 
+// =====================================================
+// REQUEST RESET - Solicitar restablecimiento de contraseña
+// =====================================================
+const crypto = require('crypto');
+
+const requestReset = async (req, res) => {
+  try {
+    const { username } = req.body;
+
+    if (!username || !username.trim()) {
+      return res.status(400).json({ error: 'Usuario es requerido' });
+    }
+
+    const result = await pool.query(
+      'SELECT id, user_name, active FROM users WHERE user_name = $1',
+      [username.trim()]
+    );
+
+    // Respuesta genérica para no revelar si el usuario existe
+    if (result.rows.length === 0 || !result.rows[0].active) {
+      return res.json({ success: true, message: 'Si el usuario existe, recibirás instrucciones.' });
+    }
+
+    const user = result.rows[0];
+    const token = crypto.randomBytes(32).toString('hex');
+    const expires = new Date(Date.now() + 3600 * 1000); // 1 hora
+
+    await pool.query(
+      'UPDATE users SET reset_token = $1, reset_token_expires = $2 WHERE id = $3',
+      [token, expires, user.id]
+    );
+
+    res.json({ success: true, token, message: 'Token generado correctamente.' });
+
+  } catch (error) {
+    console.error('Error en requestReset:', error);
+    res.status(500).json({ error: 'Error al procesar la solicitud.' });
+  }
+};
+
+// =====================================================
+// RESET PASSWORD - Establecer nueva contraseña con token
+// =====================================================
+const resetPassword = async (req, res) => {
+  try {
+    const { token, new_password } = req.body;
+
+    if (!token || !new_password) {
+      return res.status(400).json({ error: 'Token y nueva contraseña son requeridos.' });
+    }
+
+    if (new_password.length < 6) {
+      return res.status(400).json({ error: 'La contraseña debe tener al menos 6 caracteres.' });
+    }
+
+    const result = await pool.query(
+      'SELECT id FROM users WHERE reset_token = $1 AND reset_token_expires > NOW()',
+      [token]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(400).json({ error: 'El enlace es inválido o ya expiró.' });
+    }
+
+    const hashedPassword = await bcrypt.hash(new_password, 10);
+
+    await pool.query(
+      'UPDATE users SET password = $1, reset_token = NULL, reset_token_expires = NULL WHERE id = $2',
+      [hashedPassword, result.rows[0].id]
+    );
+
+    res.json({ success: true, message: 'Contraseña actualizada exitosamente.' });
+
+  } catch (error) {
+    console.error('Error en resetPassword:', error);
+    res.status(500).json({ error: 'Error al actualizar la contraseña.' });
+  }
+};
+
 module.exports = {
   login,
   register,
-  verifyTokenRoute
+  verifyTokenRoute,
+  requestReset,
+  resetPassword,
 };

@@ -5,6 +5,7 @@
 const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/authController');
+const { requestReset, resetPassword } = authController;
 const { verifyToken, verifyAdmin } = require('../middleware/authMiddleware');
 
 // =====================================================
@@ -14,6 +15,14 @@ const { verifyToken, verifyAdmin } = require('../middleware/authMiddleware');
 // POST /api/auth/login
 // Iniciar sesión
 router.post('/login', authController.login);
+
+// POST /api/auth/request-reset
+// Solicitar restablecimiento de contraseña
+router.post('/request-reset', requestReset);
+
+// POST /api/auth/reset-password
+// Establecer nueva contraseña con token
+router.post('/reset-password', resetPassword);
 
 // =====================================================
 // RUTAS PROTEGIDAS (requieren autenticación)

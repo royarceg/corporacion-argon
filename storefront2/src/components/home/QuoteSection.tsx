@@ -1,8 +1,8 @@
 const cards = [
-  { bg: "#1a2535", icon: "👟", label: "Seguridad personal", title: ["Calzado", "Táctico"], href: "/productos" },
-  { bg: "#2c2c2c", icon: "👔", label: "Ropa laboral", title: ["Uniformes", "Corporativos"], href: "/productos" },
-  { bg: "#3d3020", icon: "🦺", label: "Protección", title: ["Chalecos", "y Equipos"], href: "/productos" },
-  { bg: "#1c2a20", icon: "🏍️", label: "Movilidad", title: ["Equipo", "para Moto"], href: "/productos" },
+  { img: "/images/web/banner-guantes.jpg", label: "Protección personal", title: ["Guantes", "y Equipo"], href: "/productos" },
+  { img: "/images/web/banner-uniforme.jpg", label: "Ropa laboral", title: ["Uniformes", "Corporativos"], href: "/productos" },
+  { img: "/images/web/banner-bujias.jpg", label: "Movilidad", title: ["Accesorios", "para Moto"], href: "/productos" },
+  { img: "/images/web/banner-bulto.jpg", label: "Equipamiento", title: ["Bolsos", "y Mochilas"], href: "/productos" },
 ];
 
 export default function QuoteSection() {
@@ -18,7 +18,8 @@ export default function QuoteSection() {
       <style>{`
         .quote-card { flex: 1; transition: flex 0.4s ease; }
         .quote-card:hover { flex: 1.6; }
-        .quote-card:hover .quote-icon { opacity: 0.28; }
+        .quote-card .quote-img { transition: transform 0.5s ease; }
+        .quote-card:hover .quote-img { transform: scale(1.05); }
       `}</style>
 
       <div style={{ display: "flex", height: "480px" }}>
@@ -28,7 +29,6 @@ export default function QuoteSection() {
             href={card.href}
             className="quote-card"
             style={{
-              background: card.bg,
               position: "relative",
               display: "flex",
               flexDirection: "column",
@@ -38,23 +38,30 @@ export default function QuoteSection() {
               textDecoration: "none",
             }}
           >
-            {/* Big icon */}
-            <span
-              className="quote-icon"
+            {/* Photo background */}
+            <img
+              src={card.img}
+              alt={card.label}
+              className="quote-img"
               style={{
                 position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -60%)",
-                fontSize: "80px",
-                opacity: 0.18,
+                inset: 0,
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
                 pointerEvents: "none",
-                userSelect: "none",
-                transition: "opacity 0.3s",
               }}
-            >
-              {card.icon}
-            </span>
+            />
+
+            {/* Dark overlay */}
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                background: "linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.15) 60%)",
+                pointerEvents: "none",
+              }}
+            />
 
             {/* Arrow */}
             <span
@@ -64,13 +71,14 @@ export default function QuoteSection() {
                 right: "24px",
                 width: "32px",
                 height: "32px",
-                border: "1px solid rgba(255,255,255,0.2)",
+                border: "1px solid rgba(255,255,255,0.4)",
                 borderRadius: "50%",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                color: "rgba(255,255,255,0.5)",
+                color: "rgba(255,255,255,0.7)",
                 fontSize: "14px",
+                zIndex: 1,
               }}
             >
               ↗
@@ -83,8 +91,7 @@ export default function QuoteSection() {
                 fontSize: "10px",
                 letterSpacing: "2px",
                 textTransform: "uppercase",
-                color: "rgba(255,255,255,0.4)",
-                marginBottom: "8px",
+                color: "rgba(255,255,255,0.6)",
                 position: "relative",
                 zIndex: 1,
                 margin: "0 0 8px 0",

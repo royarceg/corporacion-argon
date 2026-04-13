@@ -11,6 +11,7 @@ export default function LoginPage() {
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -164,34 +165,69 @@ export default function LoginPage() {
                 >
                   Contraseña
                 </label>
-                <span
+                <a
+                  href="/recuperar-contrasena"
                   style={{
                     fontFamily: "Graphik, sans-serif",
                     fontSize: "11px",
                     color: "rgba(0,0,0,0.5)",
+                    textDecoration: "none",
                   }}
                 >
-                  ¿Olvidaste tu contraseña? Contactá a CORPORACION ARGON.
-                </span>
+                  ¿Olvidaste tu contraseña?
+                </a>
               </div>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                placeholder="••••••••"
-                style={{
-                  fontFamily: "Graphik, sans-serif",
-                  fontSize: "13px",
-                  color: "#000000",
-                  backgroundColor: "#ffffff",
-                  border: "1px solid rgba(0,0,0,0.2)",
-                  padding: "12px 14px",
-                  outline: "none",
-                  width: "100%",
-                  boxSizing: "border-box",
-                }}
-              />
+              <div style={{ position: "relative" }}>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  placeholder="••••••••"
+                  style={{
+                    fontFamily: "Graphik, sans-serif",
+                    fontSize: "13px",
+                    color: "#000000",
+                    backgroundColor: "#ffffff",
+                    border: "1px solid rgba(0,0,0,0.2)",
+                    padding: "12px 40px 12px 14px",
+                    outline: "none",
+                    width: "100%",
+                    boxSizing: "border-box",
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  style={{
+                    position: "absolute",
+                    right: "12px",
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    padding: 0,
+                    display: "flex",
+                    alignItems: "center",
+                    color: "rgba(0,0,0,0.4)",
+                  }}
+                  aria-label={showPassword ? "Ocultar contraseña" : "Ver contraseña"}
+                >
+                  {showPassword ? (
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94" />
+                      <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19" />
+                      <line x1="1" y1="1" x2="23" y2="23" />
+                    </svg>
+                  ) : (
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                      <circle cx="12" cy="12" r="3" />
+                    </svg>
+                  )}
+                </button>
+              </div>
             </div>
 
             {/* Error */}
