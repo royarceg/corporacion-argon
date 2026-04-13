@@ -57,7 +57,7 @@ export default function Hero() {
             whiteSpace: "pre-line",
           }}
         >
-          {"Elevate Your Style\nTimeless Fashion, Sustainable Choices"}
+          {"Equipa a tu equipo.\nUniformes y protección de alto rendimiento."}
         </h1>
 
         <a
@@ -77,7 +77,7 @@ export default function Hero() {
             textDecoration: "none",
           }}
         >
-          Shop Now
+          Comprar Ya
         </a>
       </div>
     </section>

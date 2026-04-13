@@ -5,10 +5,10 @@ import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
 
 const navLinks = [
-  { label: "Shop", href: "/producto/acceso", hasDropdown: true },
-  { label: "New Arrivals", href: "/producto/acceso" },
-  { label: "Sales", href: "/producto/acceso" },
-  { label: "Journel", href: "/producto/acceso" },
+  { label: "Tienda", href: "/producto/acceso", hasDropdown: true },
+  { label: "Novedades", href: "/producto/acceso" },
+  { label: "Promociones", href: "/producto/acceso" },
+  { label: "Blog", href: "/producto/acceso" },
 ];
 
 const dropdownColumns = [
@@ -153,7 +153,7 @@ export default function Header() {
               href="/stores"
               style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", fontWeight: 400, color: "#000000", textDecoration: "none" }}
             >
-              Stores
+              Sucursales
             </a>
 
             <a

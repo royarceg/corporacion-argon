@@ -20,7 +20,7 @@ export default function Footer() {
       >
         {/* Left columns */}
         <div style={{ display: "flex", gap: "25px", flexWrap: "wrap" }}>
-          {/* CONTACT US */}
+          {/* CONTÁCTANOS */}
           <div style={{ width: "192px" }}>
             <p
               style={{
@@ -33,7 +33,7 @@ export default function Footer() {
                 marginBottom: "16px",
               }}
             >
-              Contact Us
+              Contáctanos
             </p>
             <ul
               style={{
@@ -45,25 +45,23 @@ export default function Footer() {
                 gap: "10px",
               }}
             >
-              {["+1 (844) 326-6000", "Email Us", "Mon-Fri 9am-3pm PT"].map(
-                (item) => (
-                  <li
-                    key={item}
-                    style={{
-                      fontFamily: "Graphik, sans-serif",
-                      fontSize: "13px",
-                      fontWeight: 400,
-                      color: "#000000",
-                    }}
-                  >
-                    {item}
-                  </li>
-                )
-              )}
+              {["Escríbenos", "Lun-Vie 8am-5pm"].map((item) => (
+                <li
+                  key={item}
+                  style={{
+                    fontFamily: "Graphik, sans-serif",
+                    fontSize: "13px",
+                    fontWeight: 400,
+                    color: "#000000",
+                  }}
+                >
+                  {item}
+                </li>
+              ))}
             </ul>
           </div>
 
-          {/* CUSTOMERS */}
+          {/* CLIENTES */}
           <div style={{ width: "192px" }}>
             <p
               style={{
@@ -76,7 +74,7 @@ export default function Footer() {
                 marginBottom: "16px",
               }}
             >
-              Customers
+              Clientes
             </p>
             <ul
               style={{
@@ -89,11 +87,11 @@ export default function Footer() {
               }}
             >
               {[
-                "Start a Return",
-                "Return Policy",
-                "FAQ",
-                "Catalogs and Mailers",
-                "About Group Gifting",
+                "Iniciar Devolución",
+                "Política de Devolución",
+                "Preguntas Frecuentes",
+                "Catálogos",
+                "Compras Corporativas",
               ].map((item) => (
                 <li key={item}>
                   <a
@@ -113,7 +111,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* COMPANY */}
+          {/* EMPRESA */}
           <div style={{ width: "370px" }}>
             <p
               style={{
@@ -126,7 +124,7 @@ export default function Footer() {
                 marginBottom: "16px",
               }}
             >
-              Company
+              Empresa
             </p>
             <ul
               style={{
@@ -139,12 +137,12 @@ export default function Footer() {
               }}
             >
               {[
-                "About Us",
-                "Sustainability",
-                "Discover Revive",
-                "Careers",
-                "Privacy Policy",
-                "Terms",
+                "Nosotros",
+                "Sostenibilidad",
+                "Conoce ARGON",
+                "Trabaja con Nosotros",
+                "Política de Privacidad",
+                "Términos",
               ].map((item) => (
                 <li key={item}>
                   <a
@@ -176,12 +174,12 @@ export default function Footer() {
               marginBottom: "16px",
             }}
           >
-            Get the latest new from us
+            Recibe nuestras novedades
           </p>
           <div style={{ display: "flex", gap: "8px", marginBottom: "12px" }}>
             <input
               type="email"
-              placeholder="Enter your email address"
+              placeholder="Tu correo electrónico"
               style={{
                 flex: 1,
                 height: "42px",
@@ -209,7 +207,7 @@ export default function Footer() {
                 cursor: "pointer",
               }}
             >
-              Subscribe
+              Suscribirse
             </button>
           </div>
           <p
@@ -222,7 +220,7 @@ export default function Footer() {
               lineHeight: 1.5,
             }}
           >
-            By signing up, you agree to our Privacy Policy and Terms of Service.
+            Al suscribirte, aceptas nuestra Política de Privacidad y Términos de Servicio.
           </p>
         </div>
       </div>
@@ -243,7 +241,7 @@ export default function Footer() {
             margin: 0,
           }}
         >
-          &copy;CEIN
+          &copy;ARGON 2026
         </p>
       </div>
     </footer>

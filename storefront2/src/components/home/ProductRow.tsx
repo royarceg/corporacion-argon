@@ -10,6 +10,29 @@ const products = [
 
 export default function ProductRow() {
   return (
+    <>
+    <style>{`
+      .cta-cotizar {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-family: Graphik, sans-serif;
+        font-size: 10px;
+        font-weight: 400;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+        color: #888;
+        text-decoration: none;
+        transition: color .2s;
+      }
+      .cta-cotizar span {
+        display: inline-block;
+        transition: transform .2s, color .2s;
+        color: #aaa;
+      }
+      .cta-cotizar:hover { color: #000; }
+      .cta-cotizar:hover span { color: #000; transform: translateX(3px); }
+    `}</style>
     <section
       style={{
         width: "100%",
@@ -39,7 +62,7 @@ export default function ProductRow() {
             margin: 0,
           }}
         >
-          What to Wear Now
+          Lo Que Necesitas Ahora
         </h2>
       </div>
 
@@ -88,6 +111,8 @@ export default function ProductRow() {
                 display: "flex",
                 flexDirection: "column",
                 gap: "3px",
+                alignItems: "center",
+                textAlign: "center",
               }}
             >
               <p
@@ -101,21 +126,14 @@ export default function ProductRow() {
               >
                 {product.name}
               </p>
-              <p
-                style={{
-                  fontFamily: "Graphik, sans-serif",
-                  fontSize: "13px",
-                  fontWeight: 400,
-                  color: "#000000",
-                  margin: 0,
-                }}
-              >
-                {product.price}
-              </p>
+              <a href="/productos" className="cta-cotizar">
+                Cotizar ya <span>→</span>
+              </a>
             </div>
           </div>
         ))}
       </div>
     </section>
+    </>
   );
 }

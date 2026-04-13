@@ -1,9 +1,9 @@
 import Image from "next/image";
 
 const collections = [
-  { title: "New Arrivals", href: "/producto/acceso", img: "/images/web/banner-collection-03.svg" },
-  { title: "The Casual Edit", href: "/producto/acceso", img: "/images/web/banner-collection-02.svg" },
-  { title: "Best-Sellers", href: "/producto/acceso", img: "/images/web/banner-collection-01.svg" },
+  { title: "Novedades", href: "/producto/acceso", img: "/images/web/banner-collection-03.svg" },
+  { title: "Colección Laboral", href: "/producto/acceso", img: "/images/web/banner-collection-02.svg" },
+  { title: "Más Vendidos", href: "/producto/acceso", img: "/images/web/banner-collection-01.svg" },
 ];
 
 export default function CollectionBanners() {
@@ -33,8 +33,7 @@ export default function CollectionBanners() {
             maxWidth: "1304px",
           }}
         >
-          Elevate your lifestyle with a more intelligent, superior wardrobe. Our
-          range is crafted sustainably with longevity in mind.
+          Equipamos a los equipos que hacen posible el trabajo. Uniformes, calzado y protección con calidad que dura.
         </p>
       </div>
 

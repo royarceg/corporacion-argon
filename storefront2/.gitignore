@@ -14,3 +14,11 @@ node_modules/
 
 # Build
 tsconfig.tsbuildinfo
+
+# Imágenes locales (ya subidas a Cloudinary)
+public/products/nobg/
+public/products/expanded/
+
+# Mockups temporales
+*.html
+!src/**/*.html

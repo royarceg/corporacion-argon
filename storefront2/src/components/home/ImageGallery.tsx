@@ -37,7 +37,7 @@ export default function ImageGallery() {
             margin: 0,
           }}
         >
-          Our Products
+          Nuestros Productos
         </h2>
       </div>
 

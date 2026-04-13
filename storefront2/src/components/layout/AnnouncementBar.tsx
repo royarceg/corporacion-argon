@@ -23,7 +23,7 @@ export default function AnnouncementBar() {
           letterSpacing: "0.3px",
         }}
       >
-        Complimentary U.S. No-Rush Shipping on orders of $50+
+        Uniformes y equipo de seguridad para empresas · Envíos a todo el país · ¡Solicita tu cotización gratis!
       </p>
     </div>
   );
