@@ -102,13 +102,6 @@ function ProductosContent() {
       });
     }
 
-    // Favoritos siempre al tope (sort estable secundario)
-    list.sort((a, b) => {
-      const aFav = wishlistedIds.has(a.id) ? 0 : 1;
-      const bFav = wishlistedIds.has(b.id) ? 0 : 1;
-      return aFav - bFav;
-    });
-
     return list;
   }, [products, searchQuery, wishlistedIds, activeCategory, activeColors, activeSizes, sort]);
 
