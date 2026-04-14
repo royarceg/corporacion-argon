@@ -290,7 +290,7 @@ export default function LoginPage() {
           >
             ¿No tenés cuenta?{" "}
             <a
-              href="mailto:info@corporacionargom.com"
+              href="/registro"
               style={{ color: "#000000", textDecoration: "underline" }}
             >
               Contactá a CORPORACION ARGON
