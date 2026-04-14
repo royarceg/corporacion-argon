@@ -97,9 +97,13 @@ function PedidoDetailContent() {
     setDeleting(true);
     try {
       await orderService.deleteOrder(order.id);
-      router.replace("/mi-cuenta/pedidos");
+      // Refrescar para mostrar estado "Cancelado" con trazabilidad
+      const updated = await orderService.getOrderById(order.id);
+      setOrder(updated);
+      setConfirmDelete(false);
     } catch {
       setConfirmDelete(false);
+    } finally {
       setDeleting(false);
     }
   }
@@ -159,7 +163,7 @@ function PedidoDetailContent() {
                   letterSpacing: "0.02em",
                 }}
               >
-                Eliminar orden
+                Cancelar orden
               </button>
             </div>
           )}
@@ -408,10 +412,10 @@ function PedidoDetailContent() {
             gap: "20px",
           }}>
             <h2 style={{ fontFamily: "Graphik, sans-serif", fontSize: "18px", fontWeight: 400, color: "#000", margin: 0, letterSpacing: "-0.01em" }}>
-              Eliminar orden
+              Cancelar orden
             </h2>
             <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "14px", color: "rgba(0,0,0,0.6)", margin: 0, lineHeight: 1.6 }}>
-              ¿Estás seguro de que querés eliminar la orden <strong>{order.order_number}</strong>? Esta acción no se puede deshacer.
+              ¿Estás seguro de que querés cancelar la orden <strong>{order.order_number}</strong>? La orden quedará registrada como cancelada.
             </p>
             <div style={{ display: "flex", gap: "12px", justifyContent: "flex-end" }}>
               <button
@@ -426,7 +430,7 @@ function PedidoDetailContent() {
                 disabled={deleting}
                 style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", fontWeight: 500, color: "#fff", backgroundColor: deleting ? "rgba(156,15,15,0.4)" : "#9c0f0f", border: "none", padding: "10px 20px", cursor: deleting ? "not-allowed" : "pointer" }}
               >
-                {deleting ? "Eliminando..." : "Sí, eliminar"}
+                {deleting ? "Cancelando..." : "Sí, cancelar"}
               </button>
             </div>
           </div>

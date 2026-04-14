@@ -601,13 +601,15 @@ const deleteOrder = async (req, res) => {
       return res.status(404).json({ error: 'Orden no encontrada o no se puede eliminar' });
     }
 
-    // Eliminar items primero (FK), luego la orden
-    await client.query('DELETE FROM order_items WHERE purchase_order_id = $1', [id]);
-    await client.query('DELETE FROM purchase_orders WHERE id = $1', [id]);
+    // Soft delete: marcar como cancelada (no se eliminan registros para trazabilidad)
+    await client.query(
+      `UPDATE purchase_orders SET status = 'cancelled' WHERE id = $1`,
+      [id]
+    );
 
     await client.query('COMMIT');
 
-    res.json({ success: true, message: 'Orden eliminada exitosamente' });
+    res.json({ success: true, message: 'Orden cancelada exitosamente' });
 
   } catch (error) {
     await client.query('ROLLBACK');
