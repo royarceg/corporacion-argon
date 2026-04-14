@@ -54,12 +54,13 @@ coverage/
 tmp/
 temp/
 *.tmp
+~$*
 
 # PDFs generados
 generated-pdfs/
 
 # Multimedia temporal
-00. Multimedia/
+multimedia/
 
 # Archivos de documentación temporal
 CAMBIOS_URGENTES.txt
