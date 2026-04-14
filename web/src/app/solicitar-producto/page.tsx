@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { animate } from "animejs";
-import { useAuth } from "@/context/AuthContext";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
 import { uploadService } from "@/services/uploadService";
 import api from "@/services/api";
 import AnnouncementBar from "@/components/layout/AnnouncementBar";
@@ -11,7 +11,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 
 export default function SolicitarProductoPage() {
-  const { isAuthenticated, loading } = useAuth();
+  const { isAuthenticated, loading } = useRequireAuth();
   const router = useRouter();
   const formRef = useRef<HTMLDivElement>(null);
 
