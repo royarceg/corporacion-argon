@@ -226,13 +226,11 @@ const getOrderById = async (req, res) => {
 
     // Obtener items de la orden
     const itemsResult = await pool.query(
-      `SELECT 
+      `SELECT
         oi.*,
-        p.sku,
+        p.sku as product_sku,
         p.name as product_name,
-        p.description,
-        p.size,
-        p.color
+        p.description
       FROM order_items oi
       INNER JOIN products p ON oi.product_id = p.id
       WHERE oi.purchase_order_id = $1

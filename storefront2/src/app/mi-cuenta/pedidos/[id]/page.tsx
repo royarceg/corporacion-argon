@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { orderService, OrderDetail } from "@/services/orderService";
@@ -13,6 +13,14 @@ const statusLabel: Record<string, string> = { pending: "Pendiente", confirmed: "
 const statusColor: Record<string, string> = { pending: "#d4a017", confirmed: "#3a6b3a", cancelled: "#9c0f0f" };
 
 export default function PedidoDetailPage() {
+  return (
+    <Suspense>
+      <PedidoDetailContent />
+    </Suspense>
+  );
+}
+
+function PedidoDetailContent() {
   const { id } = useParams<{ id: string }>();
   const searchParams = useSearchParams();
   const isNew = searchParams.get("new") === "1";
