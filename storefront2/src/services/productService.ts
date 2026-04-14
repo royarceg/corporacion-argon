@@ -43,7 +43,8 @@ export const productService = {
         id: p.id, sku: p.sku, name: p.name, description: p.description || "",
         category: p.category, price: p.reference_price ?? p.price ?? "0",
         images: p.images ?? (p.image_url ? [p.image_url] : []),
-        colors: p.colors ?? [], sizes: p.sizes ?? [],
+        colors: p.available_colors ?? p.colors ?? [],
+        sizes: p.available_sizes ?? p.sizes ?? [],
         variants: p.variants ?? [], variant_images: p.variant_images ?? {},
         videos: p.videos ?? [],
       };
