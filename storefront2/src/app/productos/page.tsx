@@ -29,7 +29,7 @@ function ProductosContent() {
 
   const [products, setProducts] = useState<ApiProduct[]>([]);
   const [fetching, setFetching] = useState(true);
-  const [activeCategory, setActiveCategory] = useState("All");
+  const [activeCategory, setActiveCategory] = useState(catParam || "All");
   const [sort, setSort] = useState<SortOption>("featured");
   const [sortOpen, setSortOpen] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
@@ -38,6 +38,7 @@ function ProductosContent() {
   const [quickViewProduct, setQuickViewProduct] = useState<ApiProduct | null>(null);
 
   const searchQuery = searchParams.get("q") ?? "";
+  const catParam = searchParams.get("cat") ?? "";
   const { addToCart } = useCart();
   const { wishlistedIds } = useWishlist();
 
@@ -46,6 +47,11 @@ function ProductosContent() {
       if (!isAuthenticated()) router.replace("/login");
     }
   }, [loading, isAuthenticated, router]);
+
+  // Sincronizar categoría activa cuando cambia el parámetro URL
+  useEffect(() => {
+    setActiveCategory(catParam || "All");
+  }, [catParam]);
 
   useEffect(() => {
     if (!loading && isAuthenticated() && isClient()) {

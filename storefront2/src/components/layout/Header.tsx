@@ -7,41 +7,41 @@ import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
 
 const navLinks = [
-  { label: "Tienda", href: "/producto/acceso", hasDropdown: true },
-  { label: "Novedades", href: "/producto/acceso" },
-  { label: "Promociones", href: "/producto/acceso" },
-  { label: "Blog", href: "/producto/acceso" },
+  { label: "Tienda", href: "/productos", hasDropdown: true },
+  { label: "Novedades", href: "/productos" },
+  { label: "Promociones", href: "/productos" },
+  { label: "Blog", href: "/productos" },
 ];
 
 const dropdownColumns = [
   {
     title: "Categorías",
     links: [
-      { label: "Uniformes", href: "/producto/acceso" },
-      { label: "Zapatos de Seguridad", href: "/producto/acceso" },
-      { label: "Motocicleta", href: "/producto/acceso" },
-      { label: "Seguridad", href: "/producto/acceso" },
-      { label: "Protección", href: "/producto/acceso" },
-      { label: "Ver Todo", href: "/producto/acceso" },
+      { label: "Uniformes", href: "/productos?cat=UNIFORME" },
+      { label: "Zapatos de Seguridad", href: "/productos?cat=ZAPATOS+DE+SEGURIDAD" },
+      { label: "Motocicleta", href: "/productos?cat=MOTOCICLETA" },
+      { label: "Seguridad", href: "/productos?cat=SEGURIDAD" },
+      { label: "Protección", href: "/productos?cat=PROTECCION" },
+      { label: "Ver Todo", href: "/productos" },
     ],
   },
   {
     title: "Destacado",
     links: [
-      { label: "Novedades", href: "/producto/acceso" },
-      { label: "Más Vendidos", href: "/producto/acceso" },
-      { label: "Promocionales", href: "/producto/acceso" },
+      { label: "Novedades", href: "/productos" },
+      { label: "Más Vendidos", href: "/productos" },
+      { label: "Promocionales", href: "/productos" },
     ],
   },
   {
     title: "Colecciones",
     links: [
-      { label: "Chaleco Reflectivo", href: "/producto/acceso" },
-      { label: "Chaleco Antibalas", href: "/producto/acceso" },
-      { label: "Jacket", href: "/producto/acceso" },
-      { label: "Capa Impermeable", href: "/producto/acceso" },
-      { label: "Set UOT", href: "/producto/acceso" },
-      { label: "Camisa", href: "/producto/acceso" },
+      { label: "Chaleco Reflectivo", href: "/productos?q=chaleco+reflectivo" },
+      { label: "Chaleco Antibalas", href: "/productos?q=chaleco+antibalas" },
+      { label: "Jacket", href: "/productos?q=jacket" },
+      { label: "Capa Impermeable", href: "/productos?q=capa" },
+      { label: "Set UOT", href: "/productos?q=set+uot" },
+      { label: "Camisa", href: "/productos?q=camisa" },
     ],
   },
 ];
