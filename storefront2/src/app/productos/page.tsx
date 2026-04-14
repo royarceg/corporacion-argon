@@ -54,7 +54,7 @@ function ProductosContent() {
   }, [catParam]);
 
   useEffect(() => {
-    if (!loading && isAuthenticated() && isClient()) {
+    if (!loading && isAuthenticated()) {
       productService.getProducts()
         .then(setProducts)
         .catch(console.error)
