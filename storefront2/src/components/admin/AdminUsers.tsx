@@ -27,6 +27,14 @@ export default function AdminUsers() {
   const [createLoading, setCreateLoading] = useState(false);
   const [createMsg, setCreateMsg] = useState("");
 
+  // Inline nueva empresa
+  const [newClientOpen, setNewClientOpen] = useState(false);
+  const [newClientName, setNewClientName] = useState("");
+  const [newClientContact, setNewClientContact] = useState("");
+  const [newClientEmail, setNewClientEmail] = useState("");
+  const [newClientLoading, setNewClientLoading] = useState(false);
+  const [newClientMsg, setNewClientMsg] = useState("");
+
   async function load() {
     try {
       const [u, c] = await Promise.all([userService.getAll(), clientService.getAll()]);
@@ -89,6 +97,25 @@ export default function AdminUsers() {
       await userService.toggleStatus(u.id);
       await load();
     } catch { /* */ }
+  }
+
+  // Crear nueva empresa inline
+  async function saveNewClient() {
+    if (!newClientName.trim()) { setNewClientMsg("El nombre es requerido."); return; }
+    setNewClientLoading(true);
+    setNewClientMsg("");
+    try {
+      const created = await clientService.create(newClientName.trim(), newClientContact.trim() || undefined, newClientEmail.trim() || undefined);
+      setClients((prev) => [...prev, created].sort((a, b) => a.company_name.localeCompare(b.company_name)));
+      setCreateForm((prev) => ({ ...prev, client_id: String(created.id) }));
+      setNewClientOpen(false);
+      setNewClientName("");
+      setNewClientContact("");
+      setNewClientEmail("");
+    } catch {
+      setNewClientMsg("Error al crear la empresa.");
+    }
+    setNewClientLoading(false);
   }
 
   // Create
@@ -218,7 +245,7 @@ export default function AdminUsers() {
 
       {/* ── Modal: Crear usuario ── */}
       {createOpen && (
-        <Modal title="Nuevo Usuario" onClose={() => setCreateOpen(false)}>
+        <Modal title="Nuevo Usuario" onClose={() => { setCreateOpen(false); setNewClientOpen(false); setNewClientName(""); setNewClientContact(""); setNewClientEmail(""); }}>
           <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
             <div><p style={labelStyle}>Nombre de Usuario *</p><input style={inputStyle} value={createForm.user_name} onChange={(e) => setCreateForm({ ...createForm, user_name: e.target.value })} /></div>
             <div><p style={labelStyle}>Email *</p><input type="email" style={inputStyle} value={createForm.email} onChange={(e) => setCreateForm({ ...createForm, email: e.target.value })} /></div>
@@ -231,12 +258,50 @@ export default function AdminUsers() {
               </select>
             </div>
             {createForm.role === "client_user" && (
-              <div>
-                <p style={labelStyle}>Empresa (cliente)</p>
+              <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <p style={labelStyle}>Empresa (cliente)</p>
+                  <button
+                    type="button"
+                    onClick={() => { setNewClientOpen((v) => !v); setNewClientMsg(""); }}
+                    style={{ fontFamily: "Graphik, sans-serif", fontSize: "11px", color: "#000", background: "none", border: "none", cursor: "pointer", textDecoration: "underline", padding: 0 }}
+                  >
+                    {newClientOpen ? "Cancelar" : "+ Agregar empresa nueva"}
+                  </button>
+                </div>
+
                 <select style={inputStyle} value={createForm.client_id} onChange={(e) => setCreateForm({ ...createForm, client_id: e.target.value })}>
                   <option value="">— Sin asignar —</option>
                   {clients.map((c) => <option key={c.id} value={c.id}>{c.company_name}</option>)}
                 </select>
+
+                {/* Mini-form nueva empresa */}
+                {newClientOpen && (
+                  <div style={{ border: "1px solid rgba(0,0,0,0.12)", padding: "14px", display: "flex", flexDirection: "column", gap: "10px", backgroundColor: "#fafafa" }}>
+                    <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "11px", fontWeight: 600, letterSpacing: "0.06em", textTransform: "uppercase", color: "rgba(0,0,0,0.5)", margin: 0 }}>Nueva empresa</p>
+                    <div>
+                      <p style={labelStyle}>Nombre *</p>
+                      <input style={inputStyle} value={newClientName} onChange={(e) => setNewClientName(e.target.value)} placeholder="Empresa S.A." />
+                    </div>
+                    <div>
+                      <p style={labelStyle}>Contacto</p>
+                      <input style={inputStyle} value={newClientContact} onChange={(e) => setNewClientContact(e.target.value)} placeholder="Nombre del contacto" />
+                    </div>
+                    <div>
+                      <p style={labelStyle}>Email</p>
+                      <input type="email" style={inputStyle} value={newClientEmail} onChange={(e) => setNewClientEmail(e.target.value)} placeholder="empresa@correo.com" />
+                    </div>
+                    {newClientMsg && <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "12px", color: "#9c0f0f", margin: 0 }}>{newClientMsg}</p>}
+                    <button
+                      type="button"
+                      onClick={saveNewClient}
+                      disabled={newClientLoading}
+                      style={{ fontFamily: "Graphik, sans-serif", fontSize: "12px", fontWeight: 500, color: "#fff", backgroundColor: newClientLoading ? "rgba(0,0,0,0.4)" : "#000", border: "none", padding: "9px 14px", cursor: newClientLoading ? "not-allowed" : "pointer", alignSelf: "flex-start" }}
+                    >
+                      {newClientLoading ? "Creando..." : "Crear empresa"}
+                    </button>
+                  </div>
+                )}
               </div>
             )}
             {createMsg && <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "12px", color: createMsg.includes("creado") ? "#3a6b3a" : "#9c0f0f", margin: 0 }}>{createMsg}</p>}

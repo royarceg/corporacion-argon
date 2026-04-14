@@ -15,6 +15,10 @@ const { verifyToken, verifyAdmin } = require('../middleware/authMiddleware');
 // Obtener todos los clientes (solo admin)
 router.get('/', verifyToken, verifyAdmin, clientController.getAllClients);
 
+// POST /api/clients
+// Crear nueva empresa cliente (solo admin)
+router.post('/', verifyToken, verifyAdmin, clientController.createClient);
+
 // GET /api/clients/:clientId/products
 // Obtener productos asignados a un cliente (solo admin)
 router.get('/:clientId/products', verifyToken, verifyAdmin, clientController.getClientProducts);

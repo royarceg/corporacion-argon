@@ -16,6 +16,15 @@ export const clientService = {
     return data.clients ?? data;
   },
 
+  create: async (company_name: string, contact_name?: string, email?: string): Promise<ApiClient> => {
+    const { data } = await api.post<{ success: boolean; client: ApiClient }>("/clients", {
+      company_name,
+      contact_name,
+      email,
+    });
+    return data.client;
+  },
+
   getClientProducts: async (clientId: number): Promise<number[]> => {
     const { data } = await api.get(`/clients/${clientId}/products`);
     return data.product_ids ?? data;

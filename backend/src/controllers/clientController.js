@@ -257,8 +257,41 @@ const unassignAllProductsFromClient = async (req, res) => {
   }
 };
 
+// =====================================================
+// CREATE CLIENT - Crear nueva empresa cliente
+// =====================================================
+const createClient = async (req, res) => {
+  try {
+    const { company_name, contact_name, email, phone, address } = req.body;
+
+    if (!company_name || !company_name.trim()) {
+      return res.status(400).json({ error: 'company_name es requerido' });
+    }
+
+    const result = await pool.query(
+      `INSERT INTO clients (company_name, contact_name, email, phone, address, active)
+       VALUES ($1, $2, $3, $4, $5, true)
+       RETURNING id, company_name, contact_name, email, phone, address, active`,
+      [
+        company_name.trim(),
+        contact_name?.trim() || null,
+        email?.trim() || null,
+        phone?.trim() || null,
+        address?.trim() || null,
+      ]
+    );
+
+    res.status(201).json({ success: true, client: result.rows[0] });
+
+  } catch (error) {
+    console.error('Error en createClient:', error);
+    res.status(500).json({ error: 'Error al crear empresa' });
+  }
+};
+
 module.exports = {
   getAllClients,
+  createClient,
   getClientProducts,
   assignProductToClient,
   unassignProductFromClient,
