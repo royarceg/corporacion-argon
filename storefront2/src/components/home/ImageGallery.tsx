@@ -30,7 +30,7 @@ export default function ImageGallery() {
       >
         <h2
           style={{
-            fontFamily: "Graphik, sans-serif",
+            fontFamily: "StyreneA, sans-serif",
             fontSize: "18px",
             fontWeight: 400,
             color: "#000000",

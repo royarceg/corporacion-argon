@@ -116,7 +116,7 @@ export default function ProductCard({ product, onAddToCart, onQuickView }: Props
               transition: "opacity 0.2s ease",
             }}
           >
-            <span style={{ fontFamily: "Graphik, sans-serif", fontSize: "11px", color: "#000", marginRight: "4px" }}>
+            <span style={{ fontFamily: "StyreneA, sans-serif", fontSize: "11px", color: "#000", marginRight: "4px" }}>
               {product.colors[0]}
             </span>
             {product.colors.slice(0, 4).map((color) => (
@@ -139,7 +139,7 @@ export default function ProductCard({ product, onAddToCart, onQuickView }: Props
       {/* Product name */}
       <p
         style={{
-          fontFamily: "Graphik, sans-serif",
+          fontFamily: "StyreneA, sans-serif",
           fontSize: "13px",
           fontWeight: 400,
           color: "#000000",
@@ -153,7 +153,7 @@ export default function ProductCard({ product, onAddToCart, onQuickView }: Props
       {/* Price */}
       <p
         style={{
-          fontFamily: "Graphik, sans-serif",
+          fontFamily: "StyreneA, sans-serif",
           fontSize: "13px",
           fontWeight: 400,
           color: "#000000",

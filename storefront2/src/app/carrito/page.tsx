@@ -72,7 +72,7 @@ export default function CarritoPage() {
 
         {/* Title */}
         <h1 style={{
-          fontFamily: "Graphik, sans-serif",
+          fontFamily: "StyreneA, sans-serif",
           fontSize: "26px",
           fontWeight: 400,
           color: "#000",
@@ -85,10 +85,10 @@ export default function CarritoPage() {
 
         {items.length === 0 ? (
           <div style={{ textAlign: "center", padding: "100px 0" }}>
-            <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "15px", color: "rgba(0,0,0,0.4)", marginBottom: "24px" }}>
+            <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "15px", color: "rgba(0,0,0,0.4)", marginBottom: "24px" }}>
               Tu carrito está vacío.
             </p>
-            <a href="/productos" style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "#000", textDecoration: "underline" }}>
+            <a href="/productos" style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "#000", textDecoration: "underline" }}>
               Ver catálogo
             </a>
           </div>
@@ -114,11 +114,11 @@ export default function CarritoPage() {
                     padding: "14px 16px 10px",
                   }}>
                     <div>
-                      <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", fontWeight: 400, color: "#000", margin: "0 0 3px 0", lineHeight: 1.35 }}>
+                      <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", fontWeight: 400, color: "#000", margin: "0 0 3px 0", lineHeight: 1.35 }}>
                         {item.product_name}
                       </p>
                       {(item.color || item.size) && (
-                        <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "11px", color: "rgba(0,0,0,0.45)", margin: 0 }}>
+                        <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "11px", color: "rgba(0,0,0,0.45)", margin: 0 }}>
                           {[item.color, item.size].filter(Boolean).join(" / ")}
                         </p>
                       )}
@@ -159,7 +159,7 @@ export default function CarritoPage() {
                         if (!isNaN(val) && val >= 1) updateItem(item.id, val);
                       }}
                       style={{
-                        fontFamily: "Graphik, sans-serif",
+                        fontFamily: "StyreneA, sans-serif",
                         fontSize: "13px",
                         width: "48px",
                         textAlign: "center",
@@ -182,8 +182,8 @@ export default function CarritoPage() {
 
                   {/* Subtotal */}
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 16px 14px", borderTop: "1px solid rgba(0,0,0,0.07)" }}>
-                    <span style={{ fontFamily: "Graphik, sans-serif", fontSize: "12px", color: "rgba(0,0,0,0.45)" }}>Subtotal</span>
-                    <span style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", fontWeight: 400, color: "#000" }}>
+                    <span style={{ fontFamily: "StyreneA, sans-serif", fontSize: "12px", color: "rgba(0,0,0,0.45)" }}>Subtotal</span>
+                    <span style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", fontWeight: 400, color: "#000" }}>
                       {parseFloat(item.line_total).toLocaleString("es-CR", { style: "currency", currency: "CRC", minimumFractionDigits: 0 })}
                     </span>
                   </div>
@@ -195,25 +195,25 @@ export default function CarritoPage() {
             <div style={{ position: "sticky", top: "24px" }}>
               <div style={{ border: "1px solid rgba(0,0,0,0.12)", padding: "24px" }}>
 
-                <h2 style={{ fontFamily: "Graphik, sans-serif", fontSize: "14px", fontWeight: 400, color: "#000", margin: "0 0 20px 0", textAlign: "center" }}>
+                <h2 style={{ fontFamily: "StyreneA, sans-serif", fontSize: "14px", fontWeight: 400, color: "#000", margin: "0 0 20px 0", textAlign: "center" }}>
                   Order Summary
                 </h2>
 
                 {/* Subtotal */}
                 <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "12px" }}>
-                  <span style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.6)" }}>Subtotal</span>
-                  <span style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "#000" }}>{formattedTotal}</span>
+                  <span style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.6)" }}>Subtotal</span>
+                  <span style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "#000" }}>{formattedTotal}</span>
                 </div>
 
                 {/* Total */}
                 <div style={{ display: "flex", justifyContent: "space-between", paddingBottom: "20px", borderBottom: "1px solid rgba(0,0,0,0.08)", marginBottom: "20px" }}>
-                  <span style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "#000", fontWeight: 500 }}>Total</span>
-                  <span style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "#000", fontWeight: 500 }}>{formattedTotal}</span>
+                  <span style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "#000", fontWeight: 500 }}>Total</span>
+                  <span style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "#000", fontWeight: 500 }}>{formattedTotal}</span>
                 </div>
 
                 {/* PO Number */}
                 <div style={{ display: "flex", flexDirection: "column", gap: "6px", marginBottom: "14px" }}>
-                  <label style={{ fontFamily: "Graphik, sans-serif", fontSize: "10px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "#000" }}>
+                  <label style={{ fontFamily: "StyreneA, sans-serif", fontSize: "10px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "#000" }}>
                     N° de Orden (PO) *
                   </label>
                   <input
@@ -221,30 +221,30 @@ export default function CarritoPage() {
                     value={customerPo}
                     onChange={(e) => setCustomerPo(e.target.value)}
                     placeholder="ej. PO-2026-001"
-                    style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", border: "1px solid rgba(0,0,0,0.2)", padding: "10px 12px", outline: "none", width: "100%", boxSizing: "border-box" }}
+                    style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", border: "1px solid rgba(0,0,0,0.2)", padding: "10px 12px", outline: "none", width: "100%", boxSizing: "border-box" }}
                   />
                 </div>
 
                 {/* Fecha */}
                 <div style={{ display: "flex", flexDirection: "column", gap: "6px", marginBottom: "20px" }}>
-                  <label style={{ fontFamily: "Graphik, sans-serif", fontSize: "10px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "#000" }}>
+                  <label style={{ fontFamily: "StyreneA, sans-serif", fontSize: "10px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "#000" }}>
                     Fecha deseada de entrega
                   </label>
                   <input
                     type="date"
                     value={wantedDate}
                     onChange={(e) => setWantedDate(e.target.value)}
-                    style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", border: "1px solid rgba(0,0,0,0.2)", padding: "10px 12px", outline: "none", width: "100%", boxSizing: "border-box" }}
+                    style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", border: "1px solid rgba(0,0,0,0.2)", padding: "10px 12px", outline: "none", width: "100%", boxSizing: "border-box" }}
                   />
                 </div>
 
                 {/* Nota */}
-                <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "11px", color: "rgba(0,0,0,0.4)", margin: "0 0 20px 0", lineHeight: 1.6, textAlign: "center" }}>
+                <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "11px", color: "rgba(0,0,0,0.4)", margin: "0 0 20px 0", lineHeight: 1.6, textAlign: "center" }}>
                   Los precios son estimados. ARGON confirmará cantidades y precios finales antes de procesar.
                 </p>
 
                 {error && (
-                  <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "12px", color: "#9c0f0f", margin: "0 0 12px 0" }}>
+                  <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "12px", color: "#9c0f0f", margin: "0 0 12px 0" }}>
                     {error}
                   </p>
                 )}
@@ -254,7 +254,7 @@ export default function CarritoPage() {
                   disabled={submitting}
                   style={{
                     width: "100%",
-                    fontFamily: "Graphik, sans-serif",
+                    fontFamily: "StyreneA, sans-serif",
                     fontSize: "13px",
                     fontWeight: 500,
                     color: "#fff",
@@ -277,7 +277,7 @@ export default function CarritoPage() {
         {related.length > 0 && (
           <div style={{ marginTop: "80px" }}>
             <h2 style={{
-              fontFamily: "Graphik, sans-serif",
+              fontFamily: "StyreneA, sans-serif",
               fontSize: "18px",
               fontWeight: 400,
               color: "#000",
@@ -335,10 +335,10 @@ export default function CarritoPage() {
                       }
                     </button>
                   </div>
-                  <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "#000", margin: 0, lineHeight: 1.3 }}>
+                  <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "#000", margin: 0, lineHeight: 1.3 }}>
                     {product.name}
                   </p>
-                  <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "12px", color: "rgba(0,0,0,0.45)", margin: 0 }}>
+                  <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "12px", color: "rgba(0,0,0,0.45)", margin: 0 }}>
                     Consultar precio
                   </p>
                 </div>

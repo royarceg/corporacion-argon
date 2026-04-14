@@ -27,7 +27,7 @@ export default function MiCuentaPage() {
       <Header />
 
       <main style={{ width: "100%", maxWidth: "1400px", padding: "48px 32px", flex: 1 }}>
-        <h1 style={{ fontFamily: "Graphik, sans-serif", fontSize: "28px", fontWeight: 400, color: "#000", margin: "0 0 48px 0", letterSpacing: "-0.02em" }}>
+        <h1 style={{ fontFamily: "StyreneA, sans-serif", fontSize: "28px", fontWeight: 400, color: "#000", margin: "0 0 48px 0", letterSpacing: "-0.02em" }}>
           Mi Cuenta
         </h1>
 
@@ -39,8 +39,8 @@ export default function MiCuentaPage() {
 
             {/* Welcome */}
             <div style={{ padding: "32px", backgroundColor: "#f5f4f4" }}>
-              <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "14px", color: "rgba(0,0,0,0.6)", margin: "0 0 4px 0" }}>Bienvenido de vuelta,</p>
-              <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "20px", fontWeight: 400, color: "#000", margin: 0 }}>{user.name}</p>
+              <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "14px", color: "rgba(0,0,0,0.6)", margin: "0 0 4px 0" }}>Bienvenido de vuelta,</p>
+              <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "20px", fontWeight: 400, color: "#000", margin: 0 }}>{user.name}</p>
             </div>
 
             {/* Stats row */}
@@ -51,18 +51,18 @@ export default function MiCuentaPage() {
                 { label: "Rol", value: user.role === "master_admin" ? "Administrador" : "Cliente" },
               ].map((stat) => (
                 <div key={stat.label} style={{ padding: "24px", border: "1px solid rgba(0,0,0,0.08)" }}>
-                  <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "11px", color: "rgba(0,0,0,0.4)", margin: "0 0 8px 0", letterSpacing: "0.06em", textTransform: "uppercase" }}>{stat.label}</p>
-                  <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "20px", fontWeight: 400, color: "#000", margin: 0 }}>{stat.value}</p>
+                  <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "11px", color: "rgba(0,0,0,0.4)", margin: "0 0 8px 0", letterSpacing: "0.06em", textTransform: "uppercase" }}>{stat.label}</p>
+                  <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "20px", fontWeight: 400, color: "#000", margin: 0 }}>{stat.value}</p>
                 </div>
               ))}
             </div>
 
             {/* Quick links */}
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
-              <a href="/productos" style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "#fff", backgroundColor: "#000", padding: "14px 24px", textDecoration: "none", textAlign: "center", letterSpacing: "0.04em", textTransform: "uppercase" }}>
+              <a href="/productos" style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "#fff", backgroundColor: "#000", padding: "14px 24px", textDecoration: "none", textAlign: "center", letterSpacing: "0.04em", textTransform: "uppercase" }}>
                 Ver Catálogo
               </a>
-              <a href="/mi-cuenta/pedidos" style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "#000", backgroundColor: "#fff", padding: "14px 24px", textDecoration: "none", textAlign: "center", letterSpacing: "0.04em", textTransform: "uppercase", border: "1px solid #000" }}>
+              <a href="/mi-cuenta/pedidos" style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "#000", backgroundColor: "#fff", padding: "14px 24px", textDecoration: "none", textAlign: "center", letterSpacing: "0.04em", textTransform: "uppercase", border: "1px solid #000" }}>
                 Mis Pedidos
               </a>
             </div>

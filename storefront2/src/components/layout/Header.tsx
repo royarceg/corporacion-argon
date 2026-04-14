@@ -110,7 +110,7 @@ export default function Header() {
             <a
               href="/"
               style={{
-                fontFamily: "Graphik, sans-serif",
+                fontFamily: "StyreneA, sans-serif",
                 fontSize: "20px",
                 fontWeight: 700,
                 color: "#000000",
@@ -131,7 +131,7 @@ export default function Header() {
                   <a
                     href={link.href}
                     style={{
-                      fontFamily: "Graphik, sans-serif",
+                      fontFamily: "StyreneA, sans-serif",
                       fontSize: "13px",
                       fontWeight: 400,
                       color: "#000000",
@@ -163,7 +163,7 @@ export default function Header() {
 
             <a
               href="/stores"
-              style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", fontWeight: 400, color: "#000000", textDecoration: "none" }}
+              style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", fontWeight: 400, color: "#000000", textDecoration: "none" }}
             >
               Sucursales
             </a>
@@ -183,7 +183,7 @@ export default function Header() {
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="1.5">
                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
               </svg>
-              <span style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", fontWeight: 400, color: "#000000" }}>{wishlistCount}</span>
+              <span style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", fontWeight: 400, color: "#000000" }}>{wishlistCount}</span>
             </button>
 
             <a href="/carrito" aria-label="Cart" style={{ display: "flex", alignItems: "center", gap: "4px", textDecoration: "none" }}>
@@ -192,7 +192,7 @@ export default function Header() {
                 <line x1="3" y1="6" x2="21" y2="6" />
                 <path d="M16 10a4 4 0 0 1-8 0" />
               </svg>
-              <span style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", fontWeight: 400, color: "#000000" }}>{count}</span>
+              <span style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", fontWeight: 400, color: "#000000" }}>{count}</span>
             </a>
           </div>
         </header>
@@ -229,7 +229,7 @@ export default function Header() {
                 flex: 1,
                 border: "none",
                 outline: "none",
-                fontFamily: "Graphik, sans-serif",
+                fontFamily: "StyreneA, sans-serif",
                 fontSize: "14px",
                 color: "#000000",
                 padding: "0 16px",
@@ -270,7 +270,7 @@ export default function Header() {
               <div key={col.title}>
                 <p
                   style={{
-                    fontFamily: "Graphik, sans-serif",
+                    fontFamily: "StyreneA, sans-serif",
                     fontSize: "11px",
                     fontWeight: 400,
                     color: "rgba(0,0,0,0.45)",
@@ -286,7 +286,7 @@ export default function Header() {
                       key={link.label}
                       href={link.href}
                       style={{
-                        fontFamily: "Graphik, sans-serif",
+                        fontFamily: "StyreneA, sans-serif",
                         fontSize: "13px",
                         fontWeight: 400,
                         color: "#000000",

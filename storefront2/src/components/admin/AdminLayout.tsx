@@ -33,7 +33,7 @@ export default function AdminLayout({ activeTab, onTabChange, children }: AdminL
         }}
       >
         <p style={{
-          fontFamily: "Graphik, sans-serif",
+          fontFamily: "StyreneA, sans-serif",
           fontSize: "10px",
           fontWeight: 600,
           letterSpacing: "0.1em",
@@ -55,7 +55,7 @@ export default function AdminLayout({ activeTab, onTabChange, children }: AdminL
                 alignItems: "center",
                 gap: "10px",
                 padding: "10px 20px",
-                fontFamily: "Graphik, sans-serif",
+                fontFamily: "StyreneA, sans-serif",
                 fontSize: "13px",
                 fontWeight: activeTab === item.key ? 500 : 400,
                 color: activeTab === item.key ? "#000" : "rgba(0,0,0,0.5)",
@@ -74,13 +74,13 @@ export default function AdminLayout({ activeTab, onTabChange, children }: AdminL
         </nav>
 
         <div style={{ marginTop: "auto", padding: "20px" }}>
-          <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "11px", color: "rgba(0,0,0,0.4)", margin: "0 0 8px 0" }}>
+          <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "11px", color: "rgba(0,0,0,0.4)", margin: "0 0 8px 0" }}>
             {user?.email}
           </p>
           <button
             onClick={logout}
             style={{
-              fontFamily: "Graphik, sans-serif",
+              fontFamily: "StyreneA, sans-serif",
               fontSize: "12px",
               color: "rgba(0,0,0,0.5)",
               background: "none",

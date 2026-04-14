@@ -87,7 +87,7 @@ export default function QuoteSection() {
             {/* Label */}
             <p
               style={{
-                fontFamily: "Graphik, sans-serif",
+                fontFamily: "StyreneA, sans-serif",
                 fontSize: "10px",
                 letterSpacing: "2px",
                 textTransform: "uppercase",
@@ -103,7 +103,7 @@ export default function QuoteSection() {
             {/* Title */}
             <p
               style={{
-                fontFamily: "Graphik, sans-serif",
+                fontFamily: "StyreneA, sans-serif",
                 fontSize: "20px",
                 fontWeight: 400,
                 color: "#ffffff",

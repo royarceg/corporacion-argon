@@ -80,7 +80,7 @@ export default function ThreeColumnSection() {
                 </span>
                 <p
                   style={{
-                    fontFamily: "Graphik, sans-serif",
+                    fontFamily: "StyreneA, sans-serif",
                     fontSize: "16px",
                     fontWeight: 500,
                     color: "white",
@@ -97,7 +97,7 @@ export default function ThreeColumnSection() {
                 <a
                   href={`/${col.slug}`}
                   style={{
-                    fontFamily: "Graphik, sans-serif",
+                    fontFamily: "StyreneA, sans-serif",
                     fontSize: "12px",
                     fontWeight: 500,
                     textTransform: "uppercase",
@@ -117,7 +117,7 @@ export default function ThreeColumnSection() {
                 <a
                   href={`/${col.slug}`}
                   style={{
-                    fontFamily: "Graphik, sans-serif",
+                    fontFamily: "StyreneA, sans-serif",
                     fontSize: "12px",
                     fontWeight: 500,
                     textTransform: "uppercase",

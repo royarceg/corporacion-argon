@@ -48,7 +48,7 @@ function ConfirmarContent() {
   if (!token) {
     return (
       <div style={{ textAlign: "center", padding: "40px 0" }}>
-        <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "#9c0f0f" }}>
+        <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "#9c0f0f" }}>
           Enlace inválido. <a href="/recuperar-contrasena" style={{ color: "#000", textDecoration: "underline" }}>Solicitá uno nuevo</a>.
         </p>
       </div>
@@ -63,19 +63,19 @@ function ConfirmarContent() {
             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
             <polyline points="22 4 12 14.01 9 11.01" />
           </svg>
-          <h1 style={{ fontFamily: "Graphik, sans-serif", fontSize: "20px", fontWeight: 400, color: "#000000", margin: "0 0 12px 0" }}>
+          <h1 style={{ fontFamily: "StyreneA, sans-serif", fontSize: "20px", fontWeight: 400, color: "#000000", margin: "0 0 12px 0" }}>
             Contraseña actualizada
           </h1>
-          <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.5)", lineHeight: 1.6 }}>
+          <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.5)", lineHeight: 1.6 }}>
             Redirigiendo al inicio de sesión...
           </p>
         </div>
       ) : (
         <>
-          <h1 style={{ fontFamily: "Graphik, sans-serif", fontSize: "22px", fontWeight: 400, color: "#000000", margin: "0 0 8px 0", letterSpacing: "-0.02em" }}>
+          <h1 style={{ fontFamily: "StyreneA, sans-serif", fontSize: "22px", fontWeight: 400, color: "#000000", margin: "0 0 8px 0", letterSpacing: "-0.02em" }}>
             Nueva contraseña
           </h1>
-          <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.5)", margin: "0 0 32px 0", lineHeight: 1.6 }}>
+          <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.5)", margin: "0 0 32px 0", lineHeight: 1.6 }}>
             Elegí una contraseña segura para tu cuenta.
           </p>
 
@@ -85,7 +85,7 @@ function ConfirmarContent() {
               { label: "Confirmar contraseña", value: confirm, set: setConfirm },
             ].map((field) => (
               <div key={field.label} style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                <label style={{ fontFamily: "Graphik, sans-serif", fontSize: "11px", fontWeight: 500, color: "#000000", letterSpacing: "0.06em", textTransform: "uppercase" }}>
+                <label style={{ fontFamily: "StyreneA, sans-serif", fontSize: "11px", fontWeight: 500, color: "#000000", letterSpacing: "0.06em", textTransform: "uppercase" }}>
                   {field.label}
                 </label>
                 <div style={{ position: "relative" }}>
@@ -95,7 +95,7 @@ function ConfirmarContent() {
                     onChange={(e) => field.set(e.target.value)}
                     required
                     placeholder="••••••••"
-                    style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "#000000", backgroundColor: "#ffffff", border: "1px solid rgba(0,0,0,0.2)", padding: "12px 40px 12px 14px", outline: "none", width: "100%", boxSizing: "border-box" }}
+                    style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "#000000", backgroundColor: "#ffffff", border: "1px solid rgba(0,0,0,0.2)", padding: "12px 40px 12px 14px", outline: "none", width: "100%", boxSizing: "border-box" }}
                   />
                   <button
                     type="button"
@@ -120,13 +120,13 @@ function ConfirmarContent() {
             ))}
 
             {error && (
-              <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "#9c0f0f", margin: 0 }}>{error}</p>
+              <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "#9c0f0f", margin: 0 }}>{error}</p>
             )}
 
             <button
               type="submit"
               disabled={loading}
-              style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", fontWeight: 500, color: "#ffffff", backgroundColor: loading ? "rgba(0,0,0,0.4)" : "#000000", border: "none", padding: "14px", cursor: loading ? "not-allowed" : "pointer", letterSpacing: "0.06em", textTransform: "uppercase", width: "100%", marginTop: "4px" }}
+              style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", fontWeight: 500, color: "#ffffff", backgroundColor: loading ? "rgba(0,0,0,0.4)" : "#000000", border: "none", padding: "14px", cursor: loading ? "not-allowed" : "pointer", letterSpacing: "0.06em", textTransform: "uppercase", width: "100%", marginTop: "4px" }}
             >
               {loading ? "Guardando..." : "Actualizar Contraseña"}
             </button>
@@ -142,7 +142,7 @@ export default function ConfirmarPage() {
     <div style={{ minHeight: "100vh", backgroundColor: "#ffffff", display: "flex", flexDirection: "column" }}>
       <AnnouncementBar />
       <header style={{ width: "100%", height: "68px", display: "flex", alignItems: "center", justifyContent: "center", borderBottom: "1px solid rgba(0,0,0,0.08)" }}>
-        <a href="/" style={{ fontFamily: "Graphik, sans-serif", fontSize: "20px", fontWeight: 700, color: "#000000", textDecoration: "none", letterSpacing: "-0.02em" }}>
+        <a href="/" style={{ fontFamily: "StyreneA, sans-serif", fontSize: "20px", fontWeight: 700, color: "#000000", textDecoration: "none", letterSpacing: "-0.02em" }}>
           ARGON.
         </a>
       </header>

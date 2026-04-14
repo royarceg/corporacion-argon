@@ -61,7 +61,7 @@ export default function RegistroPage() {
         <a
           href="/"
           style={{
-            fontFamily: "Graphik, sans-serif",
+            fontFamily: "StyreneA, sans-serif",
             fontSize: "20px",
             fontWeight: 700,
             color: "#000000",
@@ -99,7 +99,7 @@ export default function RegistroPage() {
               </svg>
               <h1
                 style={{
-                  fontFamily: "Graphik, sans-serif",
+                  fontFamily: "StyreneA, sans-serif",
                   fontSize: "20px",
                   fontWeight: 400,
                   color: "#000000",
@@ -111,7 +111,7 @@ export default function RegistroPage() {
               </h1>
               <p
                 style={{
-                  fontFamily: "Graphik, sans-serif",
+                  fontFamily: "StyreneA, sans-serif",
                   fontSize: "13px",
                   color: "rgba(0,0,0,0.5)",
                   lineHeight: 1.6,
@@ -123,7 +123,7 @@ export default function RegistroPage() {
               <a
                 href="/"
                 style={{
-                  fontFamily: "Graphik, sans-serif",
+                  fontFamily: "StyreneA, sans-serif",
                   fontSize: "13px",
                   fontWeight: 500,
                   color: "#ffffff",
@@ -141,7 +141,7 @@ export default function RegistroPage() {
             <>
               <h1
                 style={{
-                  fontFamily: "Graphik, sans-serif",
+                  fontFamily: "StyreneA, sans-serif",
                   fontSize: "22px",
                   fontWeight: 400,
                   color: "#000000",
@@ -153,7 +153,7 @@ export default function RegistroPage() {
               </h1>
               <p
                 style={{
-                  fontFamily: "Graphik, sans-serif",
+                  fontFamily: "StyreneA, sans-serif",
                   fontSize: "13px",
                   color: "rgba(0,0,0,0.5)",
                   margin: "0 0 32px 0",
@@ -174,7 +174,7 @@ export default function RegistroPage() {
                   <div key={field.name} style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
                     <label
                       style={{
-                        fontFamily: "Graphik, sans-serif",
+                        fontFamily: "StyreneA, sans-serif",
                         fontSize: "11px",
                         fontWeight: 500,
                         color: "#000000",
@@ -192,7 +192,7 @@ export default function RegistroPage() {
                       required={field.required}
                       placeholder={field.placeholder}
                       style={{
-                        fontFamily: "Graphik, sans-serif",
+                        fontFamily: "StyreneA, sans-serif",
                         fontSize: "13px",
                         color: "#000000",
                         backgroundColor: "#ffffff",
@@ -210,7 +210,7 @@ export default function RegistroPage() {
                 <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
                   <label
                     style={{
-                      fontFamily: "Graphik, sans-serif",
+                      fontFamily: "StyreneA, sans-serif",
                       fontSize: "11px",
                       fontWeight: 500,
                       color: "#000000",
@@ -227,7 +227,7 @@ export default function RegistroPage() {
                     rows={4}
                     placeholder="Contanos sobre tu negocio o lo que estás buscando..."
                     style={{
-                      fontFamily: "Graphik, sans-serif",
+                      fontFamily: "StyreneA, sans-serif",
                       fontSize: "13px",
                       color: "#000000",
                       backgroundColor: "#ffffff",
@@ -245,7 +245,7 @@ export default function RegistroPage() {
                   type="submit"
                   disabled={state === "loading"}
                   style={{
-                    fontFamily: "Graphik, sans-serif",
+                    fontFamily: "StyreneA, sans-serif",
                     fontSize: "13px",
                     fontWeight: 500,
                     color: "#ffffff",
@@ -274,7 +274,7 @@ export default function RegistroPage() {
 
               <p
                 style={{
-                  fontFamily: "Graphik, sans-serif",
+                  fontFamily: "StyreneA, sans-serif",
                   fontSize: "13px",
                   color: "rgba(0,0,0,0.5)",
                   margin: 0,

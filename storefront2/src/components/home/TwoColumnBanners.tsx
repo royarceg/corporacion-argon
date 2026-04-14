@@ -45,7 +45,7 @@ export default function TwoColumnBanners() {
               position: "absolute",
               bottom: "32px",
               left: "32px",
-              fontFamily: "Graphik, sans-serif",
+              fontFamily: "StyreneA, sans-serif",
               fontSize: "18px",
               fontWeight: 400,
               color: "#ffffff",

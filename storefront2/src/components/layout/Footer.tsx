@@ -24,7 +24,7 @@ export default function Footer() {
           <div style={{ width: "192px" }}>
             <p
               style={{
-                fontFamily: "Graphik, sans-serif",
+                fontFamily: "StyreneA, sans-serif",
                 fontSize: "11px",
                 fontWeight: 400,
                 textTransform: "uppercase",
@@ -49,7 +49,7 @@ export default function Footer() {
                 <li
                   key={item}
                   style={{
-                    fontFamily: "Graphik, sans-serif",
+                    fontFamily: "StyreneA, sans-serif",
                     fontSize: "13px",
                     fontWeight: 400,
                     color: "#000000",
@@ -65,7 +65,7 @@ export default function Footer() {
           <div style={{ width: "192px" }}>
             <p
               style={{
-                fontFamily: "Graphik, sans-serif",
+                fontFamily: "StyreneA, sans-serif",
                 fontSize: "11px",
                 fontWeight: 400,
                 textTransform: "uppercase",
@@ -97,7 +97,7 @@ export default function Footer() {
                   <a
                     href="#"
                     style={{
-                      fontFamily: "Graphik, sans-serif",
+                      fontFamily: "StyreneA, sans-serif",
                       fontSize: "13px",
                       fontWeight: 400,
                       color: "#000000",
@@ -115,7 +115,7 @@ export default function Footer() {
           <div style={{ width: "370px" }}>
             <p
               style={{
-                fontFamily: "Graphik, sans-serif",
+                fontFamily: "StyreneA, sans-serif",
                 fontSize: "11px",
                 fontWeight: 400,
                 textTransform: "uppercase",
@@ -148,7 +148,7 @@ export default function Footer() {
                   <a
                     href="#"
                     style={{
-                      fontFamily: "Graphik, sans-serif",
+                      fontFamily: "StyreneA, sans-serif",
                       fontSize: "13px",
                       fontWeight: 400,
                       color: "#000000",
@@ -167,7 +167,7 @@ export default function Footer() {
         <div style={{ maxWidth: "491px", width: "491px" }}>
           <p
             style={{
-              fontFamily: "Graphik, sans-serif",
+              fontFamily: "StyreneA, sans-serif",
               fontSize: "16px",
               fontWeight: 400,
               color: "#000000",
@@ -184,7 +184,7 @@ export default function Footer() {
                 flex: 1,
                 height: "42px",
                 padding: "0 12px",
-                fontFamily: "Graphik, sans-serif",
+                fontFamily: "StyreneA, sans-serif",
                 fontSize: "13px",
                 color: "#565656",
                 border: "1px solid #cccccc",
@@ -197,7 +197,7 @@ export default function Footer() {
               style={{
                 height: "42px",
                 padding: "0 24px",
-                fontFamily: "Graphik, sans-serif",
+                fontFamily: "StyreneA, sans-serif",
                 fontSize: "15px",
                 fontWeight: 400,
                 color: "#ffffff",
@@ -212,7 +212,7 @@ export default function Footer() {
           </div>
           <p
             style={{
-              fontFamily: "Graphik, sans-serif",
+              fontFamily: "StyreneA, sans-serif",
               fontSize: "13px",
               fontWeight: 400,
               color: "#000000",
@@ -234,7 +234,7 @@ export default function Footer() {
       >
         <p
           style={{
-            fontFamily: "Graphik, sans-serif",
+            fontFamily: "StyreneA, sans-serif",
             fontSize: "13px",
             fontWeight: 400,
             color: "#565656",

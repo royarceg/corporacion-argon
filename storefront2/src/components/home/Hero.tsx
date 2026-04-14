@@ -48,7 +48,7 @@ export default function Hero() {
       >
         <h1
           style={{
-            fontFamily: "Graphik, sans-serif",
+            fontFamily: "StyreneA, sans-serif",
             fontSize: "24px",
             fontWeight: 400,
             color: "#ffffff",
@@ -63,7 +63,7 @@ export default function Hero() {
         <a
           href="/producto/acceso"
           style={{
-            fontFamily: "Graphik, sans-serif",
+            fontFamily: "StyreneA, sans-serif",
             fontSize: "15px",
             fontWeight: 400,
             color: "#000000",

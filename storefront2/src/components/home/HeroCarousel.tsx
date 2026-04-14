@@ -93,7 +93,7 @@ export default function HeroCarousel() {
             >
               <span
                 style={{
-                  fontFamily: "Graphik, sans-serif",
+                  fontFamily: "StyreneA, sans-serif",
                   fontSize: "12px",
                   fontWeight: 500,
                   color: "white",
@@ -125,7 +125,7 @@ export default function HeroCarousel() {
                     display: "inline-flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    fontFamily: "Graphik, sans-serif",
+                    fontFamily: "StyreneA, sans-serif",
                     fontSize: "12px",
                     fontWeight: 500,
                     textTransform: "uppercase",
@@ -146,7 +146,7 @@ export default function HeroCarousel() {
                     display: "inline-flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    fontFamily: "Graphik, sans-serif",
+                    fontFamily: "StyreneA, sans-serif",
                     fontSize: "12px",
                     fontWeight: 500,
                     textTransform: "uppercase",

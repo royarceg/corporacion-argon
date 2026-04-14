@@ -17,10 +17,10 @@ export default function AccountSidebar() {
     <aside style={{ width: "220px", flexShrink: 0 }}>
       {/* User info */}
       <div style={{ marginBottom: "32px" }}>
-        <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "14px", fontWeight: 500, color: "#000", margin: "0 0 4px 0" }}>
+        <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "14px", fontWeight: 500, color: "#000", margin: "0 0 4px 0" }}>
           {user?.name}
         </p>
-        <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "12px", color: "rgba(0,0,0,0.4)", margin: 0 }}>
+        <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "12px", color: "rgba(0,0,0,0.4)", margin: 0 }}>
           {user?.email}
         </p>
       </div>
@@ -34,7 +34,7 @@ export default function AccountSidebar() {
               key={link.href}
               href={link.href}
               style={{
-                fontFamily: "Graphik, sans-serif",
+                fontFamily: "StyreneA, sans-serif",
                 fontSize: "13px",
                 fontWeight: active ? 500 : 400,
                 color: active ? "#000" : "rgba(0,0,0,0.6)",
@@ -50,7 +50,7 @@ export default function AccountSidebar() {
         <button
           onClick={logout}
           style={{
-            fontFamily: "Graphik, sans-serif",
+            fontFamily: "StyreneA, sans-serif",
             fontSize: "13px",
             fontWeight: 400,
             color: "rgba(0,0,0,0.4)",

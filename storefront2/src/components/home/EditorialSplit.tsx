@@ -87,7 +87,7 @@ function EditorialBlock({
       </h3>
       <p
         style={{
-          fontFamily: "Graphik, sans-serif",
+          fontFamily: "StyreneA, sans-serif",
           fontSize: "14px",
           fontWeight: 500,
           color: "var(--color-charcoal)",
@@ -99,7 +99,7 @@ function EditorialBlock({
       </p>
       <p
         style={{
-          fontFamily: "Graphik, sans-serif",
+          fontFamily: "StyreneA, sans-serif",
           fontSize: "14px",
           fontWeight: 400,
           color: "var(--color-light-charcoal)",
@@ -117,7 +117,7 @@ function EditorialBlock({
           display: "inline-flex",
           alignItems: "center",
           justifyContent: "center",
-          fontFamily: "Graphik, sans-serif",
+          fontFamily: "StyreneA, sans-serif",
           fontSize: "12px",
           fontWeight: 500,
           textTransform: "uppercase",

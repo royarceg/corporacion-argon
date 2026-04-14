@@ -24,7 +24,7 @@ export default function CollectionBanners() {
       <div style={{ width: "1336px", maxWidth: "100%", padding: "16px 0" }}>
         <p
           style={{
-            fontFamily: "Graphik, sans-serif",
+            fontFamily: "StyreneA, sans-serif",
             fontSize: "18px",
             fontWeight: 400,
             color: "#000000",
@@ -74,7 +74,7 @@ export default function CollectionBanners() {
                 position: "absolute",
                 bottom: "24px",
                 left: "24px",
-                fontFamily: "Graphik, sans-serif",
+                fontFamily: "StyreneA, sans-serif",
                 fontSize: "18px",
                 fontWeight: 400,
                 color: "#ffffff",

@@ -58,7 +58,7 @@ export default function ValueProps() {
             </h3>
             <p
               style={{
-                fontFamily: "Graphik, sans-serif",
+                fontFamily: "StyreneA, sans-serif",
                 fontSize: "14px",
                 fontWeight: 400,
                 color: "var(--color-light-charcoal)",

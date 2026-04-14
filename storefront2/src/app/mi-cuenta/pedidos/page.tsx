@@ -45,7 +45,7 @@ export default function PedidosPage() {
       <Header />
 
       <main style={{ width: "100%", maxWidth: "1400px", padding: "48px 32px", flex: 1 }}>
-        <h1 style={{ fontFamily: "Graphik, sans-serif", fontSize: "28px", fontWeight: 400, color: "#000", margin: "0 0 48px 0", letterSpacing: "-0.02em" }}>
+        <h1 style={{ fontFamily: "StyreneA, sans-serif", fontSize: "28px", fontWeight: 400, color: "#000", margin: "0 0 48px 0", letterSpacing: "-0.02em" }}>
           Mis Pedidos
         </h1>
 
@@ -54,11 +54,11 @@ export default function PedidosPage() {
 
           <div style={{ flex: 1 }}>
             {fetching ? (
-              <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.4)" }}>Cargando pedidos...</p>
+              <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.4)" }}>Cargando pedidos...</p>
             ) : orders.length === 0 ? (
               <div style={{ textAlign: "center", padding: "60px 0" }}>
-                <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "14px", color: "rgba(0,0,0,0.4)", marginBottom: "20px" }}>No tenés pedidos aún.</p>
-                <a href="/productos" style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "#000", textDecoration: "underline" }}>Explorar catálogo</a>
+                <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "14px", color: "rgba(0,0,0,0.4)", marginBottom: "20px" }}>No tenés pedidos aún.</p>
+                <a href="/productos" style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "#000", textDecoration: "underline" }}>Explorar catálogo</a>
               </div>
             ) : (
               <div>
@@ -66,7 +66,7 @@ export default function PedidosPage() {
                 <div style={{ display: "grid", gridTemplateColumns: "48px 1.5fr 1fr 1fr 1fr 1fr", gap: "16px", padding: "0 0 12px 0", borderBottom: "1px solid rgba(0,0,0,0.1)" }}>
                   <div />
                   {["Orden", "PO Cliente", "Fecha", "Estado", "Total"].map((h) => (
-                    <p key={h} style={{ fontFamily: "Graphik, sans-serif", fontSize: "11px", fontWeight: 500, letterSpacing: "0.06em", textTransform: "uppercase", color: "rgba(0,0,0,0.4)", margin: 0 }}>{h}</p>
+                    <p key={h} style={{ fontFamily: "StyreneA, sans-serif", fontSize: "11px", fontWeight: 500, letterSpacing: "0.06em", textTransform: "uppercase", color: "rgba(0,0,0,0.4)", margin: 0 }}>{h}</p>
                   ))}
                 </div>
 
@@ -88,23 +88,23 @@ export default function PedidosPage() {
                     </div>
 
                     <div>
-                      <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", fontWeight: 500, color: "#000", margin: "0 0 2px 0" }}>{order.order_number}</p>
-                      <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "11px", color: "rgba(0,0,0,0.4)", margin: 0 }}>
+                      <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", fontWeight: 500, color: "#000", margin: "0 0 2px 0" }}>{order.order_number}</p>
+                      <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "11px", color: "rgba(0,0,0,0.4)", margin: 0 }}>
                         {order.items_count} {Number(order.items_count) === 1 ? "producto" : "productos"}
                       </p>
                     </div>
 
-                    <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.7)", margin: 0 }}>{order.customer_po}</p>
+                    <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.7)", margin: 0 }}>{order.customer_po}</p>
 
-                    <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.7)", margin: 0 }}>
+                    <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.7)", margin: 0 }}>
                       {new Date(order.created_at).toLocaleDateString("es-CR")}
                     </p>
 
-                    <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "12px", fontWeight: 500, color: statusColor[order.status], margin: 0, textTransform: "uppercase", letterSpacing: "0.04em" }}>
+                    <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "12px", fontWeight: 500, color: statusColor[order.status], margin: 0, textTransform: "uppercase", letterSpacing: "0.04em" }}>
                       {statusLabel[order.status]}
                     </p>
 
-                    <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "#000", margin: 0 }}>
+                    <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "#000", margin: 0 }}>
                       ₡{parseFloat(order.subtotal_confirmed ?? order.subtotal_initial).toLocaleString("es-CR")}
                     </p>
                   </div>

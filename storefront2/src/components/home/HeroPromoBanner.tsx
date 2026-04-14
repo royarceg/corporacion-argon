@@ -21,7 +21,7 @@ export default function HeroPromoBanner() {
       </h1>
       <p
         style={{
-          fontFamily: "Graphik, sans-serif",
+          fontFamily: "StyreneA, sans-serif",
           fontSize: "14px",
           fontWeight: 400,
           lineHeight: "21px",

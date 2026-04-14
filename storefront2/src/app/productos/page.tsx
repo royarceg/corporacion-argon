@@ -128,7 +128,7 @@ function ProductosContent() {
   if (loading || fetching) {
     return (
       <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.4)" }}>
+        <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.4)" }}>
           Loading...
         </p>
       </div>
@@ -145,7 +145,7 @@ function ProductosContent() {
         {/* Page title */}
         <div style={{ display: "flex", alignItems: "center", gap: "16px", margin: "0 0 20px 0" }}>
           <h1 style={{
-            fontFamily: "Graphik, sans-serif",
+            fontFamily: "StyreneA, sans-serif",
             fontSize: "24px",
             fontWeight: 400,
             color: "#000",
@@ -158,7 +158,7 @@ function ProductosContent() {
             <button
               onClick={() => router.replace("/productos")}
               style={{
-                fontFamily: "Graphik, sans-serif",
+                fontFamily: "StyreneA, sans-serif",
                 fontSize: "12px",
                 color: "rgba(0,0,0,0.5)",
                 background: "none",
@@ -198,7 +198,7 @@ function ProductosContent() {
                   }
                 }}
                 style={{
-                  fontFamily: "Graphik, sans-serif",
+                  fontFamily: "StyreneA, sans-serif",
                   fontSize: "13px",
                   fontWeight: 400,
                   color: activeCategory === cat ? "#ffffff" : "#000000",
@@ -224,7 +224,7 @@ function ProductosContent() {
               <button
                 onClick={() => { setSortOpen(!sortOpen); setFilterOpen(false); }}
                 style={{
-                  fontFamily: "Graphik, sans-serif",
+                  fontFamily: "StyreneA, sans-serif",
                   fontSize: "13px",
                   color: "#000",
                   background: "none",
@@ -261,7 +261,7 @@ function ProductosContent() {
                         display: "block",
                         width: "100%",
                         textAlign: "left",
-                        fontFamily: "Graphik, sans-serif",
+                        fontFamily: "StyreneA, sans-serif",
                         fontSize: "13px",
                         color: "#000",
                         fontWeight: sort === opt ? 500 : 400,
@@ -282,7 +282,7 @@ function ProductosContent() {
             <button
               onClick={() => { setFilterOpen(true); setSortOpen(false); }}
               style={{
-                fontFamily: "Graphik, sans-serif",
+                fontFamily: "StyreneA, sans-serif",
                 fontSize: "13px",
                 color: "#000",
                 background: "none",
@@ -301,7 +301,7 @@ function ProductosContent() {
 
         {/* Product grid */}
         {displayed.length === 0 ? (
-          <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.4)", padding: "60px 0" }}>
+          <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.4)", padding: "60px 0" }}>
             {searchQuery.trim() ? `Sin resultados para "${searchQuery.trim()}".` : "No se encontraron productos."}
           </p>
         ) : (
@@ -342,7 +342,7 @@ function ProductosContent() {
           }}>
             {/* Header */}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "32px" }}>
-              <h2 style={{ fontFamily: "Graphik, sans-serif", fontSize: "16px", fontWeight: 400, margin: 0 }}>Filters</h2>
+              <h2 style={{ fontFamily: "StyreneA, sans-serif", fontSize: "16px", fontWeight: 400, margin: 0 }}>Filters</h2>
               <button onClick={() => setFilterOpen(false)} style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="1.5">
                   <path d="M18 6 6 18M6 6l12 12" />
@@ -354,7 +354,7 @@ function ProductosContent() {
             {allColors.length > 0 && (
               <div style={{ marginBottom: "32px" }}>
                 <p style={{
-                  fontFamily: "Graphik, sans-serif",
+                  fontFamily: "StyreneA, sans-serif",
                   fontSize: "12px",
                   fontWeight: 500,
                   letterSpacing: "0.06em",
@@ -388,7 +388,7 @@ function ProductosContent() {
             {allSizes.length > 0 && (
               <div style={{ marginBottom: "32px" }}>
                 <p style={{
-                  fontFamily: "Graphik, sans-serif",
+                  fontFamily: "StyreneA, sans-serif",
                   fontSize: "12px",
                   fontWeight: 500,
                   letterSpacing: "0.06em",
@@ -402,7 +402,7 @@ function ProductosContent() {
                       key={size}
                       onClick={() => setActiveSizes((prev) => prev.includes(size) ? prev.filter((s) => s !== size) : [...prev, size])}
                       style={{
-                        fontFamily: "Graphik, sans-serif",
+                        fontFamily: "StyreneA, sans-serif",
                         fontSize: "13px",
                         color: activeSizes.includes(size) ? "#000" : "rgba(0,0,0,0.55)",
                         fontWeight: activeSizes.includes(size) ? 500 : 400,
@@ -431,7 +431,7 @@ function ProductosContent() {
                 onClick={() => setFilterOpen(false)}
                 style={{
                   width: "100%",
-                  fontFamily: "Graphik, sans-serif",
+                  fontFamily: "StyreneA, sans-serif",
                   fontSize: "13px",
                   fontWeight: 500,
                   color: "#ffffff",

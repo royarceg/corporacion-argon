@@ -31,7 +31,7 @@ function ScrollCard({ product }: { product: Product }) {
       <div className="pt-3 pb-4 px-1">
         <p
           style={{
-            fontFamily: "Graphik, sans-serif",
+            fontFamily: "StyreneA, sans-serif",
             fontSize: "14px",
             fontWeight: 500,
             color: "#000",
@@ -44,7 +44,7 @@ function ScrollCard({ product }: { product: Product }) {
         {product.color && (
           <p
             style={{
-              fontFamily: "Graphik, sans-serif",
+              fontFamily: "StyreneA, sans-serif",
               fontSize: "14px",
               fontWeight: 400,
               color: "#000",
@@ -58,7 +58,7 @@ function ScrollCard({ product }: { product: Product }) {
         )}
         <p
           style={{
-            fontFamily: "Graphik, sans-serif",
+            fontFamily: "StyreneA, sans-serif",
             fontSize: "12px",
             fontWeight: 500,
             color: "#000",

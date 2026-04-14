@@ -58,7 +58,7 @@ export default function LoginPage() {
         <a
           href="/"
           style={{
-            fontFamily: "Graphik, sans-serif",
+            fontFamily: "StyreneA, sans-serif",
             fontSize: "20px",
             fontWeight: 700,
             color: "#000000",
@@ -92,7 +92,7 @@ export default function LoginPage() {
           {/* Title */}
           <h1
             style={{
-              fontFamily: "Graphik, sans-serif",
+              fontFamily: "StyreneA, sans-serif",
               fontSize: "22px",
               fontWeight: 400,
               color: "#000000",
@@ -104,7 +104,7 @@ export default function LoginPage() {
           </h1>
           <p
             style={{
-              fontFamily: "Graphik, sans-serif",
+              fontFamily: "StyreneA, sans-serif",
               fontSize: "13px",
               color: "rgba(0,0,0,0.5)",
               margin: "0 0 32px 0",
@@ -119,7 +119,7 @@ export default function LoginPage() {
             <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
               <label
                 style={{
-                  fontFamily: "Graphik, sans-serif",
+                  fontFamily: "StyreneA, sans-serif",
                   fontSize: "11px",
                   fontWeight: 500,
                   color: "#000000",
@@ -137,7 +137,7 @@ export default function LoginPage() {
                 autoFocus
                 placeholder="tu_usuario"
                 style={{
-                  fontFamily: "Graphik, sans-serif",
+                  fontFamily: "StyreneA, sans-serif",
                   fontSize: "13px",
                   color: "#000000",
                   backgroundColor: "#ffffff",
@@ -155,7 +155,7 @@ export default function LoginPage() {
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <label
                   style={{
-                    fontFamily: "Graphik, sans-serif",
+                    fontFamily: "StyreneA, sans-serif",
                     fontSize: "11px",
                     fontWeight: 500,
                     color: "#000000",
@@ -168,7 +168,7 @@ export default function LoginPage() {
                 <a
                   href="/recuperar-contrasena"
                   style={{
-                    fontFamily: "Graphik, sans-serif",
+                    fontFamily: "StyreneA, sans-serif",
                     fontSize: "11px",
                     color: "rgba(0,0,0,0.5)",
                     textDecoration: "none",
@@ -185,7 +185,7 @@ export default function LoginPage() {
                   required
                   placeholder="••••••••"
                   style={{
-                    fontFamily: "Graphik, sans-serif",
+                    fontFamily: "StyreneA, sans-serif",
                     fontSize: "13px",
                     color: "#000000",
                     backgroundColor: "#ffffff",
@@ -234,7 +234,7 @@ export default function LoginPage() {
             {error && (
               <p
                 style={{
-                  fontFamily: "Graphik, sans-serif",
+                  fontFamily: "StyreneA, sans-serif",
                   fontSize: "13px",
                   color: "#9c0f0f",
                   margin: 0,
@@ -249,7 +249,7 @@ export default function LoginPage() {
               type="submit"
               disabled={loading}
               style={{
-                fontFamily: "Graphik, sans-serif",
+                fontFamily: "StyreneA, sans-serif",
                 fontSize: "13px",
                 fontWeight: 500,
                 color: "#ffffff",
@@ -280,7 +280,7 @@ export default function LoginPage() {
           {/* Register note */}
           <p
             style={{
-              fontFamily: "Graphik, sans-serif",
+              fontFamily: "StyreneA, sans-serif",
               fontSize: "13px",
               color: "rgba(0,0,0,0.5)",
               margin: 0,

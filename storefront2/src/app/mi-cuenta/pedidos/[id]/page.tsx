@@ -110,7 +110,7 @@ function PedidoDetailContent() {
 
   if (loading || fetching || !order) return (
     <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
-      <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.4)" }}>Cargando...</p>
+      <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.4)" }}>Cargando...</p>
     </div>
   );
 
@@ -126,7 +126,7 @@ function PedidoDetailContent() {
 
         {/* Title row */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "48px" }}>
-          <h1 style={{ fontFamily: "Graphik, sans-serif", fontSize: "28px", fontWeight: 400, color: "#000", margin: 0, letterSpacing: "-0.02em" }}>
+          <h1 style={{ fontFamily: "StyreneA, sans-serif", fontSize: "28px", fontWeight: 400, color: "#000", margin: 0, letterSpacing: "-0.02em" }}>
             Pedido {order.order_number}
           </h1>
 
@@ -136,7 +136,7 @@ function PedidoDetailContent() {
               <button
                 onClick={() => setEditing(true)}
                 style={{
-                  fontFamily: "Graphik, sans-serif",
+                  fontFamily: "StyreneA, sans-serif",
                   fontSize: "13px",
                   fontWeight: 500,
                   color: "#000",
@@ -152,7 +152,7 @@ function PedidoDetailContent() {
               <button
                 onClick={() => setConfirmDelete(true)}
                 style={{
-                  fontFamily: "Graphik, sans-serif",
+                  fontFamily: "StyreneA, sans-serif",
                   fontSize: "13px",
                   fontWeight: 500,
                   color: "#9c0f0f",
@@ -172,12 +172,12 @@ function PedidoDetailContent() {
           {editing && (
             <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
               {saveError && (
-                <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "12px", color: "#9c0f0f", margin: 0 }}>{saveError}</p>
+                <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "12px", color: "#9c0f0f", margin: 0 }}>{saveError}</p>
               )}
               <button
                 onClick={() => { setEditing(false); setSaveError(""); }}
                 style={{
-                  fontFamily: "Graphik, sans-serif",
+                  fontFamily: "StyreneA, sans-serif",
                   fontSize: "13px",
                   color: "rgba(0,0,0,0.5)",
                   backgroundColor: "transparent",
@@ -192,7 +192,7 @@ function PedidoDetailContent() {
                 onClick={handleSave}
                 disabled={saving}
                 style={{
-                  fontFamily: "Graphik, sans-serif",
+                  fontFamily: "StyreneA, sans-serif",
                   fontSize: "13px",
                   fontWeight: 500,
                   color: "#fff",
@@ -217,7 +217,7 @@ function PedidoDetailContent() {
             {/* Success banner */}
             {isNew && (
               <div style={{ backgroundColor: "#f0f7f0", border: "1px solid #3a6b3a", padding: "16px 20px" }}>
-                <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "#3a6b3a", margin: 0 }}>
+                <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "#3a6b3a", margin: 0 }}>
                   ✓ Orden creada exitosamente. Recibirás un email de confirmación.
                 </p>
               </div>
@@ -227,42 +227,42 @@ function PedidoDetailContent() {
             <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "16px" }}>
               {/* Orden number — never editable */}
               <div style={{ padding: "20px", border: "1px solid rgba(0,0,0,0.08)" }}>
-                <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "11px", color: "rgba(0,0,0,0.4)", margin: "0 0 6px 0", letterSpacing: "0.06em", textTransform: "uppercase" }}>Orden</p>
-                <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "14px", fontWeight: 400, color: "#000", margin: 0 }}>{order.order_number}</p>
+                <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "11px", color: "rgba(0,0,0,0.4)", margin: "0 0 6px 0", letterSpacing: "0.06em", textTransform: "uppercase" }}>Orden</p>
+                <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "14px", fontWeight: 400, color: "#000", margin: 0 }}>{order.order_number}</p>
               </div>
 
               {/* PO — editable */}
               <div style={{ padding: "20px", border: editing ? "1px solid #000" : "1px solid rgba(0,0,0,0.08)" }}>
-                <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "11px", color: "rgba(0,0,0,0.4)", margin: "0 0 6px 0", letterSpacing: "0.06em", textTransform: "uppercase" }}>PO Cliente</p>
+                <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "11px", color: "rgba(0,0,0,0.4)", margin: "0 0 6px 0", letterSpacing: "0.06em", textTransform: "uppercase" }}>PO Cliente</p>
                 {editing ? (
                   <input
                     type="text"
                     value={editPo}
                     onChange={(e) => setEditPo(e.target.value)}
-                    style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", border: "none", outline: "none", width: "100%", padding: 0, backgroundColor: "transparent" }}
+                    style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", border: "none", outline: "none", width: "100%", padding: 0, backgroundColor: "transparent" }}
                   />
                 ) : (
-                  <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "14px", color: "#000", margin: 0 }}>{order.customer_po}</p>
+                  <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "14px", color: "#000", margin: 0 }}>{order.customer_po}</p>
                 )}
               </div>
 
               {/* Fecha — never editable */}
               <div style={{ padding: "20px", border: "1px solid rgba(0,0,0,0.08)" }}>
-                <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "11px", color: "rgba(0,0,0,0.4)", margin: "0 0 6px 0", letterSpacing: "0.06em", textTransform: "uppercase" }}>Fecha</p>
-                <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "14px", color: "#000", margin: 0 }}>{new Date(order.created_at).toLocaleDateString("es-CR")}</p>
+                <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "11px", color: "rgba(0,0,0,0.4)", margin: "0 0 6px 0", letterSpacing: "0.06em", textTransform: "uppercase" }}>Fecha</p>
+                <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "14px", color: "#000", margin: 0 }}>{new Date(order.created_at).toLocaleDateString("es-CR")}</p>
               </div>
 
               {/* Estado */}
               <div style={{ padding: "20px", border: "1px solid rgba(0,0,0,0.08)" }}>
-                <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "11px", color: "rgba(0,0,0,0.4)", margin: "0 0 6px 0", letterSpacing: "0.06em", textTransform: "uppercase" }}>Estado</p>
-                <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "14px", fontWeight: 400, color: statusColor[order.status], margin: 0 }}>{statusLabel[order.status]}</p>
+                <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "11px", color: "rgba(0,0,0,0.4)", margin: "0 0 6px 0", letterSpacing: "0.06em", textTransform: "uppercase" }}>Estado</p>
+                <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "14px", fontWeight: 400, color: statusColor[order.status], margin: 0 }}>{statusLabel[order.status]}</p>
               </div>
             </div>
 
             {/* Wanted date — editable */}
             {(order.wanted_date || editing) && (
               <div style={{ display: "flex", flexDirection: "column", gap: "6px", maxWidth: "240px" }}>
-                <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "11px", color: "rgba(0,0,0,0.4)", margin: 0, letterSpacing: "0.06em", textTransform: "uppercase" }}>
+                <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "11px", color: "rgba(0,0,0,0.4)", margin: 0, letterSpacing: "0.06em", textTransform: "uppercase" }}>
                   Fecha deseada de entrega
                 </p>
                 {editing ? (
@@ -270,10 +270,10 @@ function PedidoDetailContent() {
                     type="date"
                     value={editDate}
                     onChange={(e) => setEditDate(e.target.value)}
-                    style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", border: "1px solid rgba(0,0,0,0.2)", padding: "8px 12px", outline: "none" }}
+                    style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", border: "1px solid rgba(0,0,0,0.2)", padding: "8px 12px", outline: "none" }}
                   />
                 ) : (
-                  <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "#000", margin: 0 }}>
+                  <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "#000", margin: 0 }}>
                     {order.wanted_date ? new Date(order.wanted_date).toLocaleDateString("es-CR") : "—"}
                   </p>
                 )}
@@ -282,13 +282,13 @@ function PedidoDetailContent() {
 
             {/* Items */}
             <div>
-              <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "11px", fontWeight: 500, letterSpacing: "0.06em", textTransform: "uppercase", color: "rgba(0,0,0,0.4)", margin: "0 0 16px 0" }}>Productos</p>
+              <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "11px", fontWeight: 500, letterSpacing: "0.06em", textTransform: "uppercase", color: "rgba(0,0,0,0.4)", margin: "0 0 16px 0" }}>Productos</p>
 
               {/* Table header */}
               <div style={{ display: "grid", gridTemplateColumns: "56px 2fr 1fr 1fr 1fr", gap: "12px", padding: "0 0 10px 0", borderBottom: "1px solid rgba(0,0,0,0.1)" }}>
                 <div />
                 {["Producto", "Cant.", "Precio unit.", "Total"].map((h) => (
-                  <p key={h} style={{ fontFamily: "Graphik, sans-serif", fontSize: "11px", fontWeight: 500, letterSpacing: "0.06em", textTransform: "uppercase", color: "rgba(0,0,0,0.4)", margin: 0 }}>{h}</p>
+                  <p key={h} style={{ fontFamily: "StyreneA, sans-serif", fontSize: "11px", fontWeight: 500, letterSpacing: "0.06em", textTransform: "uppercase", color: "rgba(0,0,0,0.4)", margin: 0 }}>{h}</p>
                 ))}
               </div>
 
@@ -306,8 +306,8 @@ function PedidoDetailContent() {
 
                     {/* Name + SKU */}
                     <div>
-                      <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", fontWeight: 500, margin: "0 0 2px 0" }}>{item.product_name}</p>
-                      <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "12px", color: "rgba(0,0,0,0.4)", margin: 0 }}>
+                      <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", fontWeight: 500, margin: "0 0 2px 0" }}>{item.product_name}</p>
+                      <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "12px", color: "rgba(0,0,0,0.4)", margin: 0 }}>
                         {item.product_sku}{item.color ? ` — ${item.color}` : ""}{item.size ? ` / ${item.size}` : ""}
                       </p>
                     </div>
@@ -331,7 +331,7 @@ function PedidoDetailContent() {
                               if (!isNaN(v) && v >= 0) setEditQtys((prev) => ({ ...prev, [item.id]: v }));
                             }}
                             style={{
-                              fontFamily: "Graphik, sans-serif",
+                              fontFamily: "StyreneA, sans-serif",
                               fontSize: "13px",
                               width: "44px",
                               textAlign: "center",
@@ -351,7 +351,7 @@ function PedidoDetailContent() {
                           </button>
                         </div>
                       ) : (
-                        <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", margin: 0 }}>
+                        <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", margin: 0 }}>
                           {item.quantity_confirmed ?? item.quantity_requested}
                           {item.quantity_confirmed && item.quantity_confirmed !== item.quantity_requested && (
                             <span style={{ color: "rgba(0,0,0,0.4)", fontSize: "11px" }}> (sol. {item.quantity_requested})</span>
@@ -359,14 +359,14 @@ function PedidoDetailContent() {
                         </p>
                       )}
                       {editing && qty === 0 && (
-                        <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "10px", color: "#9c0f0f", margin: "4px 0 0 0" }}>Se eliminará</p>
+                        <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "10px", color: "#9c0f0f", margin: "4px 0 0 0" }}>Se eliminará</p>
                       )}
                     </div>
 
-                    <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", margin: 0 }}>
+                    <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", margin: 0 }}>
                       ₡{parseFloat(item.unit_price_confirmed ?? item.unit_price_initial).toLocaleString("es-CR")}
                     </p>
-                    <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", margin: 0 }}>
+                    <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", margin: 0 }}>
                       ₡{parseFloat(item.line_total_confirmed ?? item.line_total_initial).toLocaleString("es-CR")}
                     </p>
                   </div>
@@ -376,13 +376,13 @@ function PedidoDetailContent() {
               {/* Total */}
               <div style={{ display: "flex", justifyContent: "flex-end", paddingTop: "16px" }}>
                 <div style={{ display: "flex", gap: "40px" }}>
-                  <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.6)", margin: 0 }}>Total</p>
-                  <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "14px", fontWeight: 500, margin: 0 }}>₡{subtotal}</p>
+                  <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.6)", margin: 0 }}>Total</p>
+                  <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "14px", fontWeight: 500, margin: 0 }}>₡{subtotal}</p>
                 </div>
               </div>
             </div>
 
-            <a href="/mi-cuenta/pedidos" style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.5)", textDecoration: "none" }}>
+            <a href="/mi-cuenta/pedidos" style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.5)", textDecoration: "none" }}>
               ← Volver a mis pedidos
             </a>
           </div>
@@ -411,24 +411,24 @@ function PedidoDetailContent() {
             flexDirection: "column",
             gap: "20px",
           }}>
-            <h2 style={{ fontFamily: "Graphik, sans-serif", fontSize: "18px", fontWeight: 400, color: "#000", margin: 0, letterSpacing: "-0.01em" }}>
+            <h2 style={{ fontFamily: "StyreneA, sans-serif", fontSize: "18px", fontWeight: 400, color: "#000", margin: 0, letterSpacing: "-0.01em" }}>
               Cancelar orden
             </h2>
-            <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "14px", color: "rgba(0,0,0,0.6)", margin: 0, lineHeight: 1.6 }}>
+            <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "14px", color: "rgba(0,0,0,0.6)", margin: 0, lineHeight: 1.6 }}>
               ¿Estás seguro de que querés cancelar la orden <strong>{order.order_number}</strong>? La orden quedará registrada como cancelada.
             </p>
             <div style={{ display: "flex", gap: "12px", justifyContent: "flex-end" }}>
               <button
                 onClick={() => setConfirmDelete(false)}
                 disabled={deleting}
-                style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "#000", backgroundColor: "transparent", border: "1px solid rgba(0,0,0,0.2)", padding: "10px 20px", cursor: "pointer" }}
+                style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "#000", backgroundColor: "transparent", border: "1px solid rgba(0,0,0,0.2)", padding: "10px 20px", cursor: "pointer" }}
               >
                 Cancelar
               </button>
               <button
                 onClick={handleDelete}
                 disabled={deleting}
-                style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", fontWeight: 500, color: "#fff", backgroundColor: deleting ? "rgba(156,15,15,0.4)" : "#9c0f0f", border: "none", padding: "10px 20px", cursor: deleting ? "not-allowed" : "pointer" }}
+                style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", fontWeight: 500, color: "#fff", backgroundColor: deleting ? "rgba(156,15,15,0.4)" : "#9c0f0f", border: "none", padding: "10px 20px", cursor: deleting ? "not-allowed" : "pointer" }}
               >
                 {deleting ? "Cancelando..." : "Sí, cancelar"}
               </button>

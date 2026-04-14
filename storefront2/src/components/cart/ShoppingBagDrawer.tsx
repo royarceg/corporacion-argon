@@ -43,7 +43,7 @@ export default function ShoppingBagDrawer() {
           padding: "24px 24px 20px 24px",
           borderBottom: "1px solid rgba(0,0,0,0.08)",
         }}>
-          <h2 style={{ fontFamily: "Graphik, sans-serif", fontSize: "15px", fontWeight: 400, margin: 0 }}>
+          <h2 style={{ fontFamily: "StyreneA, sans-serif", fontSize: "15px", fontWeight: 400, margin: 0 }}>
             Shopping Bag {count > 0 && <span style={{ color: "rgba(0,0,0,0.4)", fontWeight: 400 }}>({count})</span>}
           </h2>
           <button onClick={closeDrawer} style={{ background: "none", border: "none", cursor: "pointer", padding: "4px", lineHeight: 0 }}>
@@ -57,10 +57,10 @@ export default function ShoppingBagDrawer() {
         <div style={{ flex: 1, overflowY: "auto", padding: "0 24px" }}>
           {items.length === 0 ? (
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100%", gap: "12px" }}>
-              <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.4)" }}>
+              <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.4)" }}>
                 Tu carrito está vacío.
               </p>
-              <a href="/productos" onClick={closeDrawer} style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "#000", textDecoration: "underline" }}>
+              <a href="/productos" onClick={closeDrawer} style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "#000", textDecoration: "underline" }}>
                 Ver catálogo
               </a>
             </div>
@@ -82,7 +82,7 @@ export default function ShoppingBagDrawer() {
                 {/* Info */}
                 <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "4px" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-                    <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", fontWeight: 400, margin: 0, maxWidth: "200px", lineHeight: 1.4 }}>
+                    <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", fontWeight: 400, margin: 0, maxWidth: "200px", lineHeight: 1.4 }}>
                       {item.product_name}
                     </p>
                     <button
@@ -96,12 +96,12 @@ export default function ShoppingBagDrawer() {
                   </div>
 
                   {(item.color || item.size) && (
-                    <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "12px", color: "rgba(0,0,0,0.45)", margin: 0 }}>
+                    <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "12px", color: "rgba(0,0,0,0.45)", margin: 0 }}>
                       {item.color}{item.size ? ` / ${item.size}` : ""}
                     </p>
                   )}
 
-                  <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", margin: 0 }}>
+                  <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", margin: 0 }}>
                     {parseFloat(item.unit_price).toLocaleString("es-CR", { style: "currency", currency: "CRC", minimumFractionDigits: 0 })}
                   </p>
 
@@ -132,7 +132,7 @@ export default function ShoppingBagDrawer() {
                         }
                       }}
                       style={{
-                        fontFamily: "Graphik, sans-serif",
+                        fontFamily: "StyreneA, sans-serif",
                         fontSize: "12px",
                         width: `${Math.max(40, String(item.quantity).length * 10 + 16)}px`,
                         textAlign: "center",
@@ -161,7 +161,7 @@ export default function ShoppingBagDrawer() {
         {/* Footer */}
         {items.length > 0 && (
           <div style={{ padding: "16px 24px 24px", borderTop: "1px solid rgba(0,0,0,0.08)" }}>
-            <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "11px", color: "rgba(0,0,0,0.4)", textAlign: "center", margin: "0 0 14px 0", letterSpacing: "0.01em" }}>
+            <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "11px", color: "rgba(0,0,0,0.4)", textAlign: "center", margin: "0 0 14px 0", letterSpacing: "0.01em" }}>
               Los precios son estimados — ARGON confirmará antes de procesar
             </p>
             <a
@@ -176,10 +176,10 @@ export default function ShoppingBagDrawer() {
                 textDecoration: "none",
               }}
             >
-              <span style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", fontWeight: 500, color: "#fff", letterSpacing: "0.06em", textTransform: "uppercase" }}>
+              <span style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", fontWeight: 500, color: "#fff", letterSpacing: "0.06em", textTransform: "uppercase" }}>
                 Crear Orden
               </span>
-              <span style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.8)" }}>
+              <span style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.8)" }}>
                 {formattedTotal}
               </span>
             </a>

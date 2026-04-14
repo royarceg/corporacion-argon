@@ -53,7 +53,7 @@ export default function WishlistPage() {
       <Header />
 
       <main style={{ width: "100%", maxWidth: "1400px", padding: "48px 32px", flex: 1 }}>
-        <h1 style={{ fontFamily: "Graphik, sans-serif", fontSize: "28px", fontWeight: 400, color: "#000", margin: "0 0 48px 0", letterSpacing: "-0.02em" }}>
+        <h1 style={{ fontFamily: "StyreneA, sans-serif", fontSize: "28px", fontWeight: 400, color: "#000", margin: "0 0 48px 0", letterSpacing: "-0.02em" }}>
           Lista de Deseos
         </h1>
 
@@ -61,11 +61,11 @@ export default function WishlistPage() {
           <AccountSidebar />
           <div style={{ flex: 1 }}>
             {fetching ? (
-              <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.4)" }}>Cargando...</p>
+              <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.4)" }}>Cargando...</p>
             ) : products.length === 0 ? (
               <div style={{ textAlign: "center", padding: "60px 0" }}>
-                <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "14px", color: "rgba(0,0,0,0.4)", marginBottom: "20px" }}>Tu lista de deseos está vacía.</p>
-                <a href="/productos" style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "#000", textDecoration: "underline" }}>Explorar catálogo</a>
+                <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "14px", color: "rgba(0,0,0,0.4)", marginBottom: "20px" }}>Tu lista de deseos está vacía.</p>
+                <a href="/productos" style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "#000", textDecoration: "underline" }}>Explorar catálogo</a>
               </div>
             ) : (
               <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "24px 16px" }}>
@@ -74,7 +74,7 @@ export default function WishlistPage() {
                     <ProductCard product={product} onAddToCart={(p) => addToCart(p.id, 1)} />
                     <button
                       onClick={() => handleRemove(product.id)}
-                      style={{ fontFamily: "Graphik, sans-serif", fontSize: "11px", color: "rgba(0,0,0,0.4)", background: "none", border: "none", cursor: "pointer", padding: "4px 0", textDecoration: "underline" }}
+                      style={{ fontFamily: "StyreneA, sans-serif", fontSize: "11px", color: "rgba(0,0,0,0.4)", background: "none", border: "none", cursor: "pointer", padding: "4px 0", textDecoration: "underline" }}
                     >
                       Eliminar
                     </button>

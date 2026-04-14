@@ -218,7 +218,7 @@ export default function QuickViewModal({ product, onClose }: Props) {
           <div>
             <h2
               style={{
-                fontFamily: "Graphik, sans-serif",
+                fontFamily: "StyreneA, sans-serif",
                 fontSize: "20px",
                 fontWeight: 400,
                 color: "#000",
@@ -232,7 +232,7 @@ export default function QuickViewModal({ product, onClose }: Props) {
             </h2>
             <p
               style={{
-                fontFamily: "Graphik, sans-serif",
+                fontFamily: "StyreneA, sans-serif",
                 fontSize: "15px",
                 fontWeight: 400,
                 color: "#000",
@@ -248,7 +248,7 @@ export default function QuickViewModal({ product, onClose }: Props) {
             <div>
               <p
                 style={{
-                  fontFamily: "Graphik, sans-serif",
+                  fontFamily: "StyreneA, sans-serif",
                   fontSize: "12px",
                   fontWeight: 500,
                   color: "#000",
@@ -285,7 +285,7 @@ export default function QuickViewModal({ product, onClose }: Props) {
           {/* Siblings — otros colores del mismo producto */}
           {siblings.length > 0 && (
             <div>
-              <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "12px", fontWeight: 500, color: "#000", margin: "0 0 8px 0" }}>
+              <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "12px", fontWeight: 500, color: "#000", margin: "0 0 8px 0" }}>
                 También disponible en:
               </p>
               <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
@@ -305,7 +305,7 @@ export default function QuickViewModal({ product, onClose }: Props) {
                       border: "1px solid rgba(0,0,0,0.15)",
                       background: "#fff",
                       cursor: "pointer",
-                      fontFamily: "Graphik, sans-serif",
+                      fontFamily: "StyreneA, sans-serif",
                       fontSize: "11px",
                       color: "#000",
                     }}
@@ -341,7 +341,7 @@ export default function QuickViewModal({ product, onClose }: Props) {
               >
                 <p
                   style={{
-                    fontFamily: "Graphik, sans-serif",
+                    fontFamily: "StyreneA, sans-serif",
                     fontSize: "12px",
                     fontWeight: 500,
                     color: "#000",
@@ -359,7 +359,7 @@ export default function QuickViewModal({ product, onClose }: Props) {
                       setSelectedSize((prev) => (prev === size ? null : size))
                     }
                     style={{
-                      fontFamily: "Graphik, sans-serif",
+                      fontFamily: "StyreneA, sans-serif",
                       fontSize: "12px",
                       color: selectedSize === size ? "#fff" : "#000",
                       backgroundColor: selectedSize === size ? "#000" : "#fff",
@@ -379,7 +379,7 @@ export default function QuickViewModal({ product, onClose }: Props) {
               {/* Código de variante */}
               {!loadingVariants && skuVariant && (
                 <p style={{
-                  fontFamily: "Graphik, sans-serif",
+                  fontFamily: "StyreneA, sans-serif",
                   fontSize: "11px",
                   color: "rgba(0,0,0,0.45)",
                   margin: "10px 0 0 0",
@@ -396,7 +396,7 @@ export default function QuickViewModal({ product, onClose }: Props) {
             onClick={handleAddToCart}
             disabled={adding}
             style={{
-              fontFamily: "Graphik, sans-serif",
+              fontFamily: "StyreneA, sans-serif",
               fontSize: "13px",
               fontWeight: 500,
               color: "#fff",
@@ -420,7 +420,7 @@ export default function QuickViewModal({ product, onClose }: Props) {
           {/* Add error */}
           {addError && (
             <p style={{
-              fontFamily: "Graphik, sans-serif",
+              fontFamily: "StyreneA, sans-serif",
               fontSize: "12px",
               color: "#9c2121",
               margin: "-12px 0 0 0",
@@ -436,7 +436,7 @@ export default function QuickViewModal({ product, onClose }: Props) {
               router.push(`/productos/${product.id}`);
             }}
             style={{
-              fontFamily: "Graphik, sans-serif",
+              fontFamily: "StyreneA, sans-serif",
               fontSize: "13px",
               color: "#000",
               background: "none",

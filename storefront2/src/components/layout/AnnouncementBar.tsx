@@ -15,7 +15,7 @@ export default function AnnouncementBar() {
     >
       <p
         style={{
-          fontFamily: "Graphik, sans-serif",
+          fontFamily: "StyreneA, sans-serif",
           fontSize: "11px",
           fontWeight: 400,
           color: "#ffffff",

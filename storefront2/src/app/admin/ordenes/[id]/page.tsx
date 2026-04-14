@@ -88,7 +88,7 @@ export default function AdminOrderDetailPage() {
   if (loading || fetching || !order) {
     return (
       <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.4)" }}>
+        <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.4)" }}>
           Cargando...
         </p>
       </div>
@@ -113,15 +113,15 @@ export default function AdminOrderDetailPage() {
           <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
             <button
               onClick={() => router.push("/admin")}
-              style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.5)", background: "none", border: "none", cursor: "pointer", padding: 0 }}
+              style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.5)", background: "none", border: "none", cursor: "pointer", padding: 0 }}
             >
               ← Volver
             </button>
-            <h1 style={{ fontFamily: "Graphik, sans-serif", fontSize: "22px", fontWeight: 400, color: "#000", margin: 0, letterSpacing: "-0.02em" }}>
+            <h1 style={{ fontFamily: "StyreneA, sans-serif", fontSize: "22px", fontWeight: 400, color: "#000", margin: 0, letterSpacing: "-0.02em" }}>
               {order.order_number}
             </h1>
             <span style={{
-              fontFamily: "Graphik, sans-serif",
+              fontFamily: "StyreneA, sans-serif",
               fontSize: "11px",
               fontWeight: 600,
               letterSpacing: "0.08em",
@@ -137,7 +137,7 @@ export default function AdminOrderDetailPage() {
               onClick={handleConfirm}
               disabled={confirming || confirmed}
               style={{
-                fontFamily: "Graphik, sans-serif",
+                fontFamily: "StyreneA, sans-serif",
                 fontSize: "13px",
                 fontWeight: 500,
                 color: "#fff",
@@ -164,10 +164,10 @@ export default function AdminOrderDetailPage() {
             { label: "Entrega deseada", value: order.wanted_date ? new Date(order.wanted_date).toLocaleDateString("es-CR") : "—" },
           ].map((info) => (
             <div key={info.label} style={{ backgroundColor: "#ffffff", padding: "20px 24px" }}>
-              <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "10px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(0,0,0,0.4)", margin: "0 0 6px 0" }}>
+              <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "10px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(0,0,0,0.4)", margin: "0 0 6px 0" }}>
                 {info.label}
               </p>
-              <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "14px", color: "#000", margin: 0 }}>
+              <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "14px", color: "#000", margin: 0 }}>
                 {info.value}
               </p>
             </div>
@@ -187,7 +187,7 @@ export default function AdminOrderDetailPage() {
             backgroundColor: "#fafafa",
           }}>
             {["Producto", "SKU", "Cant. Pedida", isPending ? "Cant. Confirmada" : "Cant. Confirmada", isPending ? "Precio Unit." : "Precio Unit.", "Total"].map((h) => (
-              <p key={h} style={{ fontFamily: "Graphik, sans-serif", fontSize: "10px", fontWeight: 600, letterSpacing: "0.06em", textTransform: "uppercase", color: "rgba(0,0,0,0.45)", margin: 0 }}>
+              <p key={h} style={{ fontFamily: "StyreneA, sans-serif", fontSize: "10px", fontWeight: 600, letterSpacing: "0.06em", textTransform: "uppercase", color: "rgba(0,0,0,0.45)", margin: 0 }}>
                 {h}
               </p>
             ))}
@@ -214,23 +214,23 @@ export default function AdminOrderDetailPage() {
               >
                 {/* Nombre */}
                 <div>
-                  <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "#000", margin: "0 0 2px 0", fontWeight: 400 }}>
+                  <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "#000", margin: "0 0 2px 0", fontWeight: 400 }}>
                     {(item as any).product_name ?? "—"}
                   </p>
                   {((item as any).color || (item as any).size) && (
-                    <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "11px", color: "rgba(0,0,0,0.45)", margin: 0 }}>
+                    <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "11px", color: "rgba(0,0,0,0.45)", margin: 0 }}>
                       {[(item as any).color, (item as any).size].filter(Boolean).join(" / ")}
                     </p>
                   )}
                 </div>
 
                 {/* SKU */}
-                <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "12px", color: "rgba(0,0,0,0.5)", margin: 0 }}>
+                <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "12px", color: "rgba(0,0,0,0.5)", margin: 0 }}>
                   {(item as any).sku ?? "—"}
                 </p>
 
                 {/* Cant. Pedida */}
-                <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "#000", margin: 0 }}>
+                <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "#000", margin: 0 }}>
                   {item.quantity_requested}
                 </p>
 
@@ -242,7 +242,7 @@ export default function AdminOrderDetailPage() {
                     value={editable?.quantity_confirmed ?? ""}
                     onChange={(e) => updateEditable(item.id, "quantity_confirmed", e.target.value)}
                     style={{
-                      fontFamily: "Graphik, sans-serif",
+                      fontFamily: "StyreneA, sans-serif",
                       fontSize: "13px",
                       border: "1px solid rgba(0,0,0,0.2)",
                       padding: "6px 10px",
@@ -251,7 +251,7 @@ export default function AdminOrderDetailPage() {
                     }}
                   />
                 ) : (
-                  <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "#000", margin: 0 }}>
+                  <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "#000", margin: 0 }}>
                     {item.quantity_confirmed ?? "—"}
                   </p>
                 )}
@@ -264,7 +264,7 @@ export default function AdminOrderDetailPage() {
                     value={editable?.unit_price_confirmed ?? ""}
                     onChange={(e) => updateEditable(item.id, "unit_price_confirmed", e.target.value)}
                     style={{
-                      fontFamily: "Graphik, sans-serif",
+                      fontFamily: "StyreneA, sans-serif",
                       fontSize: "13px",
                       border: "1px solid rgba(0,0,0,0.2)",
                       padding: "6px 10px",
@@ -273,7 +273,7 @@ export default function AdminOrderDetailPage() {
                     }}
                   />
                 ) : (
-                  <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "#000", margin: 0 }}>
+                  <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "#000", margin: 0 }}>
                     {item.unit_price_confirmed
                       ? parseFloat(item.unit_price_confirmed).toLocaleString("es-CR", { style: "currency", currency: "CRC", minimumFractionDigits: 0 })
                       : "—"}
@@ -281,7 +281,7 @@ export default function AdminOrderDetailPage() {
                 )}
 
                 {/* Total línea */}
-                <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "#000", margin: 0 }}>
+                <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "#000", margin: 0 }}>
                   {lineTotal.toLocaleString("es-CR", { style: "currency", currency: "CRC", minimumFractionDigits: 0 })}
                 </p>
               </div>
@@ -290,10 +290,10 @@ export default function AdminOrderDetailPage() {
 
           {/* Footer total */}
           <div style={{ display: "flex", justifyContent: "flex-end", gap: "40px", padding: "16px 24px", borderTop: "1px solid rgba(0,0,0,0.1)", backgroundColor: "#fafafa" }}>
-            <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", fontWeight: 500, color: "rgba(0,0,0,0.5)", margin: 0 }}>
+            <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", fontWeight: 500, color: "rgba(0,0,0,0.5)", margin: 0 }}>
               Total {isPending ? "estimado" : "confirmado"}
             </p>
-            <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "14px", fontWeight: 500, color: "#000", margin: 0, minWidth: "120px", textAlign: "right" }}>
+            <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "14px", fontWeight: 500, color: "#000", margin: 0, minWidth: "120px", textAlign: "right" }}>
               {subtotalConfirmed.toLocaleString("es-CR", { style: "currency", currency: "CRC", minimumFractionDigits: 0 })}
             </p>
           </div>
@@ -301,7 +301,7 @@ export default function AdminOrderDetailPage() {
 
         {/* Error message */}
         {confirmError && (
-          <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "12px", color: "#9c0f0f", marginTop: "16px" }}>
+          <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "12px", color: "#9c0f0f", marginTop: "16px" }}>
             {confirmError}
           </p>
         )}
@@ -313,7 +313,7 @@ export default function AdminOrderDetailPage() {
               onClick={handleConfirm}
               disabled={confirming || confirmed}
               style={{
-                fontFamily: "Graphik, sans-serif",
+                fontFamily: "StyreneA, sans-serif",
                 fontSize: "13px",
                 fontWeight: 500,
                 color: "#fff",

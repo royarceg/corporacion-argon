@@ -88,7 +88,7 @@ function CategoryCard({ cat }: { cat: (typeof categories)[0] }) {
           className="transition-opacity duration-300"
           style={{
             opacity: hovered ? 0 : 1,
-            fontFamily: "Graphik, sans-serif",
+            fontFamily: "StyreneA, sans-serif",
             fontSize: "12px",
             fontWeight: 500,
             textTransform: "uppercase",
@@ -114,7 +114,7 @@ function CategoryCard({ cat }: { cat: (typeof categories)[0] }) {
         >
           <span
             style={{
-              fontFamily: "Graphik, sans-serif",
+              fontFamily: "StyreneA, sans-serif",
               fontSize: "12px",
               fontWeight: 500,
               textTransform: "uppercase",

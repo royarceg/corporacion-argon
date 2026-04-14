@@ -142,11 +142,11 @@ export default function AdminUsers() {
   }
 
   const inputStyle: React.CSSProperties = {
-    fontFamily: "Graphik, sans-serif", fontSize: "13px", border: "1px solid rgba(0,0,0,0.2)",
+    fontFamily: "StyreneA, sans-serif", fontSize: "13px", border: "1px solid rgba(0,0,0,0.2)",
     padding: "9px 12px", outline: "none", width: "100%", boxSizing: "border-box",
   };
   const labelStyle: React.CSSProperties = {
-    fontFamily: "Graphik, sans-serif", fontSize: "10px", fontWeight: 600,
+    fontFamily: "StyreneA, sans-serif", fontSize: "10px", fontWeight: 600,
     letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(0,0,0,0.5)", margin: "0 0 4px 0",
   };
 
@@ -154,12 +154,12 @@ export default function AdminUsers() {
     <>
       {/* Header */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>
-        <h2 style={{ fontFamily: "Graphik, sans-serif", fontSize: "20px", fontWeight: 400, margin: 0 }}>
+        <h2 style={{ fontFamily: "StyreneA, sans-serif", fontSize: "20px", fontWeight: 400, margin: 0 }}>
           Usuarios <span style={{ fontSize: "13px", color: "rgba(0,0,0,0.35)" }}>({users.length})</span>
         </h2>
         <button
           onClick={() => { setCreateOpen(true); setCreateMsg(""); }}
-          style={{ fontFamily: "Graphik, sans-serif", fontSize: "12px", fontWeight: 500, color: "#fff", backgroundColor: "#000", border: "none", padding: "9px 20px", cursor: "pointer", letterSpacing: "0.04em", textTransform: "uppercase" }}
+          style={{ fontFamily: "StyreneA, sans-serif", fontSize: "12px", fontWeight: 500, color: "#fff", backgroundColor: "#000", border: "none", padding: "9px 20px", cursor: "pointer", letterSpacing: "0.04em", textTransform: "uppercase" }}
         >
           + Nuevo Usuario
         </button>
@@ -176,36 +176,36 @@ export default function AdminUsers() {
 
       {/* Table */}
       {fetching ? (
-        <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.4)" }}>Cargando...</p>
+        <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.4)" }}>Cargando...</p>
       ) : (
         <>
           <div style={{ display: "grid", gridTemplateColumns: "0.5fr 1.5fr 1.5fr 2fr 1fr 0.8fr 1.5fr", gap: "12px", padding: "0 0 10px 0", borderBottom: "1px solid rgba(0,0,0,0.1)" }}>
             {["ID", "Usuario", "Nombre", "Email", "Rol", "Estado", "Acciones"].map((h) => (
-              <p key={h} style={{ fontFamily: "Graphik, sans-serif", fontSize: "10px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(0,0,0,0.35)", margin: 0 }}>{h}</p>
+              <p key={h} style={{ fontFamily: "StyreneA, sans-serif", fontSize: "10px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(0,0,0,0.35)", margin: 0 }}>{h}</p>
             ))}
           </div>
           {filtered.map((u) => (
             <div key={u.id} style={{ display: "grid", gridTemplateColumns: "0.5fr 1.5fr 1.5fr 2fr 1fr 0.8fr 1.5fr", gap: "12px", padding: "12px 0", borderBottom: "1px solid rgba(0,0,0,0.06)", alignItems: "center" }}>
-              <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "12px", color: "rgba(0,0,0,0.4)", margin: 0 }}>{u.id}</p>
-              <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "#000", margin: 0 }}>{u.user_name}</p>
-              <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.7)", margin: 0 }}>{u.name || "—"}</p>
-              <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "12px", color: "rgba(0,0,0,0.6)", margin: 0 }}>{u.email}</p>
+              <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "12px", color: "rgba(0,0,0,0.4)", margin: 0 }}>{u.id}</p>
+              <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "#000", margin: 0 }}>{u.user_name}</p>
+              <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.7)", margin: 0 }}>{u.name || "—"}</p>
+              <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "12px", color: "rgba(0,0,0,0.6)", margin: 0 }}>{u.email}</p>
               <span style={{
-                fontFamily: "Graphik, sans-serif", fontSize: "10px", fontWeight: 600, letterSpacing: "0.06em", textTransform: "uppercase",
+                fontFamily: "StyreneA, sans-serif", fontSize: "10px", fontWeight: 600, letterSpacing: "0.06em", textTransform: "uppercase",
                 color: u.role === "master_admin" ? "#7c3aed" : "#0369a1",
               }}>
                 {u.role === "master_admin" ? "Admin" : "Cliente"}
               </span>
               <span style={{
-                fontFamily: "Graphik, sans-serif", fontSize: "10px", fontWeight: 600,
+                fontFamily: "StyreneA, sans-serif", fontSize: "10px", fontWeight: 600,
                 color: u.active ? "#3a6b3a" : "#9c0f0f",
               }}>
                 {u.active ? "Activo" : "Inactivo"}
               </span>
               <div style={{ display: "flex", gap: "6px" }}>
-                <button onClick={() => openEdit(u)} style={{ fontFamily: "Graphik, sans-serif", fontSize: "11px", color: "#000", border: "1px solid rgba(0,0,0,0.2)", background: "none", padding: "5px 10px", cursor: "pointer" }}>Editar</button>
-                <button onClick={() => openReset(u)} style={{ fontFamily: "Graphik, sans-serif", fontSize: "11px", color: "#000", border: "1px solid rgba(0,0,0,0.2)", background: "none", padding: "5px 10px", cursor: "pointer" }}>Clave</button>
-                <button onClick={() => toggleStatus(u)} style={{ fontFamily: "Graphik, sans-serif", fontSize: "11px", color: u.active ? "#9c0f0f" : "#3a6b3a", border: "1px solid rgba(0,0,0,0.2)", background: "none", padding: "5px 10px", cursor: "pointer" }}>
+                <button onClick={() => openEdit(u)} style={{ fontFamily: "StyreneA, sans-serif", fontSize: "11px", color: "#000", border: "1px solid rgba(0,0,0,0.2)", background: "none", padding: "5px 10px", cursor: "pointer" }}>Editar</button>
+                <button onClick={() => openReset(u)} style={{ fontFamily: "StyreneA, sans-serif", fontSize: "11px", color: "#000", border: "1px solid rgba(0,0,0,0.2)", background: "none", padding: "5px 10px", cursor: "pointer" }}>Clave</button>
+                <button onClick={() => toggleStatus(u)} style={{ fontFamily: "StyreneA, sans-serif", fontSize: "11px", color: u.active ? "#9c0f0f" : "#3a6b3a", border: "1px solid rgba(0,0,0,0.2)", background: "none", padding: "5px 10px", cursor: "pointer" }}>
                   {u.active ? "Desactivar" : "Activar"}
                 </button>
               </div>
@@ -221,8 +221,8 @@ export default function AdminUsers() {
             <div><p style={labelStyle}>Nombre</p><input style={inputStyle} value={editForm.name} onChange={(e) => setEditForm({ ...editForm, name: e.target.value })} /></div>
             <div><p style={labelStyle}>Email</p><input style={inputStyle} value={editForm.email} onChange={(e) => setEditForm({ ...editForm, email: e.target.value })} /></div>
             <div><p style={labelStyle}>Usuario</p><input style={inputStyle} value={editForm.user_name} onChange={(e) => setEditForm({ ...editForm, user_name: e.target.value })} /></div>
-            {editMsg && <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "12px", color: editMsg === "Guardado." ? "#3a6b3a" : "#9c0f0f", margin: 0 }}>{editMsg}</p>}
-            <button onClick={saveEdit} disabled={editLoading} style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "#fff", backgroundColor: "#000", border: "none", padding: "12px", cursor: "pointer" }}>
+            {editMsg && <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "12px", color: editMsg === "Guardado." ? "#3a6b3a" : "#9c0f0f", margin: 0 }}>{editMsg}</p>}
+            <button onClick={saveEdit} disabled={editLoading} style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "#fff", backgroundColor: "#000", border: "none", padding: "12px", cursor: "pointer" }}>
               {editLoading ? "Guardando..." : "Guardar"}
             </button>
           </div>
@@ -235,8 +235,8 @@ export default function AdminUsers() {
           <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
             <div><p style={labelStyle}>Nueva Contraseña</p><input type="password" style={inputStyle} value={resetPwd} onChange={(e) => setResetPwd(e.target.value)} /></div>
             <div><p style={labelStyle}>Confirmar</p><input type="password" style={inputStyle} value={resetConfirm} onChange={(e) => setResetConfirm(e.target.value)} /></div>
-            {resetMsg && <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "12px", color: resetMsg.includes("actualizada") ? "#3a6b3a" : "#9c0f0f", margin: 0 }}>{resetMsg}</p>}
-            <button onClick={saveReset} disabled={resetLoading} style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "#fff", backgroundColor: "#000", border: "none", padding: "12px", cursor: "pointer" }}>
+            {resetMsg && <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "12px", color: resetMsg.includes("actualizada") ? "#3a6b3a" : "#9c0f0f", margin: 0 }}>{resetMsg}</p>}
+            <button onClick={saveReset} disabled={resetLoading} style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "#fff", backgroundColor: "#000", border: "none", padding: "12px", cursor: "pointer" }}>
               {resetLoading ? "Guardando..." : "Resetear Contraseña"}
             </button>
           </div>
@@ -264,7 +264,7 @@ export default function AdminUsers() {
                   <button
                     type="button"
                     onClick={() => { setNewClientOpen((v) => !v); setNewClientMsg(""); }}
-                    style={{ fontFamily: "Graphik, sans-serif", fontSize: "11px", color: "#000", background: "none", border: "none", cursor: "pointer", textDecoration: "underline", padding: 0 }}
+                    style={{ fontFamily: "StyreneA, sans-serif", fontSize: "11px", color: "#000", background: "none", border: "none", cursor: "pointer", textDecoration: "underline", padding: 0 }}
                   >
                     {newClientOpen ? "Cancelar" : "+ Agregar empresa nueva"}
                   </button>
@@ -278,7 +278,7 @@ export default function AdminUsers() {
                 {/* Mini-form nueva empresa */}
                 {newClientOpen && (
                   <div style={{ border: "1px solid rgba(0,0,0,0.12)", padding: "14px", display: "flex", flexDirection: "column", gap: "10px", backgroundColor: "#fafafa" }}>
-                    <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "11px", fontWeight: 600, letterSpacing: "0.06em", textTransform: "uppercase", color: "rgba(0,0,0,0.5)", margin: 0 }}>Nueva empresa</p>
+                    <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "11px", fontWeight: 600, letterSpacing: "0.06em", textTransform: "uppercase", color: "rgba(0,0,0,0.5)", margin: 0 }}>Nueva empresa</p>
                     <div>
                       <p style={labelStyle}>Nombre *</p>
                       <input style={inputStyle} value={newClientName} onChange={(e) => setNewClientName(e.target.value)} placeholder="Empresa S.A." />
@@ -291,12 +291,12 @@ export default function AdminUsers() {
                       <p style={labelStyle}>Email</p>
                       <input type="email" style={inputStyle} value={newClientEmail} onChange={(e) => setNewClientEmail(e.target.value)} placeholder="empresa@correo.com" />
                     </div>
-                    {newClientMsg && <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "12px", color: "#9c0f0f", margin: 0 }}>{newClientMsg}</p>}
+                    {newClientMsg && <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "12px", color: "#9c0f0f", margin: 0 }}>{newClientMsg}</p>}
                     <button
                       type="button"
                       onClick={saveNewClient}
                       disabled={newClientLoading}
-                      style={{ fontFamily: "Graphik, sans-serif", fontSize: "12px", fontWeight: 500, color: "#fff", backgroundColor: newClientLoading ? "rgba(0,0,0,0.4)" : "#000", border: "none", padding: "9px 14px", cursor: newClientLoading ? "not-allowed" : "pointer", alignSelf: "flex-start" }}
+                      style={{ fontFamily: "StyreneA, sans-serif", fontSize: "12px", fontWeight: 500, color: "#fff", backgroundColor: newClientLoading ? "rgba(0,0,0,0.4)" : "#000", border: "none", padding: "9px 14px", cursor: newClientLoading ? "not-allowed" : "pointer", alignSelf: "flex-start" }}
                     >
                       {newClientLoading ? "Creando..." : "Crear empresa"}
                     </button>
@@ -304,8 +304,8 @@ export default function AdminUsers() {
                 )}
               </div>
             )}
-            {createMsg && <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "12px", color: createMsg.includes("creado") ? "#3a6b3a" : "#9c0f0f", margin: 0 }}>{createMsg}</p>}
-            <button onClick={saveCreate} disabled={createLoading} style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "#fff", backgroundColor: "#000", border: "none", padding: "12px", cursor: "pointer" }}>
+            {createMsg && <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "12px", color: createMsg.includes("creado") ? "#3a6b3a" : "#9c0f0f", margin: 0 }}>{createMsg}</p>}
+            <button onClick={saveCreate} disabled={createLoading} style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "#fff", backgroundColor: "#000", border: "none", padding: "12px", cursor: "pointer" }}>
               {createLoading ? "Creando..." : "Crear Usuario"}
             </button>
           </div>
@@ -321,7 +321,7 @@ function Modal({ title, onClose, children }: { title: string; onClose: () => voi
       <div onClick={onClose} style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.3)", zIndex: 200 }} />
       <div style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)", backgroundColor: "#fff", width: "440px", maxHeight: "80vh", overflowY: "auto", zIndex: 201, padding: "28px" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
-          <h3 style={{ fontFamily: "Graphik, sans-serif", fontSize: "16px", fontWeight: 400, margin: 0 }}>{title}</h3>
+          <h3 style={{ fontFamily: "StyreneA, sans-serif", fontSize: "16px", fontWeight: 400, margin: 0 }}>{title}</h3>
           <button onClick={onClose} style={{ background: "none", border: "none", cursor: "pointer", fontSize: "18px", color: "rgba(0,0,0,0.4)" }}>×</button>
         </div>
         {children}

@@ -66,11 +66,11 @@ export default function AdminClients() {
     setLoadingAssignment(false);
   }
 
-  if (fetching) return <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.4)" }}>Cargando...</p>;
+  if (fetching) return <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.4)" }}>Cargando...</p>;
 
   return (
     <>
-      <h2 style={{ fontFamily: "Graphik, sans-serif", fontSize: "20px", fontWeight: 400, margin: "0 0 24px 0" }}>
+      <h2 style={{ fontFamily: "StyreneA, sans-serif", fontSize: "20px", fontWeight: 400, margin: "0 0 24px 0" }}>
         Asignación de Productos a Clientes
       </h2>
 
@@ -78,7 +78,7 @@ export default function AdminClients() {
 
         {/* Left: Client list */}
         <div style={{ borderRight: "1px solid rgba(0,0,0,0.08)", paddingRight: "24px" }}>
-          <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "10px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(0,0,0,0.35)", margin: "0 0 12px 0" }}>
+          <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "10px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(0,0,0,0.35)", margin: "0 0 12px 0" }}>
             Clientes ({clients.length})
           </p>
           <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
@@ -89,7 +89,7 @@ export default function AdminClients() {
                 style={{
                   display: "flex", flexDirection: "column", gap: "2px",
                   padding: "12px 14px", textAlign: "left",
-                  fontFamily: "Graphik, sans-serif", fontSize: "13px",
+                  fontFamily: "StyreneA, sans-serif", fontSize: "13px",
                   color: selectedClient?.id === c.id ? "#000" : "rgba(0,0,0,0.6)",
                   fontWeight: selectedClient?.id === c.id ? 500 : 400,
                   background: selectedClient?.id === c.id ? "rgba(0,0,0,0.04)" : "transparent",
@@ -107,33 +107,33 @@ export default function AdminClients() {
         {/* Right: Product assignment */}
         <div>
           {!selectedClient ? (
-            <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "14px", color: "rgba(0,0,0,0.3)", padding: "60px 0", textAlign: "center" }}>
+            <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "14px", color: "rgba(0,0,0,0.3)", padding: "60px 0", textAlign: "center" }}>
               Seleccioná un cliente para ver y asignar productos.
             </p>
           ) : loadingAssignment ? (
-            <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.4)" }}>Cargando asignaciones...</p>
+            <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.4)" }}>Cargando asignaciones...</p>
           ) : (
             <>
               {/* Header */}
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
                 <div>
-                  <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "15px", fontWeight: 500, color: "#000", margin: "0 0 4px 0" }}>
+                  <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "15px", fontWeight: 500, color: "#000", margin: "0 0 4px 0" }}>
                     {selectedClient.company_name}
                   </p>
-                  <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "12px", color: "rgba(0,0,0,0.45)", margin: 0 }}>
+                  <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "12px", color: "rgba(0,0,0,0.45)", margin: 0 }}>
                     {assignedIds.size} de {products.length} productos asignados
                   </p>
                 </div>
                 <div style={{ display: "flex", gap: "8px" }}>
-                  <button onClick={assignAll} style={{ fontFamily: "Graphik, sans-serif", fontSize: "11px", color: "#fff", backgroundColor: "#3a6b3a", border: "none", padding: "7px 14px", cursor: "pointer" }}>Asignar Todos</button>
-                  <button onClick={unassignAll} style={{ fontFamily: "Graphik, sans-serif", fontSize: "11px", color: "#fff", backgroundColor: "#9c0f0f", border: "none", padding: "7px 14px", cursor: "pointer" }}>Quitar Todos</button>
+                  <button onClick={assignAll} style={{ fontFamily: "StyreneA, sans-serif", fontSize: "11px", color: "#fff", backgroundColor: "#3a6b3a", border: "none", padding: "7px 14px", cursor: "pointer" }}>Asignar Todos</button>
+                  <button onClick={unassignAll} style={{ fontFamily: "StyreneA, sans-serif", fontSize: "11px", color: "#fff", backgroundColor: "#9c0f0f", border: "none", padding: "7px 14px", cursor: "pointer" }}>Quitar Todos</button>
                 </div>
               </div>
 
               {/* Product table */}
               <div style={{ display: "grid", gridTemplateColumns: "40px 1fr 1.5fr 1fr 0.8fr", gap: "12px", padding: "0 0 10px 0", borderBottom: "1px solid rgba(0,0,0,0.1)" }}>
                 {["", "SKU", "Nombre", "Categoría", "Estado"].map((h) => (
-                  <p key={h || "check"} style={{ fontFamily: "Graphik, sans-serif", fontSize: "10px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(0,0,0,0.35)", margin: 0 }}>{h}</p>
+                  <p key={h || "check"} style={{ fontFamily: "StyreneA, sans-serif", fontSize: "10px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(0,0,0,0.35)", margin: 0 }}>{h}</p>
                 ))}
               </div>
               {products.map((p) => (
@@ -145,10 +145,10 @@ export default function AdminClients() {
                     style={{ cursor: "pointer", width: "16px", height: "16px" }}
                   />
                   <p style={{ fontFamily: "monospace", fontSize: "12px", color: "rgba(0,0,0,0.6)", margin: 0 }}>{p.sku}</p>
-                  <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "#000", margin: 0 }}>{p.name}</p>
-                  <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "12px", color: "rgba(0,0,0,0.6)", margin: 0 }}>{p.category}</p>
+                  <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "#000", margin: 0 }}>{p.name}</p>
+                  <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "12px", color: "rgba(0,0,0,0.6)", margin: 0 }}>{p.category}</p>
                   <span style={{
-                    fontFamily: "Graphik, sans-serif", fontSize: "10px", fontWeight: 600,
+                    fontFamily: "StyreneA, sans-serif", fontSize: "10px", fontWeight: 600,
                     color: assignedIds.has(p.id) ? "#3a6b3a" : "rgba(0,0,0,0.3)",
                   }}>
                     {assignedIds.has(p.id) ? "Asignado" : "—"}

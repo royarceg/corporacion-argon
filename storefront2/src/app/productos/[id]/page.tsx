@@ -71,7 +71,7 @@ export default function ProductDetailPage() {
   if (loading || fetching || !product) {
     return (
       <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.4)" }}>
+        <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.4)" }}>
           Cargando...
         </p>
       </div>
@@ -142,7 +142,7 @@ export default function ProductDetailPage() {
 
             {/* Breadcrumb */}
             <p style={{
-              fontFamily: "Graphik, sans-serif",
+              fontFamily: "StyreneA, sans-serif",
               fontSize: "11px",
               color: "rgba(0,0,0,0.4)",
               margin: "0 0 20px 0",
@@ -151,7 +151,7 @@ export default function ProductDetailPage() {
               <a
                 href={product.category ? `/productos?cat=${encodeURIComponent(product.category)}` : "/productos"}
                 style={{
-                  fontFamily: "Graphik, sans-serif",
+                  fontFamily: "StyreneA, sans-serif",
                   fontSize: "11px",
                   color: "rgba(0,0,0,0.4)",
                   letterSpacing: "0.02em",
@@ -166,7 +166,7 @@ export default function ProductDetailPage() {
 
             {/* Name */}
             <h1 style={{
-              fontFamily: "Graphik, sans-serif",
+              fontFamily: "StyreneA, sans-serif",
               fontSize: "24px",
               fontWeight: 400,
               color: "#000",
@@ -179,7 +179,7 @@ export default function ProductDetailPage() {
 
             {/* Price */}
             <p style={{
-              fontFamily: "Graphik, sans-serif",
+              fontFamily: "StyreneA, sans-serif",
               fontSize: "16px",
               fontWeight: 400,
               color: "#000",
@@ -192,7 +192,7 @@ export default function ProductDetailPage() {
             {colors.length > 0 && (
               <div style={{ marginBottom: "20px" }}>
                 <p style={{
-                  fontFamily: "Graphik, sans-serif",
+                  fontFamily: "StyreneA, sans-serif",
                   fontSize: "12px",
                   fontWeight: 500,
                   color: "#000",
@@ -226,7 +226,7 @@ export default function ProductDetailPage() {
             {/* Siblings — otros colores */}
             {siblings.length > 0 && (
               <div style={{ marginBottom: "20px" }}>
-                <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "12px", fontWeight: 500, color: "#000", margin: "0 0 10px 0" }}>
+                <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "12px", fontWeight: 500, color: "#000", margin: "0 0 10px 0" }}>
                   También disponible en:
                 </p>
                 <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
@@ -239,7 +239,7 @@ export default function ProductDetailPage() {
                         display: "flex", alignItems: "center", gap: "8px",
                         padding: "6px 12px", border: "1px solid rgba(0,0,0,0.15)",
                         background: "#fff", textDecoration: "none",
-                        fontFamily: "Graphik, sans-serif", fontSize: "11px", color: "#000",
+                        fontFamily: "StyreneA, sans-serif", fontSize: "11px", color: "#000",
                       }}
                     >
                       {s.image && <img src={s.image} alt="" style={{ width: "28px", height: "28px", objectFit: "contain", borderRadius: "2px", backgroundColor: "#f5f4f4" }} />}
@@ -256,7 +256,7 @@ export default function ProductDetailPage() {
               <div style={{ marginBottom: "20px" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "10px" }}>
                   <p style={{
-                    fontFamily: "Graphik, sans-serif",
+                    fontFamily: "StyreneA, sans-serif",
                     fontSize: "12px",
                     fontWeight: 500,
                     color: "#000",
@@ -271,7 +271,7 @@ export default function ProductDetailPage() {
                       key={size}
                       onClick={() => setSelectedSize((prev) => prev === size ? null : size)}
                       style={{
-                        fontFamily: "Graphik, sans-serif",
+                        fontFamily: "StyreneA, sans-serif",
                         fontSize: "12px",
                         color: selectedSize === size ? "#fff" : "#000",
                         backgroundColor: selectedSize === size ? "#000" : "#fff",
@@ -291,7 +291,7 @@ export default function ProductDetailPage() {
                 {/* Variant code */}
                 {activeVariant?.sku_variant && (
                   <p style={{
-                    fontFamily: "Graphik, sans-serif",
+                    fontFamily: "StyreneA, sans-serif",
                     fontSize: "11px",
                     color: "rgba(0,0,0,0.45)",
                     margin: "10px 0 0 0",
@@ -309,7 +309,7 @@ export default function ProductDetailPage() {
             {/* Quantity */}
             <div style={{ marginBottom: "16px" }}>
               <p style={{
-                fontFamily: "Graphik, sans-serif",
+                fontFamily: "StyreneA, sans-serif",
                 fontSize: "12px",
                 fontWeight: 500,
                 color: "#000",
@@ -326,7 +326,7 @@ export default function ProductDetailPage() {
                     <line x1="5" y1="12" x2="19" y2="12" />
                   </svg>
                 </button>
-                <span style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", minWidth: "32px", textAlign: "center", borderLeft: "1px solid rgba(0,0,0,0.2)", borderRight: "1px solid rgba(0,0,0,0.2)", height: "36px", lineHeight: "36px" }}>
+                <span style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", minWidth: "32px", textAlign: "center", borderLeft: "1px solid rgba(0,0,0,0.2)", borderRight: "1px solid rgba(0,0,0,0.2)", height: "36px", lineHeight: "36px" }}>
                   {qty}
                 </span>
                 <button
@@ -346,7 +346,7 @@ export default function ProductDetailPage() {
               onClick={handleAddToCart}
               disabled={adding}
               style={{
-                fontFamily: "Graphik, sans-serif",
+                fontFamily: "StyreneA, sans-serif",
                 fontSize: "13px",
                 fontWeight: 500,
                 color: "#fff",
@@ -378,7 +378,7 @@ export default function ProductDetailPage() {
                       background: "none",
                       border: "none",
                       cursor: "pointer",
-                      fontFamily: "Graphik, sans-serif",
+                      fontFamily: "StyreneA, sans-serif",
                       fontSize: "13px",
                       fontWeight: 400,
                       color: "#000",
@@ -406,7 +406,7 @@ export default function ProductDetailPage() {
                     <div style={{ paddingBottom: "16px" }}>
                       {item.content.split("\n").map((line, i) => (
                         <p key={i} style={{
-                          fontFamily: "Graphik, sans-serif",
+                          fontFamily: "StyreneA, sans-serif",
                           fontSize: "13px",
                           color: "rgba(0,0,0,0.65)",
                           margin: i === 0 ? 0 : "6px 0 0 0",

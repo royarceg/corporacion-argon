@@ -21,7 +21,7 @@ export default function ProductoPage() {
   if (loading) {
     return (
       <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.4)" }}>
+        <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.4)" }}>
           Cargando...
         </p>
       </div>
@@ -52,7 +52,7 @@ export default function ProductoPage() {
       >
         <h1
           style={{
-            fontFamily: "Graphik, sans-serif",
+            fontFamily: "StyreneA, sans-serif",
             fontSize: "28px",
             fontWeight: 400,
             color: "#000000",
@@ -83,7 +83,7 @@ export default function ProductoPage() {
 
           <p
             style={{
-              fontFamily: "Graphik, sans-serif",
+              fontFamily: "StyreneA, sans-serif",
               fontSize: "16px",
               fontWeight: 400,
               color: "#000000",
@@ -97,7 +97,7 @@ export default function ProductoPage() {
 
           <p
             style={{
-              fontFamily: "Graphik, sans-serif",
+              fontFamily: "StyreneA, sans-serif",
               fontSize: "13px",
               fontWeight: 400,
               color: "rgba(0,0,0,0.5)",
@@ -113,7 +113,7 @@ export default function ProductoPage() {
             <a
               href="/registro"
               style={{
-                fontFamily: "Graphik, sans-serif",
+                fontFamily: "StyreneA, sans-serif",
                 fontSize: "13px",
                 fontWeight: 500,
                 color: "#ffffff",
@@ -129,7 +129,7 @@ export default function ProductoPage() {
             <a
               href="/login"
               style={{
-                fontFamily: "Graphik, sans-serif",
+                fontFamily: "StyreneA, sans-serif",
                 fontSize: "13px",
                 fontWeight: 400,
                 color: "#000000",
@@ -150,7 +150,7 @@ export default function ProductoPage() {
 
         <h2
           style={{
-            fontFamily: "Graphik, sans-serif",
+            fontFamily: "StyreneA, sans-serif",
             fontSize: "14px",
             fontWeight: 400,
             color: "#000000",
@@ -190,10 +190,10 @@ export default function ProductoPage() {
                   style={{ width: "100%", height: "100%", objectFit: "cover" }}
                 />
               </div>
-              <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", fontWeight: 400, color: "#000000", margin: "0 0 4px 0" }}>
+              <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", fontWeight: 400, color: "#000000", margin: "0 0 4px 0" }}>
                 {item.label}
               </p>
-              <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", fontWeight: 400, color: "rgba(0,0,0,0.5)", margin: 0 }}>
+              <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", fontWeight: 400, color: "rgba(0,0,0,0.5)", margin: 0 }}>
                 — — —
               </p>
             </div>

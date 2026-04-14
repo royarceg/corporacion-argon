@@ -16,7 +16,7 @@ export default function ProductRow() {
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        font-family: Graphik, sans-serif;
+        font-family: StyreneA, sans-serif;
         font-size: 10px;
         font-weight: 400;
         letter-spacing: 2.5px;
@@ -55,7 +55,7 @@ export default function ProductRow() {
       >
         <h2
           style={{
-            fontFamily: "Graphik, sans-serif",
+            fontFamily: "StyreneA, sans-serif",
             fontSize: "18px",
             fontWeight: 400,
             color: "#000000",
@@ -117,7 +117,7 @@ export default function ProductRow() {
             >
               <p
                 style={{
-                  fontFamily: "Graphik, sans-serif",
+                  fontFamily: "StyreneA, sans-serif",
                   fontSize: "13px",
                   fontWeight: 400,
                   color: "#000000",
