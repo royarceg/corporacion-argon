@@ -11,38 +11,61 @@ interface Props {
   onClose: () => void;
 }
 
-export default function QuickViewModal({ product, onClose }: Props) {
+export default function QuickViewModal({ product: initialProduct, onClose }: Props) {
   const router = useRouter();
   const { addToCart } = useCart();
 
+  const [current, setCurrent] = useState<ApiProduct>(initialProduct);
   const [variants, setVariants] = useState<ApiVariant[]>([]);
   const [loadingVariants, setLoadingVariants] = useState(true);
 
   const [selectedImage, setSelectedImage] = useState(0);
   const [selectedColor, setSelectedColor] = useState<string | null>(
-    product.colors?.[0] ?? null
+    initialProduct.colors?.[0] ?? null
   );
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [adding, setAdding] = useState(false);
   const [added, setAdded] = useState(false);
   const [addError, setAddError] = useState<string | null>(null);
   const [siblings, setSiblings] = useState<Sibling[]>([]);
+  const [swapping, setSwapping] = useState(false);
 
-  const colors = product.colors ?? [];
-  const sizes = sortSizes(product.sizes ?? []);
-  const images = product.images ?? [];
+  const colors = current.colors ?? [];
+  const sizes = sortSizes(current.sizes ?? []);
+  const images = current.images ?? [];
 
-  // Fetch variantes completas (con id y sku_variant) al abrir el modal
+  // Fetch variantes y siblings cada vez que cambia el producto activo
   useEffect(() => {
-    productService.getProductById(product.id)
+    setLoadingVariants(true);
+    productService.getProductById(current.id)
       .then((detail) => setVariants(detail.variants ?? []))
       .catch(() => setVariants([]))
       .finally(() => setLoadingVariants(false));
 
-    siblingService.getForProduct(product.id)
+    siblingService.getForProduct(current.id)
       .then(setSiblings)
       .catch(() => setSiblings([]));
-  }, [product.id]);
+  }, [current.id]);
+
+  // Swap al hermano dentro del mismo modal
+  async function swapToSibling(siblingId: number) {
+    setSwapping(true);
+    try {
+      const detail = await productService.getProductById(siblingId);
+      setCurrent({
+        id: detail.id, name: detail.name, sku: detail.sku,
+        price: detail.price, category: detail.category,
+        colors: detail.colors ?? [], sizes: detail.sizes ?? [],
+        images: detail.images ?? [],
+      } as ApiProduct);
+      setSelectedImage(0);
+      setSelectedColor(detail.colors?.[0] ?? null);
+      setSelectedSize(null);
+      setAdded(false);
+      setAddError(null);
+    } catch { /* */ }
+    setSwapping(false);
+  }
 
   // Encontrar el variant_id según color + talla seleccionados
   function resolveVariantId(): number | undefined {
@@ -66,7 +89,7 @@ export default function QuickViewModal({ product, onClose }: Props) {
     return match?.sku_variant ?? null;
   }
 
-  const price = parseFloat(product.price).toLocaleString("es-CR", {
+  const price = parseFloat(current.price).toLocaleString("es-CR", {
     style: "currency",
     currency: "CRC",
     minimumFractionDigits: 0,
@@ -77,7 +100,7 @@ export default function QuickViewModal({ product, onClose }: Props) {
     setAddError(null);
     try {
       const variantId = resolveVariantId();
-      await addToCart(product.id, 1, variantId);
+      await addToCart(current.id, 1, variantId);
       setAdded(true);
       setTimeout(() => {
         setAdded(false);
@@ -181,7 +204,7 @@ export default function QuickViewModal({ product, onClose }: Props) {
                 >
                   <img
                     src={img}
-                    alt={product.name}
+                    alt={current.name}
                     style={{ width: "100%", height: "100%", objectFit: "cover" }}
                   />
                 </div>
@@ -228,7 +251,7 @@ export default function QuickViewModal({ product, onClose }: Props) {
                 paddingRight: "20px",
               }}
             >
-              {product.name}
+              {current.name}
             </h2>
             <p
               style={{
@@ -293,10 +316,8 @@ export default function QuickViewModal({ product, onClose }: Props) {
                   <button
                     key={s.id}
                     title={s.name}
-                    onClick={() => {
-                      onClose();
-                      router.push(`/productos/${s.id}`);
-                    }}
+                    disabled={swapping}
+                    onClick={() => swapToSibling(s.id)}
                     style={{
                       display: "flex",
                       alignItems: "center",
@@ -433,7 +454,7 @@ export default function QuickViewModal({ product, onClose }: Props) {
           <button
             onClick={() => {
               onClose();
-              router.push(`/productos/${product.id}`);
+              router.push(`/productos/${current.id}`);
             }}
             style={{
               fontFamily: "StyreneA, sans-serif",
