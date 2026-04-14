@@ -32,8 +32,22 @@ export const productService = {
   },
 
   async getProductById(id: number): Promise<ApiProductDetail> {
-    const { data } = await api.get<{ success: boolean; product: ApiProductDetail }>(`/products/${id}`);
-    return data.product;
+    try {
+      const { data } = await api.get<{ success: boolean; product: ApiProductDetail }>(`/products/${id}`);
+      return data.product;
+    } catch {
+      // Fallback al endpoint admin si el cliente falla (ej: admin sin client_id)
+      const { data } = await api.get(`/products/admin/${id}`);
+      const p = data.product ?? data;
+      return {
+        id: p.id, sku: p.sku, name: p.name, description: p.description || "",
+        category: p.category, price: p.reference_price ?? p.price ?? "0",
+        images: p.images ?? (p.image_url ? [p.image_url] : []),
+        colors: p.colors ?? [], sizes: p.sizes ?? [],
+        variants: p.variants ?? [], variant_images: p.variant_images ?? {},
+        videos: p.videos ?? [],
+      };
+    }
   },
 
   async getProductsByCategory(category: string): Promise<ApiProduct[]> {
