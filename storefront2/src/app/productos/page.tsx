@@ -60,7 +60,7 @@ function ProductosContent() {
         .catch(console.error)
         .finally(() => setFetching(false));
     }
-  }, [loading, isAuthenticated, isClient]);
+  }, [loading, isAuthenticated]);
 
   const categories = useMemo(() => {
     const cats = Array.from(new Set(products.map((p) => p.category)));
