@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { animate } from "animejs";
 import { ApiProduct, ApiVariant, productService } from "@/services/productService";
 import { useCart } from "@/context/CartContext";
 import { siblingService, Sibling } from "@/services/siblingService";
