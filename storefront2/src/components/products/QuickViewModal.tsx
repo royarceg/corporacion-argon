@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ApiProduct, ApiVariant, productService } from "@/services/productService";
 import { useCart } from "@/context/CartContext";
+import { siblingService, Sibling } from "@/services/siblingService";
 
 interface Props {
   product: ApiProduct;
@@ -25,6 +26,7 @@ export default function QuickViewModal({ product, onClose }: Props) {
   const [adding, setAdding] = useState(false);
   const [added, setAdded] = useState(false);
   const [addError, setAddError] = useState<string | null>(null);
+  const [siblings, setSiblings] = useState<Sibling[]>([]);
 
   const colors = product.colors ?? [];
   const sizes = sortSizes(product.sizes ?? []);
@@ -36,6 +38,10 @@ export default function QuickViewModal({ product, onClose }: Props) {
       .then((detail) => setVariants(detail.variants ?? []))
       .catch(() => setVariants([]))
       .finally(() => setLoadingVariants(false));
+
+    siblingService.getForProduct(product.id)
+      .then(setSiblings)
+      .catch(() => setSiblings([]));
   }, [product.id]);
 
   // Encontrar el variant_id según color + talla seleccionados
@@ -276,6 +282,52 @@ export default function QuickViewModal({ product, onClose }: Props) {
             </div>
           )}
 
+          {/* Siblings — otros colores del mismo producto */}
+          {siblings.length > 0 && (
+            <div>
+              <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "12px", fontWeight: 500, color: "#000", margin: "0 0 8px 0" }}>
+                También disponible en:
+              </p>
+              <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                {siblings.map((s) => (
+                  <button
+                    key={s.id}
+                    title={s.name}
+                    onClick={() => {
+                      onClose();
+                      router.push(`/productos/${s.id}`);
+                    }}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "8px",
+                      padding: "6px 12px",
+                      border: "1px solid rgba(0,0,0,0.15)",
+                      background: "#fff",
+                      cursor: "pointer",
+                      fontFamily: "Graphik, sans-serif",
+                      fontSize: "11px",
+                      color: "#000",
+                    }}
+                  >
+                    {s.image && (
+                      <img src={s.image} alt={s.color ?? ""} style={{ width: "24px", height: "24px", objectFit: "contain", borderRadius: "2px", backgroundColor: "#f5f4f4" }} />
+                    )}
+                    {s.color && (
+                      <span style={{
+                        width: "14px", height: "14px", borderRadius: "50%",
+                        backgroundColor: colorToHex(s.color),
+                        border: "1px solid rgba(0,0,0,0.2)",
+                        flexShrink: 0,
+                      }} />
+                    )}
+                    <span>{s.color || s.name}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Size */}
           {sizes.length > 0 && (
             <div>
@@ -362,7 +414,7 @@ export default function QuickViewModal({ product, onClose }: Props) {
               marginTop: "4px",
             }}
           >
-            {added ? "✓ Agregado" : adding ? "Agregando..." : "Add to Bag"}
+            {added ? "✓ Agregado" : adding ? "Agregando..." : "Agregar al Carrito"}
           </button>
 
           {/* Add error */}
@@ -396,7 +448,7 @@ export default function QuickViewModal({ product, onClose }: Props) {
               marginTop: "-8px",
             }}
           >
-            View Full Details
+            Ver Detalle Completo
           </button>
         </div>
       </div>

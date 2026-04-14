@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
 import { productService, ApiProductDetail, ApiVariant } from "@/services/productService";
+import { siblingService, Sibling } from "@/services/siblingService";
 import AnnouncementBar from "@/components/layout/AnnouncementBar";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -23,6 +24,7 @@ export default function ProductDetailPage() {
   const [adding, setAdding] = useState(false);
   const [added, setAdded] = useState(false);
   const [openAccordion, setOpenAccordion] = useState<string | null>("descripcion");
+  const [siblings, setSiblings] = useState<Sibling[]>([]);
 
   useEffect(() => {
     if (!loading && !isAuthenticated()) router.replace("/login");
@@ -37,6 +39,10 @@ export default function ProductDetailPage() {
         })
         .catch(() => router.replace("/productos"))
         .finally(() => setFetching(false));
+
+      siblingService.getForProduct(Number(id))
+        .then(setSiblings)
+        .catch(() => setSiblings([]));
     }
   }, [id, loading, isAuthenticated, router]);
 
@@ -212,6 +218,34 @@ export default function ProductDetailPage() {
                         transition: "border 0.15s",
                       }}
                     />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Siblings — otros colores */}
+            {siblings.length > 0 && (
+              <div style={{ marginBottom: "20px" }}>
+                <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "12px", fontWeight: 500, color: "#000", margin: "0 0 10px 0" }}>
+                  También disponible en:
+                </p>
+                <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                  {siblings.map((s) => (
+                    <a
+                      key={s.id}
+                      href={`/productos/${s.id}`}
+                      title={s.name}
+                      style={{
+                        display: "flex", alignItems: "center", gap: "8px",
+                        padding: "6px 12px", border: "1px solid rgba(0,0,0,0.15)",
+                        background: "#fff", textDecoration: "none",
+                        fontFamily: "Graphik, sans-serif", fontSize: "11px", color: "#000",
+                      }}
+                    >
+                      {s.image && <img src={s.image} alt="" style={{ width: "28px", height: "28px", objectFit: "contain", borderRadius: "2px", backgroundColor: "#f5f4f4" }} />}
+                      {s.color && <span style={{ width: "14px", height: "14px", borderRadius: "50%", backgroundColor: colorToHex(s.color), border: "1px solid rgba(0,0,0,0.2)", flexShrink: 0 }} />}
+                      <span>{s.color || s.name}</span>
+                    </a>
                   ))}
                 </div>
               </div>

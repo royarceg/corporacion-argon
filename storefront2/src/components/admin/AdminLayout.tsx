@@ -7,6 +7,7 @@ const navItems = [
   { key: "usuarios", label: "Usuarios", icon: "👥" },
   { key: "productos", label: "Productos", icon: "📋" },
   { key: "clientes", label: "Clientes", icon: "🏢" },
+  { key: "variantes", label: "Variantes Color", icon: "🎨" },
 ];
 
 interface AdminLayoutProps {

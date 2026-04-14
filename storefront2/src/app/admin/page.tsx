@@ -10,6 +10,7 @@ import AdminOrders from "@/components/admin/AdminOrders";
 import AdminUsers from "@/components/admin/AdminUsers";
 import AdminProducts from "@/components/admin/AdminProducts";
 import AdminClients from "@/components/admin/AdminClients";
+import AdminSiblings from "@/components/admin/AdminSiblings";
 
 export default function AdminPage() {
   const { isAuthenticated, isAdmin, loading } = useAuth();
@@ -36,6 +37,7 @@ export default function AdminPage() {
           {activeTab === "usuarios" && <AdminUsers />}
           {activeTab === "productos" && <AdminProducts />}
           {activeTab === "clientes" && <AdminClients />}
+          {activeTab === "variantes" && <AdminSiblings />}
         </AdminLayout>
       </div>
     </div>

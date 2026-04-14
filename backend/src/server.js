@@ -114,6 +114,7 @@ const cartRoutes = require('./routes/cartRoutes');
 const clientRoutes = require('./routes/clientRoutes');
 const userRoutes = require('./routes/userRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
+const siblingRoutes = require('./routes/siblingRoutes');
 
 // Usar rutas
 app.use('/api/auth', authRoutes);
@@ -124,6 +125,7 @@ app.use('/api/cart', cartRoutes);
 app.use('/api/clients', clientRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/siblings', siblingRoutes);
 
 // =====================================================
 // MANEJO DE ERRORES CENTRALIZADO
