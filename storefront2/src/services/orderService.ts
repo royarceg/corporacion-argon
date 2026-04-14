@@ -44,12 +44,17 @@ export const orderService = {
     return data.order;
   },
 
-  async createOrder(customer_po: string, wanted_date?: string): Promise<{ order_number: string; id: number }> {
-    const { data } = await api.post<{ success: boolean; order_number: string; id: number }>("/orders", {
+  async createOrder(
+    customer_po: string,
+    items: { product_id: number; quantity: number }[],
+    wanted_date?: string,
+  ): Promise<{ order_number: string; id: number }> {
+    const { data } = await api.post<{ success: boolean; order: { id: number; order_number: string } }>("/orders", {
       customer_po,
+      items,
       ...(wanted_date ? { wanted_date } : {}),
     });
-    return data;
+    return data.order;
   },
 
   // Admin

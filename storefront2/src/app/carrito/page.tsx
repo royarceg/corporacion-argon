@@ -46,7 +46,8 @@ export default function CarritoPage() {
     setSubmitting(true);
     setError("");
     try {
-      const result = await orderService.createOrder(customerPo.trim(), wantedDate || undefined);
+      const orderItems = items.map((i) => ({ product_id: i.product_id, quantity: i.quantity }));
+      const result = await orderService.createOrder(customerPo.trim(), orderItems, wantedDate || undefined);
       await clearCart();
       router.push(`/mi-cuenta/pedidos/${result.id}?new=1`);
     } catch {
