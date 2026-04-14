@@ -58,6 +58,11 @@ export const orderService = {
   },
 
   // Admin
+  async getAdminOrderById(id: number): Promise<OrderDetail> {
+    const { data } = await api.get<{ success: boolean; order: OrderDetail }>(`/orders/admin/${id}`);
+    return data.order;
+  },
+
   async getAllOrders(): Promise<Order[]> {
     const { data } = await api.get<{ success: boolean; orders: Order[] }>("/orders/admin/all");
     return data.orders;

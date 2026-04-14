@@ -31,6 +31,10 @@ router.get('/:id', verifyToken, orderController.getOrderById);
 // Ver todas las órdenes del sistema (solo admin)
 router.get('/admin/all', verifyToken, verifyAdmin, orderController.getAllOrders);
 
+// GET /api/orders/admin/:id
+// Detalle de una orden específica (solo admin, sin filtro de cliente)
+router.get('/admin/:id', verifyToken, verifyAdmin, orderController.getAdminOrderById);
+
 // PUT /api/orders/:id/confirm
 // Confirmar orden (solo admin)
 router.put('/:id/confirm', verifyToken, verifyAdmin, orderController.confirmOrder);

@@ -360,6 +360,62 @@ const confirmOrder = async (req, res) => {
 };
 
 // =====================================================
+// GET ADMIN ORDER BY ID - Detalle de orden (sin filtro de client)
+// =====================================================
+const getAdminOrderById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!validateNumericId(id)) {
+      return res.status(400).json({ error: 'ID de orden inválido' });
+    }
+
+    const orderResult = await pool.query(
+      `SELECT
+        po.*,
+        u.user_name as created_by,
+        u.email as user_email,
+        c.company_name,
+        c.email as company_email,
+        c.phone,
+        c.address
+      FROM purchase_orders po
+      INNER JOIN users u ON po.user_id = u.id
+      INNER JOIN clients c ON po.client_id = c.id
+      WHERE po.id = $1`,
+      [id]
+    );
+
+    if (orderResult.rows.length === 0) {
+      return res.status(404).json({ error: 'Orden no encontrada' });
+    }
+
+    const order = orderResult.rows[0];
+
+    const itemsResult = await pool.query(
+      `SELECT
+        oi.*,
+        p.sku,
+        p.name as product_name
+      FROM order_items oi
+      INNER JOIN products p ON oi.product_id = p.id
+      WHERE oi.purchase_order_id = $1
+      ORDER BY oi.id`,
+      [id]
+    );
+
+    res.json({
+      success: true,
+      order: { ...order, items: itemsResult.rows }
+    });
+
+  } catch (error) {
+    console.error('Error en getAdminOrderById:', error);
+    res.status(500).json({ error: 'Error al obtener orden' });
+  }
+};
+
+// =====================================================
 // GET ALL ORDERS (ADMIN) - Ver todas las órdenes
 // =====================================================
 const getAllOrders = async (req, res) => {
@@ -400,6 +456,7 @@ module.exports = {
   createOrder,
   getOrders,
   getOrderById,
+  getAdminOrderById,
   confirmOrder,
   getAllOrders
 };
