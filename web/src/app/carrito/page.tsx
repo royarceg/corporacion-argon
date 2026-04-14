@@ -264,20 +264,6 @@ export default function CarritoPage() {
                   />
                 </div>
 
-                {/* Comentarios */}
-                <div style={{ display: "flex", flexDirection: "column", gap: "6px", marginBottom: "14px" }}>
-                  <label style={{ fontFamily: "StyreneA, sans-serif", fontSize: "10px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "#000" }}>
-                    Comentarios
-                  </label>
-                  <textarea
-                    value={comments}
-                    onChange={(e) => setComments(e.target.value)}
-                    placeholder="Instrucciones especiales, cambios, observaciones..."
-                    rows={3}
-                    style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", border: "1px solid rgba(0,0,0,0.2)", padding: "10px 12px", outline: "none", width: "100%", boxSizing: "border-box", resize: "vertical" }}
-                  />
-                </div>
-
                 {/* Nota */}
                 <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "11px", color: "rgba(0,0,0,0.4)", margin: "0 0 20px 0", lineHeight: 1.6, textAlign: "center" }}>
                   Los precios son estimados. ARGON confirmará cantidades y precios finales antes de procesar.
