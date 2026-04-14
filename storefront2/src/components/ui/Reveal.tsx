@@ -14,7 +14,7 @@ interface RevealProps {
   threshold?: number;
   style?: React.CSSProperties;
   className?: string;
-  as?: keyof JSX.IntrinsicElements;
+  as?: React.ElementType;
 }
 
 const variantConfig: Record<RevealVariant, Record<string, unknown>> = {
