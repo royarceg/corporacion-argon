@@ -75,7 +75,6 @@ export default function QuickViewModal({ product, onClose }: Props) {
       setAdded(true);
       setTimeout(() => {
         setAdded(false);
-        onClose();
       }, 1500);
     } catch (err: any) {
       const msg = err?.response?.data?.error ?? "No se pudo agregar al carrito";
