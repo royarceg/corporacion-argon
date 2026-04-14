@@ -10,7 +10,7 @@ const navLinks = [
   { label: "Tienda", href: "/productos", hasDropdown: true },
   { label: "Novedades", href: "/productos" },
   { label: "Promociones", href: "/productos" },
-  { label: "Blog", href: "/productos" },
+  { label: "Blog", href: "/blog" },
 ];
 
 const dropdownColumns = [
@@ -162,7 +162,7 @@ export default function Header() {
             </button>
 
             <a
-              href="/stores"
+              href="/sucursales"
               style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", fontWeight: 400, color: "#000000", textDecoration: "none" }}
             >
               Sucursales
