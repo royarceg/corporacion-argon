@@ -451,26 +451,19 @@ export default function QuickViewModal({ product: initialProduct, onClose }: Pro
           )}
 
           {/* View Full Details */}
-          <button
-            onClick={() => {
-              onClose();
-              router.push(`/productos/${current.id}`);
-            }}
+          <a
+            href={`/productos/${current.id}`}
+            onClick={onClose}
             style={{
               fontFamily: "StyreneA, sans-serif",
               fontSize: "13px",
               color: "#000",
-              background: "none",
-              border: "none",
-              cursor: "pointer",
               textDecoration: "underline",
-              padding: 0,
-              textAlign: "left",
               marginTop: "-8px",
             }}
           >
             Ver Detalle Completo
-          </button>
+          </a>
         </div>
       </div>
     </>
