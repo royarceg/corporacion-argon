@@ -240,9 +240,24 @@ export default function AdminOrderDetailPage() {
                   )}
                   {(item as any).note && (
                     <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "10px", color: "#0369a1", margin: "2px 0 0 0", fontStyle: "italic" }}>
-                      Nota: {(item as any).note}
+                      Cliente: {(item as any).note}
                     </p>
                   )}
+                  {isPending ? (
+                    <input
+                      type="text"
+                      placeholder="Respuesta admin..."
+                      defaultValue={(item as any).admin_note || ""}
+                      onBlur={(e) => {
+                        (item as any)._adminNote = e.target.value.trim();
+                      }}
+                      style={{ fontFamily: "StyreneA, sans-serif", fontSize: "10px", color: "#7c3aed", border: "none", borderBottom: "1px solid rgba(0,0,0,0.1)", padding: "3px 0", marginTop: "4px", width: "100%", outline: "none", background: "transparent" }}
+                    />
+                  ) : (item as any).admin_note ? (
+                    <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "10px", color: "#7c3aed", margin: "2px 0 0 0", fontStyle: "italic" }}>
+                      Admin: {(item as any).admin_note}
+                    </p>
+                  ) : null}
                 </div>
 
                 {/* Imagen */}
@@ -290,30 +305,7 @@ export default function AdminOrderDetailPage() {
           </div>
         </div>
 
-        {/* Comentarios — ABAJO de la tabla */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px", marginTop: "32px" }}>
-          <div>
-            <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "10px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(0,0,0,0.4)", margin: "0 0 6px 0" }}>
-              Comentarios del cliente
-            </p>
-            <div style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "#000", border: "1px solid rgba(0,0,0,0.1)", padding: "12px", minHeight: "60px", backgroundColor: "#fafafa", lineHeight: 1.5 }}>
-              {(order as any).comments || <span style={{ color: "rgba(0,0,0,0.3)" }}>Sin comentarios</span>}
-            </div>
-          </div>
-          <div>
-            <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "10px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(0,0,0,0.4)", margin: "0 0 6px 0" }}>
-              Respuesta del administrador
-            </p>
-            {isPending ? (
-              <textarea value={adminComments} onChange={(e) => setAdminComments(e.target.value)} placeholder="Confirmar cambios, notas internas, observaciones..." rows={3}
-                style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", border: "1px solid rgba(0,0,0,0.2)", padding: "12px", outline: "none", width: "100%", boxSizing: "border-box", resize: "vertical", lineHeight: 1.5 }} />
-            ) : (
-              <div style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "#000", border: "1px solid rgba(0,0,0,0.1)", padding: "12px", minHeight: "60px", backgroundColor: "#fafafa", lineHeight: 1.5 }}>
-                {(order as any).admin_comments || <span style={{ color: "rgba(0,0,0,0.3)" }}>Sin respuesta</span>}
-              </div>
-            )}
-          </div>
-        </div>
+        {/* Comentarios por producto ya están inline en cada fila */}
 
         {/* Error message */}
         {confirmError && (
@@ -349,36 +341,94 @@ function exportPDF(order: OrderDetail, editables: { id: number; quantity_confirm
   const w = window.open("", "_blank");
   if (!w) return;
 
-  const rows = order.items.map((item: any) => {
+  const statusMap: Record<string, { label: string; color: string }> = {
+    pending: { label: "PENDIENTE", color: "#d4a017" },
+    confirmed: { label: "CONFIRMADA", color: "#2e7d32" },
+    cancelled: { label: "CANCELADA", color: "#c62828" },
+  };
+  const st = statusMap[order.status] || statusMap.pending;
+
+  const rows = order.items.map((item: any, i: number) => {
     const ed = editables.find((e) => e.id === item.id);
     const qty = isPending ? (ed?.quantity_confirmed ?? item.quantity_requested) : (item.quantity_confirmed ?? item.quantity_requested);
     const price = isPending ? (ed?.unit_price_confirmed ?? item.unit_price_initial) : (item.unit_price_confirmed ?? item.unit_price_initial);
     const total = Number(qty) * Number(price);
-    return `<tr>
-      <td style="padding:8px;border-bottom:1px solid #eee;font-family:monospace;font-size:11px">${item.product_sku || "—"}</td>
-      <td style="padding:8px;border-bottom:1px solid #eee">${item.product_name || "—"}</td>
-      <td style="padding:8px;border-bottom:1px solid #eee;text-align:center">${qty}</td>
-      <td style="padding:8px;border-bottom:1px solid #eee;text-align:right">$${Number(price).toFixed(2)}</td>
-      <td style="padding:8px;border-bottom:1px solid #eee;text-align:right">$${total.toFixed(2)}</td>
+    const bg = i % 2 === 0 ? "#ffffff" : "#f9fafb";
+    const note = item.note ? `<div style="font-size:9px;color:#0369a1;font-style:italic;margin-top:2px">Cliente: ${item.note}</div>` : "";
+    const variant = [item.color, item.size].filter(Boolean).join(" / ");
+    const variantHtml = variant ? `<div style="font-size:9px;color:#888">${variant}</div>` : "";
+    return `<tr style="background:${bg}">
+      <td style="padding:10px 12px;border-bottom:1px solid #eee;font-family:monospace;font-size:10px;color:#555">${item.sku_variant || item.product_sku || "—"}</td>
+      <td style="padding:10px 12px;border-bottom:1px solid #eee;font-size:12px">${item.product_name || "—"}${variantHtml}${note}</td>
+      <td style="padding:10px 12px;border-bottom:1px solid #eee;text-align:center;font-size:12px">${qty}</td>
+      <td style="padding:10px 12px;border-bottom:1px solid #eee;text-align:right;font-size:12px">$${Number(price).toFixed(2)}</td>
+      <td style="padding:10px 12px;border-bottom:1px solid #eee;text-align:right;font-size:12px;font-weight:600">$${total.toFixed(2)}</td>
     </tr>`;
   }).join("");
 
-  w.document.write(`<!DOCTYPE html><html><head><title>Orden ${order.order_number}</title>
-  <style>body{font-family:Arial,sans-serif;padding:40px;color:#000}table{width:100%;border-collapse:collapse}th{text-align:left;padding:8px;border-bottom:2px solid #000;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#555}h1{font-size:22px;font-weight:normal;margin:0 0 4px}p{margin:4px 0}.meta{display:flex;gap:40px;margin:20px 0 30px}.meta div p:first-child{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:#888}.total-row{text-align:right;font-size:16px;font-weight:bold;padding:16px 8px;border-top:2px solid #000}.comments{margin-top:30px;padding:16px;background:#f9f9f9;border:1px solid #eee}.comments h3{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#888;margin:0 0 8px}@media print{body{padding:20px}}</style>
+  const createdBy = (order as any).created_by_name
+    ? `${(order as any).created_by_name} (${(order as any).created_by})`
+    : (order as any).created_by || "—";
+
+  w.document.write(`<!DOCTYPE html><html><head><title>Orden ${order.order_number} — CORPORACIÓN ARGON</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: 'Helvetica Neue', Arial, sans-serif; margin: 0; padding: 0; color: #1a1a1a; }
+    .header { background: #000; color: #fff; padding: 32px 48px; display: flex; justify-content: space-between; align-items: center; }
+    .header h1 { font-size: 28px; font-weight: 700; letter-spacing: 2px; margin: 0; }
+    .header .tagline { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-top: 4px; }
+    .header .order-badge { text-align: right; }
+    .header .order-num { font-size: 20px; font-weight: 300; letter-spacing: 1px; }
+    .header .status { display: inline-block; padding: 4px 12px; font-size: 10px; font-weight: 700; letter-spacing: 1.5px; border-radius: 3px; margin-top: 6px; }
+    .content { padding: 32px 48px; }
+    .meta-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: #e5e7eb; border: 1px solid #e5e7eb; margin-bottom: 32px; }
+    .meta-card { background: #fff; padding: 16px 20px; }
+    .meta-label { font-size: 9px; text-transform: uppercase; letter-spacing: 1.5px; color: #888; margin: 0 0 4px; }
+    .meta-value { font-size: 13px; font-weight: 600; margin: 0; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 0; }
+    th { text-align: left; padding: 10px 12px; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #fff; background: #1a1a1a; }
+    th:nth-child(3), th:nth-child(4), th:nth-child(5) { text-align: right; }
+    .total-bar { background: #f9fafb; border-top: 2px solid #000; padding: 16px 12px; text-align: right; font-size: 15px; }
+    .total-bar strong { font-size: 18px; }
+    .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e7eb; display: flex; justify-content: space-between; font-size: 10px; color: #aaa; }
+    @media print { body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } .header { -webkit-print-color-adjust: exact; } }
+  </style>
   </head><body>
-  <h1>Orden de Compra: ${order.order_number}</h1>
-  <p style="color:#888">Estado: ${order.status.toUpperCase()}</p>
-  <div class="meta">
-    <div><p>Cliente</p><p><strong>${(order as any).company_name || "—"}</strong></p></div>
-    <div><p>Creado por</p><p><strong>${(order as any).created_by_name ? `${(order as any).created_by_name} (${(order as any).created_by})` : (order as any).created_by || "—"}</strong></p></div>
-    <div><p>PO</p><p><strong>${order.customer_po}</strong></p></div>
-    <div><p>Fecha</p><p><strong>${new Date(order.created_at).toLocaleDateString("es-CR")}</strong></p></div>
-  </div>
-  <table><thead><tr><th>SKU</th><th>Producto</th><th style="text-align:center">Cantidad</th><th style="text-align:right">Precio Unit.</th><th style="text-align:right">Total</th></tr></thead><tbody>${rows}</tbody></table>
-  <p class="total-row">Total: $${subtotal.toFixed(2)}</p>
-  ${(order as any).comments ? `<div class="comments"><h3>Comentarios del cliente</h3><p>${(order as any).comments}</p></div>` : ""}
-  ${(order as any).admin_comments ? `<div class="comments"><h3>Respuesta del administrador</h3><p>${(order as any).admin_comments}</p></div>` : ""}
-  <script>setTimeout(()=>window.print(),300)</script>
+    <div class="header">
+      <div>
+        <h1>CORPORACIÓN ARGON.</h1>
+        <p class="tagline">Insumos y Uniformes para empresas</p>
+      </div>
+      <div class="order-badge">
+        <div class="order-num">${order.order_number}</div>
+        <div class="status" style="background:${st.color};color:#fff">${st.label}</div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="meta-grid">
+        <div class="meta-card"><p class="meta-label">Cliente</p><p class="meta-value">${(order as any).company_name || "—"}</p></div>
+        <div class="meta-card"><p class="meta-label">Creado por</p><p class="meta-value">${createdBy}</p></div>
+        <div class="meta-card"><p class="meta-label">PO del cliente</p><p class="meta-value">${order.customer_po}</p></div>
+        <div class="meta-card"><p class="meta-label">Fecha</p><p class="meta-value">${new Date(order.created_at).toLocaleDateString("es-CR")}</p></div>
+      </div>
+
+      <table>
+        <thead><tr><th>SKU</th><th>Producto</th><th style="text-align:center">Cant.</th><th>Precio Unit.</th><th>Total</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+
+      <div class="total-bar">
+        Total ${isPending ? "estimado" : "confirmado"}: <strong>$${subtotal.toFixed(2)}</strong>
+      </div>
+
+      <div class="footer">
+        <span>Generado el ${new Date().toLocaleDateString("es-CR")} · CORPORACIÓN ARGON</span>
+        <span>Este documento es informativo. Precios sujetos a confirmación.</span>
+      </div>
+    </div>
+
+    <script>setTimeout(()=>window.print(),400)</script>
   </body></html>`);
   w.document.close();
 }
