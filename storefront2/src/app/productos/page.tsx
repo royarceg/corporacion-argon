@@ -24,7 +24,7 @@ export default function ProductosPage() {
 }
 
 function ProductosContent() {
-  const { isAuthenticated, isClient, loading } = useAuth();
+  const { isAuthenticated, isClient, isAdmin, loading } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -56,7 +56,8 @@ function ProductosContent() {
 
   useEffect(() => {
     if (!loading && isAuthenticated()) {
-      productService.getProducts()
+      const fetch = isAdmin() ? productService.getAllAdmin() : productService.getProducts();
+      fetch
         .then(setProducts)
         .catch(console.error)
         .finally(() => setFetching(false));

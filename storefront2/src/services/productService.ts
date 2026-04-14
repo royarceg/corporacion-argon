@@ -43,6 +43,11 @@ export const productService = {
     return data.products;
   },
 
+  async getAllAdmin(): Promise<ApiProduct[]> {
+    const { data } = await api.get("/products/admin/all");
+    return data.products ?? data;
+  },
+
   async searchProducts(query: string): Promise<ApiProduct[]> {
     const { data } = await api.get<{ success: boolean; products: ApiProduct[] }>(
       `/products/search?q=${encodeURIComponent(query)}`
