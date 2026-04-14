@@ -225,7 +225,7 @@ export default function AdminOrderDetailPage() {
               >
                 {/* SKU */}
                 <p style={{ fontFamily: "monospace", fontSize: "11px", color: "rgba(0,0,0,0.6)", margin: 0 }}>
-                  {(item as any).product_sku ?? (item as any).sku ?? "—"}
+                  {(item as any).sku_variant || (item as any).product_sku || "—"}
                 </p>
 
                 {/* Producto */}

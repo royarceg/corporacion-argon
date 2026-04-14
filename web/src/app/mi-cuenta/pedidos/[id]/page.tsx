@@ -323,8 +323,10 @@ function PedidoDetailContent() {
                     {/* Name + SKU */}
                     <div>
                       <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", fontWeight: 500, margin: "0 0 2px 0" }}>{item.product_name}</p>
-                      <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "12px", color: "rgba(0,0,0,0.4)", margin: 0 }}>
-                        {item.product_sku}{item.color ? ` — ${item.color}` : ""}{item.size ? ` / ${item.size}` : ""}
+                      <p style={{ fontFamily: "monospace", fontSize: "11px", color: "rgba(0,0,0,0.4)", margin: 0 }}>
+                        {(item as any).sku_variant || item.product_sku}
+                        {(item as any).color ? ` — ${(item as any).color}` : ""}
+                        {(item as any).size ? ` / ${(item as any).size}` : ""}
                       </p>
                     </div>
 

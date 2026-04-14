@@ -81,7 +81,7 @@ const createOrder = async (req, res) => {
 
     // Insertar items de la orden
     for (const item of items) {
-      const { product_id, quantity, note } = item;
+      const { product_id, variant_id, quantity, note } = item;
 
       // Obtener precio de referencia del producto
       const priceResult = await client.query(
@@ -100,9 +100,9 @@ const createOrder = async (req, res) => {
       // Insertar item
       await client.query(
         `INSERT INTO order_items
-          (purchase_order_id, product_id, quantity_requested, unit_price_initial, line_total_initial, note)
-         VALUES ($1, $2, $3, $4, $5, $6)`,
-        [order.id, product_id, quantity, unit_price, line_total, note || '']
+          (purchase_order_id, product_id, variant_id, quantity_requested, unit_price_initial, line_total_initial, note)
+         VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+        [order.id, product_id, variant_id || null, quantity, unit_price, line_total, note || '']
       );
     }
 
@@ -242,19 +242,23 @@ const getOrderById = async (req, res) => {
 
     const order = orderResult.rows[0];
 
-    // Obtener items de la orden con imagen primaria
+    // Obtener items de la orden con imagen primaria y variante
     const itemsResult = await pool.query(
       `SELECT
         oi.*,
         p.sku as product_sku,
         p.name as product_name,
         p.description,
+        pv.sku_variant,
+        pv.color,
+        pv.size,
         (SELECT image_url FROM product_images
          WHERE product_id = p.id
          ORDER BY is_primary DESC, display_order ASC
          LIMIT 1) as image_url
       FROM order_items oi
       INNER JOIN products p ON oi.product_id = p.id
+      LEFT JOIN product_variants pv ON oi.variant_id = pv.id
       WHERE oi.purchase_order_id = $1
       ORDER BY oi.id`,
       [id]
@@ -419,12 +423,16 @@ const getAdminOrderById = async (req, res) => {
         oi.*,
         p.sku as product_sku,
         p.name as product_name,
+        pv.sku_variant,
+        pv.color,
+        pv.size,
         (SELECT image_url FROM product_images
          WHERE product_id = p.id
          ORDER BY is_primary DESC, display_order ASC
          LIMIT 1) as image_url
       FROM order_items oi
       INNER JOIN products p ON oi.product_id = p.id
+      LEFT JOIN product_variants pv ON oi.variant_id = pv.id
       WHERE oi.purchase_order_id = $1
       ORDER BY oi.id`,
       [id]
