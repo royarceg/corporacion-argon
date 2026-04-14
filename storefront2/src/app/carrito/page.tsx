@@ -150,9 +150,28 @@ export default function CarritoPage() {
                     >
                       <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2"><line x1="5" y1="12" x2="19" y2="12" /></svg>
                     </button>
-                    <span style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", minWidth: "40px", textAlign: "center", borderTop: "1px solid rgba(0,0,0,0.15)", borderBottom: "1px solid rgba(0,0,0,0.15)", height: "32px", lineHeight: "32px" }}>
-                      {item.quantity}
-                    </span>
+                    <input
+                      type="number"
+                      min="1"
+                      value={item.quantity}
+                      onChange={(e) => {
+                        const val = parseInt(e.target.value);
+                        if (!isNaN(val) && val >= 1) updateItem(item.id, val);
+                      }}
+                      style={{
+                        fontFamily: "Graphik, sans-serif",
+                        fontSize: "13px",
+                        width: "48px",
+                        textAlign: "center",
+                        borderTop: "1px solid rgba(0,0,0,0.15)",
+                        borderBottom: "1px solid rgba(0,0,0,0.15)",
+                        borderLeft: "none",
+                        borderRight: "none",
+                        height: "32px",
+                        outline: "none",
+                        MozAppearance: "textfield",
+                      } as React.CSSProperties}
+                    />
                     <button
                       onClick={() => updateItem(item.id, item.quantity + 1)}
                       style={{ width: "32px", height: "32px", border: "1px solid rgba(0,0,0,0.15)", background: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
