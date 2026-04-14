@@ -1,9 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import { useCart } from "@/context/CartContext";
 
 export default function ShoppingBagDrawer() {
   const { items, total, count, drawerOpen, closeDrawer, updateItem, removeItem } = useCart();
+  const [localQtys, setLocalQtys] = useState<Record<number, string>>({});
 
   if (!drawerOpen) return null;
 
@@ -114,10 +116,20 @@ export default function ShoppingBagDrawer() {
                     <input
                       type="number"
                       min="1"
-                      value={item.quantity}
-                      onChange={(e) => {
-                        const val = parseInt(e.target.value);
+                      value={localQtys[item.id] ?? String(item.quantity)}
+                      onChange={(e) => setLocalQtys((prev) => ({ ...prev, [item.id]: e.target.value }))}
+                      onBlur={() => {
+                        const val = parseInt(localQtys[item.id] ?? "");
                         if (!isNaN(val) && val >= 1) updateItem(item.id, val);
+                        setLocalQtys((prev) => { const n = { ...prev }; delete n[item.id]; return n; });
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          const val = parseInt(localQtys[item.id] ?? "");
+                          if (!isNaN(val) && val >= 1) updateItem(item.id, val);
+                          setLocalQtys((prev) => { const n = { ...prev }; delete n[item.id]; return n; });
+                          (e.target as HTMLInputElement).blur();
+                        }
                       }}
                       style={{
                         fontFamily: "Graphik, sans-serif",
