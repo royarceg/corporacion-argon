@@ -23,6 +23,14 @@ router.get('/', verifyToken, orderController.getOrders);
 // Obtener detalle de una orden específica
 router.get('/:id', verifyToken, orderController.getOrderById);
 
+// PUT /api/orders/:id
+// Editar orden pendiente (solo cliente propietario)
+router.put('/:id', verifyToken, orderController.updateOrder);
+
+// DELETE /api/orders/:id
+// Eliminar orden pendiente (solo cliente propietario)
+router.delete('/:id', verifyToken, orderController.deleteOrder);
+
 // =====================================================
 // RUTAS DE ADMINISTRADOR
 // =====================================================

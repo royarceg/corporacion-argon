@@ -13,6 +13,7 @@ export interface OrderItem {
   unit_price_confirmed: string | null;
   line_total_initial: string;
   line_total_confirmed: string | null;
+  image_url: string | null;
 }
 
 export interface Order {
@@ -26,6 +27,8 @@ export interface Order {
   created_at: string;
   confirmed_at: string | null;
   created_by: string;
+  first_image_url: string | null;
+  items_count: number;
 }
 
 export interface OrderDetail extends Order {
@@ -70,5 +73,20 @@ export const orderService = {
 
   async confirmOrder(id: number, items: { id: number; quantity_confirmed: number; unit_price_confirmed: number }[]): Promise<void> {
     await api.put(`/orders/${id}/confirm`, { items });
+  },
+
+  async updateOrder(
+    id: number,
+    data: {
+      customer_po?: string;
+      wanted_date?: string;
+      items?: { id: number; quantity: number }[];
+    }
+  ): Promise<void> {
+    await api.put(`/orders/${id}`, data);
+  },
+
+  async deleteOrder(id: number): Promise<void> {
+    await api.delete(`/orders/${id}`);
   },
 };

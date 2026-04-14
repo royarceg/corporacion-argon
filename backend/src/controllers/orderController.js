@@ -149,7 +149,7 @@ const getOrders = async (req, res) => {
     }
 
     const result = await pool.query(
-      `SELECT 
+      `SELECT
         po.id,
         po.order_number,
         po.customer_po,
@@ -159,7 +159,15 @@ const getOrders = async (req, res) => {
         po.subtotal_confirmed,
         po.created_at,
         po.confirmed_at,
-        u.user_name as created_by
+        u.user_name as created_by,
+        (SELECT pi.image_url
+         FROM order_items oi2
+         INNER JOIN products p2 ON oi2.product_id = p2.id
+         LEFT JOIN product_images pi ON p2.id = pi.product_id
+         WHERE oi2.purchase_order_id = po.id
+         ORDER BY oi2.id ASC, pi.is_primary DESC, pi.display_order ASC
+         LIMIT 1) as first_image_url,
+        (SELECT COUNT(*) FROM order_items oi3 WHERE oi3.purchase_order_id = po.id) as items_count
       FROM purchase_orders po
       INNER JOIN users u ON po.user_id = u.id
       WHERE po.client_id = $1
@@ -224,13 +232,17 @@ const getOrderById = async (req, res) => {
 
     const order = orderResult.rows[0];
 
-    // Obtener items de la orden
+    // Obtener items de la orden con imagen primaria
     const itemsResult = await pool.query(
       `SELECT
         oi.*,
         p.sku as product_sku,
         p.name as product_name,
-        p.description
+        p.description,
+        (SELECT image_url FROM product_images
+         WHERE product_id = p.id
+         ORDER BY is_primary DESC, display_order ASC
+         LIMIT 1) as image_url
       FROM order_items oi
       INNER JOIN products p ON oi.product_id = p.id
       WHERE oi.purchase_order_id = $1
@@ -248,8 +260,8 @@ const getOrderById = async (req, res) => {
 
   } catch (error) {
     console.error('Error en getOrderById:', error);
-    res.status(500).json({ 
-      error: 'Error al obtener orden' 
+    res.status(500).json({
+      error: 'Error al obtener orden'
     });
   }
 };
@@ -393,8 +405,12 @@ const getAdminOrderById = async (req, res) => {
     const itemsResult = await pool.query(
       `SELECT
         oi.*,
-        p.sku,
-        p.name as product_name
+        p.sku as product_sku,
+        p.name as product_name,
+        (SELECT image_url FROM product_images
+         WHERE product_id = p.id
+         ORDER BY is_primary DESC, display_order ASC
+         LIMIT 1) as image_url
       FROM order_items oi
       INNER JOIN products p ON oi.product_id = p.id
       WHERE oi.purchase_order_id = $1
@@ -450,11 +466,165 @@ const getAllOrders = async (req, res) => {
   }
 };
 
+// =====================================================
+// UPDATE ORDER - Editar orden pendiente (solo cliente)
+// =====================================================
+const updateOrder = async (req, res) => {
+  const client = await pool.connect();
+
+  try {
+    const { client_id } = req.user;
+    const { id } = req.params;
+    const { customer_po, wanted_date, items } = req.body;
+
+    if (!validateNumericId(id)) {
+      return res.status(400).json({ error: 'ID de orden inválido' });
+    }
+
+    if (!client_id) {
+      return res.status(403).json({ error: 'Solo clientes pueden editar órdenes' });
+    }
+
+    await client.query('BEGIN');
+
+    // Verificar que la orden existe, pertenece al cliente y está pendiente
+    const orderCheck = await client.query(
+      'SELECT * FROM purchase_orders WHERE id = $1 AND client_id = $2 AND status = $3',
+      [id, client_id, 'pending']
+    );
+
+    if (orderCheck.rows.length === 0) {
+      await client.query('ROLLBACK');
+      return res.status(404).json({ error: 'Orden no encontrada o no editable' });
+    }
+
+    // Actualizar campos de cabecera si vienen
+    if (customer_po || wanted_date !== undefined) {
+      const updates = [];
+      const vals = [];
+      let idx = 1;
+      if (customer_po) { updates.push(`customer_po = $${idx++}`); vals.push(customer_po); }
+      if (wanted_date !== undefined) { updates.push(`wanted_date = $${idx++}`); vals.push(wanted_date || null); }
+      vals.push(id);
+      await client.query(
+        `UPDATE purchase_orders SET ${updates.join(', ')} WHERE id = $${idx}`,
+        vals
+      );
+    }
+
+    // Si vienen items, actualizar cantidades
+    if (items && Array.isArray(items)) {
+      let subtotal = 0;
+
+      for (const item of items) {
+        const { id: item_id, quantity } = item;
+
+        if (quantity <= 0) {
+          // Eliminar item si cantidad = 0
+          await client.query(
+            'DELETE FROM order_items WHERE id = $1 AND purchase_order_id = $2',
+            [item_id, id]
+          );
+        } else {
+          // Actualizar cantidad
+          const priceResult = await client.query(
+            'SELECT unit_price_initial FROM order_items WHERE id = $1',
+            [item_id]
+          );
+          const unit_price = priceResult.rows[0]?.unit_price_initial ?? 0;
+          const line_total = quantity * parseFloat(unit_price);
+          subtotal += line_total;
+
+          await client.query(
+            `UPDATE order_items
+             SET quantity_requested = $1, line_total_initial = $2
+             WHERE id = $3 AND purchase_order_id = $4`,
+            [quantity, line_total, item_id, id]
+          );
+        }
+      }
+
+      // Recalcular subtotal sumando todos los items que quedaron
+      const remainingResult = await client.query(
+        'SELECT SUM(line_total_initial) as total FROM order_items WHERE purchase_order_id = $1',
+        [id]
+      );
+      const newSubtotal = remainingResult.rows[0]?.total ?? 0;
+
+      await client.query(
+        'UPDATE purchase_orders SET subtotal_initial = $1 WHERE id = $2',
+        [newSubtotal, id]
+      );
+    }
+
+    await client.query('COMMIT');
+
+    res.json({ success: true, message: 'Orden actualizada exitosamente' });
+
+  } catch (error) {
+    await client.query('ROLLBACK');
+    console.error('Error en updateOrder:', error);
+    res.status(500).json({ error: 'Error al actualizar orden' });
+  } finally {
+    client.release();
+  }
+};
+
+// =====================================================
+// DELETE ORDER - Eliminar orden pendiente (solo cliente)
+// =====================================================
+const deleteOrder = async (req, res) => {
+  const client = await pool.connect();
+
+  try {
+    const { client_id } = req.user;
+    const { id } = req.params;
+
+    if (!validateNumericId(id)) {
+      return res.status(400).json({ error: 'ID de orden inválido' });
+    }
+
+    if (!client_id) {
+      return res.status(403).json({ error: 'Solo clientes pueden eliminar órdenes' });
+    }
+
+    await client.query('BEGIN');
+
+    // Verificar que la orden existe, pertenece al cliente y está pendiente
+    const orderCheck = await client.query(
+      'SELECT * FROM purchase_orders WHERE id = $1 AND client_id = $2 AND status = $3',
+      [id, client_id, 'pending']
+    );
+
+    if (orderCheck.rows.length === 0) {
+      await client.query('ROLLBACK');
+      return res.status(404).json({ error: 'Orden no encontrada o no se puede eliminar' });
+    }
+
+    // Eliminar items primero (FK), luego la orden
+    await client.query('DELETE FROM order_items WHERE purchase_order_id = $1', [id]);
+    await client.query('DELETE FROM purchase_orders WHERE id = $1', [id]);
+
+    await client.query('COMMIT');
+
+    res.json({ success: true, message: 'Orden eliminada exitosamente' });
+
+  } catch (error) {
+    await client.query('ROLLBACK');
+    console.error('Error en deleteOrder:', error);
+    res.status(500).json({ error: 'Error al eliminar orden' });
+  } finally {
+    client.release();
+  }
+};
+
 module.exports = {
   createOrder,
   getOrders,
   getOrderById,
   getAdminOrderById,
   confirmOrder,
-  getAllOrders
+  getAllOrders,
+  updateOrder,
+  deleteOrder
 };

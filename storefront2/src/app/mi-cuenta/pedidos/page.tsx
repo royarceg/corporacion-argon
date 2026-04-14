@@ -63,7 +63,8 @@ export default function PedidosPage() {
             ) : (
               <div>
                 {/* Table header */}
-                <div style={{ display: "grid", gridTemplateColumns: "1.5fr 1fr 1fr 1fr 1fr", gap: "16px", padding: "0 0 12px 0", borderBottom: "1px solid rgba(0,0,0,0.1)" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "48px 1.5fr 1fr 1fr 1fr 1fr", gap: "16px", padding: "0 0 12px 0", borderBottom: "1px solid rgba(0,0,0,0.1)" }}>
+                  <div />
                   {["Orden", "PO Cliente", "Fecha", "Estado", "Total"].map((h) => (
                     <p key={h} style={{ fontFamily: "Graphik, sans-serif", fontSize: "11px", fontWeight: 500, letterSpacing: "0.06em", textTransform: "uppercase", color: "rgba(0,0,0,0.4)", margin: 0 }}>{h}</p>
                   ))}
@@ -73,16 +74,36 @@ export default function PedidosPage() {
                   <div
                     key={order.id}
                     onClick={() => router.push(`/mi-cuenta/pedidos/${order.id}`)}
-                    style={{ display: "grid", gridTemplateColumns: "1.5fr 1fr 1fr 1fr 1fr", gap: "16px", padding: "16px 0", borderBottom: "1px solid rgba(0,0,0,0.06)", cursor: "pointer" }}
+                    style={{ display: "grid", gridTemplateColumns: "48px 1.5fr 1fr 1fr 1fr 1fr", gap: "16px", padding: "16px 0", borderBottom: "1px solid rgba(0,0,0,0.06)", cursor: "pointer", alignItems: "center" }}
                   >
-                    <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", fontWeight: 500, color: "#000", margin: 0 }}>{order.order_number}</p>
+                    {/* Thumbnail */}
+                    <div style={{ width: "48px", height: "48px", backgroundColor: "#f5f4f4", overflow: "hidden", flexShrink: 0 }}>
+                      {order.first_image_url && (
+                        <img
+                          src={order.first_image_url}
+                          alt={order.order_number}
+                          style={{ width: "100%", height: "100%", objectFit: "contain" }}
+                        />
+                      )}
+                    </div>
+
+                    <div>
+                      <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", fontWeight: 500, color: "#000", margin: "0 0 2px 0" }}>{order.order_number}</p>
+                      <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "11px", color: "rgba(0,0,0,0.4)", margin: 0 }}>
+                        {order.items_count} {Number(order.items_count) === 1 ? "producto" : "productos"}
+                      </p>
+                    </div>
+
                     <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.7)", margin: 0 }}>{order.customer_po}</p>
+
                     <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.7)", margin: 0 }}>
                       {new Date(order.created_at).toLocaleDateString("es-CR")}
                     </p>
+
                     <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "12px", fontWeight: 500, color: statusColor[order.status], margin: 0, textTransform: "uppercase", letterSpacing: "0.04em" }}>
                       {statusLabel[order.status]}
                     </p>
+
                     <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "#000", margin: 0 }}>
                       ₡{parseFloat(order.subtotal_confirmed ?? order.subtotal_initial).toLocaleString("es-CR")}
                     </p>
