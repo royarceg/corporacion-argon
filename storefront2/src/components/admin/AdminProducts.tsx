@@ -83,7 +83,7 @@ export default function AdminProducts() {
           {filtered.map((p) => (
             <div key={p.id} style={{ display: "grid", gridTemplateColumns: "0.5fr 1fr 2fr 1fr 1fr 0.8fr 1.2fr", gap: "12px", padding: "12px 0", borderBottom: "1px solid rgba(0,0,0,0.06)", alignItems: "center" }}>
               <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "12px", color: "rgba(0,0,0,0.4)", margin: 0 }}>{p.id}</p>
-              <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "12px", color: "rgba(0,0,0,0.6)", margin: 0, fontFamily: "monospace" }}>{p.sku}</p>
+              <p style={{ fontFamily: "monospace", fontSize: "12px", color: "rgba(0,0,0,0.6)", margin: 0 }}>{p.sku}</p>
               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                 {p.images?.[0] && <img src={p.images[0]} alt="" style={{ width: "32px", height: "32px", objectFit: "contain", borderRadius: "4px", backgroundColor: "#f5f4f4" }} />}
                 <p style={{ fontFamily: "Graphik, sans-serif", fontSize: "13px", color: "#000", margin: 0 }}>{p.name}</p>
