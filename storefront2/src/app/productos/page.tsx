@@ -79,8 +79,10 @@ function ProductosContent() {
   const displayed = useMemo(() => {
     let list = [...products];
     if (searchQuery.trim()) {
-      const q = searchQuery.trim().toLowerCase();
-      list = list.filter((p) => p.name.toLowerCase().includes(q) || (p.sku ?? "").toLowerCase().includes(q));
+      // Normalizar: minúsculas + quitar guiones/especiales para que "k9" encuentre "K-9"
+      const normalize = (s: string) => s.toLowerCase().replace(/[^a-z0-9\s]/g, "").replace(/\s+/g, " ").trim();
+      const q = normalize(searchQuery.trim());
+      list = list.filter((p) => normalize(p.name).includes(q) || normalize(p.sku ?? "").includes(q));
     }
     if (activeCategory !== "All") list = list.filter((p) => p.category === activeCategory);
     if (activeColors.length) list = list.filter((p) => p.colors.some((c) => activeColors.includes(c)));
