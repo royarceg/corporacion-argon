@@ -90,7 +90,7 @@ export default function Reveal({
   const Component = Tag as any;
 
   return (
-    <Component ref={ref} style={{ ...style, opacity: 0 }} className={className}>
+    <Component ref={ref} style={{ width: "100%", ...style, opacity: 0 }} className={className}>
       {children}
     </Component>
   );
