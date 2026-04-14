@@ -1,11 +1,11 @@
 import Image from "next/image";
 
 const products = [
-  { name: "GORRO CHAVITO PROTECTOR AZUL", img: "https://res.cloudinary.com/dj0i57kxn/image/upload/v1776101345/productos/GOC-01.png" },
-  { name: "NEUMÁTICO 21\"", img: "https://res.cloudinary.com/dj0i57kxn/image/upload/v1776101379/productos/NEU-21.png" },
-  { name: "PANTALÓN HOMBRE AZUL OSCURO", img: "https://res.cloudinary.com/dj0i57kxn/image/upload/v1776101388/productos/PAN-02.png" },
-  { name: "CADENA PIÑONES MOTO", img: "https://res.cloudinary.com/dj0i57kxn/image/upload/v1776101278/productos/CAD-SPRO.png" },
-  { name: "PARCHE K-9 LETRAS", img: "https://res.cloudinary.com/dj0i57kxn/image/upload/v1776101403/productos/PCH-04.png" },
+  { name: "GORRO CHAVITO PROTECTOR AZUL", img: "https://res.cloudinary.com/dj0i57kxn/image/upload/v1776101345/productos/GOC-01.png", href: "/productos/117" },
+  { name: "NEUMÁTICO 21\"", img: "https://res.cloudinary.com/dj0i57kxn/image/upload/v1776101379/productos/NEU-21.png", href: "/productos/135" },
+  { name: "PANTALÓN HOMBRE AZUL OSCURO", img: "https://res.cloudinary.com/dj0i57kxn/image/upload/v1776101388/productos/PAN-02.png", href: "/productos/148" },
+  { name: "CADENA PIÑONES MOTO", img: "https://res.cloudinary.com/dj0i57kxn/image/upload/v1776101278/productos/CAD-SPRO.png", href: "/productos/125" },
+  { name: "PARCHE K-9 LETRAS", img: "https://res.cloudinary.com/dj0i57kxn/image/upload/v1776101403/productos/PCH-04.png", href: "/productos/151" },
 ];
 
 export default function ProductRow() {
@@ -88,8 +88,10 @@ export default function ProductRow() {
             }}
           >
             {/* Product image */}
-            <div
+            <a
+              href={product.href}
               style={{
+                display: "block",
                 width: "251px",
                 height: "279px",
                 borderRadius: "4px",
@@ -104,7 +106,7 @@ export default function ProductRow() {
                 className="object-cover"
                 sizes="251px"
               />
-            </div>
+            </a>
             {/* Detail frame */}
             <div
               style={{
@@ -126,7 +128,7 @@ export default function ProductRow() {
               >
                 {product.name}
               </p>
-              <a href="/productos" className="cta-cotizar">
+              <a href={product.href} className="cta-cotizar">
                 Cotizar ya <span>→</span>
               </a>
             </div>
