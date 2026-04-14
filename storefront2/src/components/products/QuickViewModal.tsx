@@ -217,7 +217,7 @@ export default function QuickViewModal({ product: initialProduct, onClose }: Pro
             {images[selectedImage] ? (
               <img
                 src={images[selectedImage]}
-                alt={product.name}
+                alt={current.name}
                 style={{ width: "100%", height: "100%", objectFit: "contain" }}
               />
             ) : (
