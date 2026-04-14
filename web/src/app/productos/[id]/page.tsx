@@ -27,6 +27,7 @@ export default function ProductDetailPage() {
   const [qty, setQty] = useState(1);
   const [adding, setAdding] = useState(false);
   const [added, setAdded] = useState(false);
+  const [note, setNote] = useState("");
   const [openAccordion, setOpenAccordion] = useState<string | null>("descripcion");
   const [siblings, setSiblings] = useState<Sibling[]>([]);
   const [related, setRelated] = useState<ApiProduct[]>([]);
@@ -75,7 +76,7 @@ export default function ProductDetailPage() {
     setAdding(true);
     try {
       const variant = resolveVariant();
-      await addToCart(product.id, qty, variant?.id);
+      await addToCart(product.id, qty, variant?.id, note.trim() || undefined);
       setAdded(true);
       setTimeout(() => setAdded(false), 2500);
     } finally {
@@ -362,6 +363,24 @@ export default function ProductDetailPage() {
                   </svg>
                 </button>
               </div>
+            </div>
+
+            {/* Nota / Comentarios */}
+            <div style={{ marginBottom: "16px" }}>
+              <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "12px", fontWeight: 500, color: "#000", margin: "0 0 8px 0" }}>
+                Nota o especificación
+              </p>
+              <textarea
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+                placeholder="Ej: bordado con logo, color especial, cantidad exacta..."
+                rows={3}
+                style={{
+                  width: "100%", fontFamily: "StyreneA, sans-serif", fontSize: "12px",
+                  color: "#000", border: "1px solid rgba(0,0,0,0.15)", padding: "10px 12px",
+                  outline: "none", resize: "vertical", boxSizing: "border-box", lineHeight: 1.5,
+                }}
+              />
             </div>
 
             {/* Add to cart */}
