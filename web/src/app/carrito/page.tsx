@@ -18,7 +18,7 @@ export default function CarritoPage() {
   const router = useRouter();
 
   const [customerPo, setCustomerPo] = useState("");
-  const [wantedDate, setWantedDate] = useState("");
+  const [comments, setComments] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [related, setRelated] = useState<ApiProduct[]>([]);
@@ -63,8 +63,8 @@ export default function CarritoPage() {
     setSubmitting(true);
     setError("");
     try {
-      const orderItems = items.map((i) => ({ product_id: i.product_id, quantity: i.quantity }));
-      const result = await orderService.createOrder(customerPo.trim(), orderItems, wantedDate || undefined);
+      const orderItems = items.map((i) => ({ product_id: i.product_id, quantity: i.quantity, note: i.note || "" }));
+      const result = await orderService.createOrder(customerPo.trim(), orderItems, undefined, comments.trim() || undefined);
       await clearCart();
       router.push(`/mi-cuenta/pedidos/${result.id}?new=1`);
     } catch {
@@ -242,16 +242,17 @@ export default function CarritoPage() {
                   />
                 </div>
 
-                {/* Fecha */}
-                <div style={{ display: "flex", flexDirection: "column", gap: "6px", marginBottom: "20px" }}>
+                {/* Comentarios */}
+                <div style={{ display: "flex", flexDirection: "column", gap: "6px", marginBottom: "14px" }}>
                   <label style={{ fontFamily: "StyreneA, sans-serif", fontSize: "10px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "#000" }}>
-                    Fecha deseada de entrega
+                    Comentarios
                   </label>
-                  <input
-                    type="date"
-                    value={wantedDate}
-                    onChange={(e) => setWantedDate(e.target.value)}
-                    style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", border: "1px solid rgba(0,0,0,0.2)", padding: "10px 12px", outline: "none", width: "100%", boxSizing: "border-box" }}
+                  <textarea
+                    value={comments}
+                    onChange={(e) => setComments(e.target.value)}
+                    placeholder="Instrucciones especiales, cambios, observaciones..."
+                    rows={3}
+                    style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", border: "1px solid rgba(0,0,0,0.2)", padding: "10px 12px", outline: "none", width: "100%", boxSizing: "border-box", resize: "vertical" }}
                   />
                 </div>
 

@@ -32,6 +32,7 @@ export default function AdminUsers() {
   const [newClientName, setNewClientName] = useState("");
   const [newClientContact, setNewClientContact] = useState("");
   const [newClientEmail, setNewClientEmail] = useState("");
+  const [newClientPrefix, setNewClientPrefix] = useState("");
   const [newClientLoading, setNewClientLoading] = useState(false);
   const [newClientMsg, setNewClientMsg] = useState("");
 
@@ -102,18 +103,20 @@ export default function AdminUsers() {
   // Crear nueva empresa inline
   async function saveNewClient() {
     if (!newClientName.trim()) { setNewClientMsg("El nombre es requerido."); return; }
+    if (!newClientPrefix.trim()) { setNewClientMsg("El prefijo de orden es requerido (ej: OCD, OK9)."); return; }
     setNewClientLoading(true);
     setNewClientMsg("");
     try {
-      const created = await clientService.create(newClientName.trim(), newClientContact.trim() || undefined, newClientEmail.trim() || undefined);
+      const created = await clientService.create(newClientName.trim(), newClientContact.trim() || undefined, newClientEmail.trim() || undefined, newClientPrefix.trim().toUpperCase());
       setClients((prev) => [...prev, created].sort((a, b) => a.company_name.localeCompare(b.company_name)));
       setCreateForm((prev) => ({ ...prev, client_id: String(created.id) }));
       setNewClientOpen(false);
       setNewClientName("");
       setNewClientContact("");
       setNewClientEmail("");
-    } catch {
-      setNewClientMsg("Error al crear la empresa.");
+      setNewClientPrefix("");
+    } catch (e: any) {
+      setNewClientMsg(e?.response?.data?.error || "Error al crear la empresa.");
     }
     setNewClientLoading(false);
   }
@@ -290,6 +293,11 @@ export default function AdminUsers() {
                     <div>
                       <p style={labelStyle}>Email</p>
                       <input type="email" style={inputStyle} value={newClientEmail} onChange={(e) => setNewClientEmail(e.target.value)} placeholder="empresa@correo.com" />
+                    </div>
+                    <div>
+                      <p style={labelStyle}>Prefijo de Orden *</p>
+                      <input style={{ ...inputStyle, textTransform: "uppercase" }} value={newClientPrefix} onChange={(e) => setNewClientPrefix(e.target.value)} placeholder="ej: OCD, OK9, OFN" maxLength={5} />
+                      <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "10px", color: "rgba(0,0,0,0.35)", margin: "4px 0 0 0" }}>Se usará para generar órdenes: OCD-1, OCD-2...</p>
                     </div>
                     {newClientMsg && <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "12px", color: "#9c0f0f", margin: 0 }}>{newClientMsg}</p>}
                     <button

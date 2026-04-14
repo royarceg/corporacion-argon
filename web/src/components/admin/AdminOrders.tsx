@@ -84,7 +84,7 @@ export default function AdminOrders() {
               <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.7)", margin: 0 }}>{order.customer_po}</p>
               <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.7)", margin: 0 }}>{new Date(order.created_at).toLocaleDateString("es-CR")}</p>
               <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "11px", fontWeight: 600, color: statusColor[order.status], margin: 0, textTransform: "uppercase", letterSpacing: "0.04em" }}>{statusLabel[order.status]}</p>
-              <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "#000", margin: 0 }}>₡{parseFloat(order.subtotal_confirmed ?? order.subtotal_initial).toLocaleString("es-CR")}</p>
+              <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "#000", margin: 0 }}>${parseFloat(order.subtotal_confirmed ?? order.subtotal_initial).toLocaleString("en-US", { minimumFractionDigits: 2 })}</p>
             </div>
           ))}
         </>

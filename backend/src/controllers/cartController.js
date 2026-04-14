@@ -24,10 +24,11 @@ const getCart = async (req, res) => {
 
     // Obtener items del carrito con detalles
     const cartResult = await pool.query(
-      `SELECT 
+      `SELECT
         c.id as cart_item_id,
         c.quantity,
         c.unit_price,
+        c.note,
         c.added_at,
         c.updated_at,
         p.id as product_id,
@@ -96,7 +97,7 @@ const getCart = async (req, res) => {
 const addToCart = async (req, res) => {
   try {
     const { id: user_id, client_id } = req.user;
-    const { product_id, variant_id, quantity } = req.body;
+    const { product_id, variant_id, quantity, note } = req.body;
 
     if (!client_id) {
       return res.status(403).json({ 
@@ -189,10 +190,10 @@ const addToCart = async (req, res) => {
     } else {
       // Agregar nuevo item
       result = await pool.query(
-        `INSERT INTO cart_items (user_id, product_id, variant_id, quantity, unit_price)
-         VALUES ($1, $2, $3, $4, $5)
+        `INSERT INTO cart_items (user_id, product_id, variant_id, quantity, unit_price, note)
+         VALUES ($1, $2, $3, $4, $5, $6)
          RETURNING id`,
-        [user_id, product_id, variant_id || null, quantity, unit_price]
+        [user_id, product_id, variant_id || null, quantity, unit_price, note || '']
       );
 
       return res.status(201).json({

@@ -11,7 +11,7 @@ interface CartContextType {
   drawerOpen: boolean;
   openDrawer: () => void;
   closeDrawer: () => void;
-  addToCart: (product_id: number, quantity?: number, variant_id?: number) => Promise<void>;
+  addToCart: (product_id: number, quantity?: number, variant_id?: number, note?: string) => Promise<void>;
   updateItem: (cart_item_id: number, quantity: number) => Promise<void>;
   removeItem: (cart_item_id: number) => Promise<void>;
   clearCart: () => Promise<void>;
@@ -41,8 +41,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => { refresh(); }, [refresh]);
 
-  async function addToCart(product_id: number, quantity = 1, variant_id?: number) {
-    await cartService.addToCart(product_id, quantity, variant_id);
+  async function addToCart(product_id: number, quantity = 1, variant_id?: number, note?: string) {
+    await cartService.addToCart(product_id, quantity, variant_id, note);
     await refresh();
     setDrawerOpen(true);
     // Nota: si cartService.addToCart lanza, el error se propaga al llamador

@@ -23,7 +23,7 @@ export default function AnnouncementBar() {
           letterSpacing: "0.3px",
         }}
       >
-        Uniformes y equipo de seguridad para empresas · Envíos a todo el país · ¡Solicita tu cotización gratis!
+        Insumos y Uniformes para empresas · Envíos a todo el país · ¡Solicita tu cotización gratis!
       </p>
     </div>
   );

@@ -89,7 +89,7 @@ export default function AdminProducts() {
                 <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "#000", margin: 0 }}>{p.name}</p>
               </div>
               <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "12px", color: "rgba(0,0,0,0.6)", margin: 0 }}>{p.category}</p>
-              <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "12px", color: "#000", margin: 0 }}>₡{parseFloat(p.reference_price).toLocaleString("es-CR")}</p>
+              <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "12px", color: "#000", margin: 0 }}>${parseFloat(p.reference_price).toLocaleString("en-US", { minimumFractionDigits: 2 })}</p>
               <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "12px", color: "rgba(0,0,0,0.5)", margin: 0 }}>{p.variants?.length ?? 0}</p>
               <div style={{ display: "flex", gap: "6px" }}>
                 <button onClick={() => handleEdit(p.id)} style={{ fontFamily: "StyreneA, sans-serif", fontSize: "11px", color: "#000", border: "1px solid rgba(0,0,0,0.2)", background: "none", padding: "5px 10px", cursor: "pointer" }}>Editar</button>
@@ -197,7 +197,13 @@ function ProductEditModal({ product, isCreate, onClose, onSave }: {
     letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(0,0,0,0.5)", margin: "0 0 4px 0",
   };
 
-  const categories = ["UNIFORME", "ZAPATOS DE SEGURIDAD", "MOTOCICLETA", "SEGURIDAD", "PROTECCION", "HIGIENE", "PROMOCIONAL"];
+  const [customCategory, setCustomCategory] = useState("");
+  const [showNewCategory, setShowNewCategory] = useState(false);
+
+  // Categorías dinámicas: las existentes en productos + las hardcoded como fallback
+  const baseCategories = ["UNIFORME", "ZAPATOS DE SEGURIDAD", "MOTOCICLETA", "SEGURIDAD", "PROTECCION", "HIGIENE", "PROMOCIONAL", "PROTECTOR", "PARAGUAS", "ILUMINACION", "PUBLICIDAD EXTERIOR", "PROYECTOS EXTERNOS"];
+  const allCats = Array.from(new Set([...baseCategories, ...products.map((p) => p.category).filter(Boolean)])).sort();
+  const categories = allCats;
 
   return (
     <>
@@ -221,11 +227,30 @@ function ProductEditModal({ product, isCreate, onClose, onSave }: {
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
             <div><p style={labelStyle}>SKU *</p><input style={inputStyle} value={form.sku} onChange={(e) => set("sku", e.target.value)} /></div>
             <div>
-              <p style={labelStyle}>Categoría *</p>
-              <select style={inputStyle} value={form.category} onChange={(e) => set("category", e.target.value)}>
-                <option value="">Seleccionar...</option>
-                {categories.map((c) => <option key={c} value={c}>{c}</option>)}
-              </select>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <p style={labelStyle}>Categoría *</p>
+                <button type="button" onClick={() => setShowNewCategory(!showNewCategory)} style={{ fontFamily: "StyreneA, sans-serif", fontSize: "10px", color: "#000", background: "none", border: "none", cursor: "pointer", textDecoration: "underline", padding: 0 }}>
+                  {showNewCategory ? "Cancelar" : "+ Nueva"}
+                </button>
+              </div>
+              {showNewCategory ? (
+                <div style={{ display: "flex", gap: "6px" }}>
+                  <input
+                    style={{ ...inputStyle, flex: 1, textTransform: "uppercase" }}
+                    value={customCategory}
+                    onChange={(e) => setCustomCategory(e.target.value)}
+                    placeholder="Nombre de la nueva categoría"
+                  />
+                  <button type="button" onClick={() => { if (customCategory.trim()) { set("category", customCategory.trim().toUpperCase()); setShowNewCategory(false); setCustomCategory(""); } }} style={{ fontFamily: "StyreneA, sans-serif", fontSize: "11px", color: "#fff", backgroundColor: "#000", border: "none", padding: "0 14px", cursor: "pointer", whiteSpace: "nowrap" }}>
+                    Agregar
+                  </button>
+                </div>
+              ) : (
+                <select style={inputStyle} value={form.category} onChange={(e) => set("category", e.target.value)}>
+                  <option value="">Seleccionar...</option>
+                  {categories.map((c) => <option key={c} value={c}>{c}</option>)}
+                </select>
+              )}
             </div>
           </div>
           <div><p style={labelStyle}>Nombre *</p><input style={inputStyle} value={form.name} onChange={(e) => set("name", e.target.value)} /></div>

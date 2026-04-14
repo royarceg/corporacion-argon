@@ -49,13 +49,15 @@ export const orderService = {
 
   async createOrder(
     customer_po: string,
-    items: { product_id: number; quantity: number }[],
+    items: { product_id: number; quantity: number; note?: string }[],
     wanted_date?: string,
+    comments?: string,
   ): Promise<{ order_number: string; id: number }> {
     const { data } = await api.post<{ success: boolean; order: { id: number; order_number: string } }>("/orders", {
       customer_po,
       items,
       ...(wanted_date ? { wanted_date } : {}),
+      ...(comments ? { comments } : {}),
     });
     return data.order;
   },
@@ -71,8 +73,8 @@ export const orderService = {
     return data.orders;
   },
 
-  async confirmOrder(id: number, items: { id: number; quantity_confirmed: number; unit_price_confirmed: number }[]): Promise<void> {
-    await api.put(`/orders/${id}/confirm`, { items });
+  async confirmOrder(id: number, items: { id: number; quantity_confirmed: number; unit_price_confirmed: number }[], admin_comments?: string): Promise<void> {
+    await api.put(`/orders/${id}/confirm`, { items, admin_comments });
   },
 
   async updateOrder(

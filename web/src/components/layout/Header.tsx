@@ -8,8 +8,7 @@ import { useWishlist } from "@/context/WishlistContext";
 
 const navLinks = [
   { label: "Tienda", href: "/productos", hasDropdown: true },
-  { label: "Novedades", href: "/productos" },
-  { label: "Promociones", href: "/productos" },
+  { label: "Solicitar Producto", href: "/solicitar-producto" },
   { label: "Blog", href: "/blog" },
 ];
 
@@ -37,10 +36,8 @@ const dropdownColumns = [
     title: "Colecciones",
     links: [
       { label: "Chaleco Reflectivo", href: "/productos?q=chaleco+reflectivo" },
-      { label: "Chaleco Antibalas", href: "/productos?q=chaleco+antibalas" },
       { label: "Jacket", href: "/productos?q=jacket" },
       { label: "Capa Impermeable", href: "/productos?q=capa" },
-      { label: "Set UOT", href: "/productos?q=set+uot" },
       { label: "Camisa", href: "/productos?q=camisa" },
     ],
   },
@@ -160,13 +157,6 @@ export default function Header() {
                 <path d="m21 21-4.35-4.35" />
               </svg>
             </button>
-
-            <a
-              href="/sucursales"
-              style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", fontWeight: 400, color: "#000000", textDecoration: "none" }}
-            >
-              Sucursales
-            </a>
 
             <a
               href={isAuthenticated() ? (isAdmin() ? "/admin" : "/mi-cuenta") : "/login"}

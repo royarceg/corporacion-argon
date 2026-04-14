@@ -91,7 +91,7 @@ export default function PedidosPage() {
                     </p>
 
                     <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "#000", margin: 0 }}>
-                      ₡{parseFloat(order.subtotal_confirmed ?? order.subtotal_initial).toLocaleString("es-CR")}
+                      ${parseFloat(order.subtotal_confirmed ?? order.subtotal_initial).toLocaleString("en-US", { minimumFractionDigits: 2 })}
                     </p>
                   </div>
                 ))}

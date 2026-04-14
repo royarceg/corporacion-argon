@@ -7,6 +7,7 @@ export interface ApiClient {
   email: string;
   phone: string;
   address: string;
+  order_prefix: string;
   active: boolean;
 }
 
@@ -16,11 +17,12 @@ export const clientService = {
     return data.clients ?? data;
   },
 
-  create: async (company_name: string, contact_name?: string, email?: string): Promise<ApiClient> => {
+  create: async (company_name: string, contact_name?: string, email?: string, order_prefix?: string): Promise<ApiClient> => {
     const { data } = await api.post<{ success: boolean; client: ApiClient }>("/clients", {
       company_name,
       contact_name,
       email,
+      order_prefix,
     });
     return data.client;
   },

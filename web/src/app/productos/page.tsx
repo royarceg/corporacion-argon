@@ -4,6 +4,7 @@ import { useEffect, useState, useMemo, Suspense, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { animate, stagger } from "animejs";
 import { colorToHex } from "@/utils/colorToHex";
+import { fuzzyFilter } from "@/utils/fuzzySearch";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import { productService, ApiProduct } from "@/services/productService";
 import AnnouncementBar from "@/components/layout/AnnouncementBar";
@@ -76,10 +77,7 @@ function ProductosContent() {
   const displayed = useMemo(() => {
     let list = [...products];
     if (searchQuery.trim()) {
-      // Normalizar: minúsculas + quitar guiones/especiales para que "k9" encuentre "K-9"
-      const normalize = (s: string) => s.toLowerCase().replace(/[^a-z0-9\s]/g, "").replace(/\s+/g, " ").trim();
-      const q = normalize(searchQuery.trim());
-      list = list.filter((p) => normalize(p.name).includes(q) || normalize(p.sku ?? "").includes(q));
+      list = fuzzyFilter(list, searchQuery.trim());
     }
     if (activeCategory !== "All") list = list.filter((p) => p.category === activeCategory);
     if (activeColors.length) list = list.filter((p) => p.colors.some((c) => activeColors.includes(c)));

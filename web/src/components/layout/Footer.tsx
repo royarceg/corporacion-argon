@@ -45,7 +45,7 @@ export default function Footer() {
                 gap: "10px",
               }}
             >
-              {["Escríbenos", "Lun-Vie 8am-5pm"].map((item) => (
+              {["Escríbenos"].map((item) => (
                 <li
                   key={item}
                   style={{
@@ -87,8 +87,6 @@ export default function Footer() {
               }}
             >
               {[
-                "Iniciar Devolución",
-                "Política de Devolución",
                 "Preguntas Frecuentes",
                 "Catálogos",
                 "Compras Corporativas",

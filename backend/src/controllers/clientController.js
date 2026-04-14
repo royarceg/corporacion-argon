@@ -12,10 +12,11 @@ const { validateNumericId } = require('../middleware/validators');
 const getAllClients = async (req, res) => {
   try {
     const result = await pool.query(
-      `SELECT 
+      `SELECT
         id,
         company_name,
         email,
+        order_prefix,
         active
       FROM clients
       WHERE active = true
@@ -262,22 +263,32 @@ const unassignAllProductsFromClient = async (req, res) => {
 // =====================================================
 const createClient = async (req, res) => {
   try {
-    const { company_name, contact_name, email, phone, address } = req.body;
+    const { company_name, contact_name, email, phone, address, order_prefix } = req.body;
 
     if (!company_name || !company_name.trim()) {
       return res.status(400).json({ error: 'company_name es requerido' });
     }
+    if (!order_prefix || !order_prefix.trim()) {
+      return res.status(400).json({ error: 'order_prefix es requerido (ej: OCD, OK9)' });
+    }
+
+    // Verificar que el prefijo no esté en uso
+    const existing = await pool.query('SELECT id FROM clients WHERE order_prefix = $1', [order_prefix.trim().toUpperCase()]);
+    if (existing.rows.length > 0) {
+      return res.status(400).json({ error: 'Ese prefijo ya está en uso por otro cliente' });
+    }
 
     const result = await pool.query(
-      `INSERT INTO clients (company_name, contact_name, email, phone, address, active)
-       VALUES ($1, $2, $3, $4, $5, true)
-       RETURNING id, company_name, contact_name, email, phone, address, active`,
+      `INSERT INTO clients (company_name, contact_name, email, phone, address, order_prefix, active)
+       VALUES ($1, $2, $3, $4, $5, $6, true)
+       RETURNING id, company_name, contact_name, email, phone, address, order_prefix, active`,
       [
         company_name.trim(),
         contact_name?.trim() || null,
         email?.trim() || null,
         phone?.trim() || null,
         address?.trim() || null,
+        order_prefix.trim().toUpperCase(),
       ]
     );
 

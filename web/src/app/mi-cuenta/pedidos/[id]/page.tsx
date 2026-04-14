@@ -109,7 +109,7 @@ function PedidoDetailContent() {
   );
 
   const isPending = order.status === "pending";
-  const subtotal = parseFloat(order.subtotal_confirmed ?? order.subtotal_initial).toLocaleString("es-CR");
+  const subtotal = parseFloat(order.subtotal_confirmed ?? order.subtotal_initial).toLocaleString("en-US", { minimumFractionDigits: 2 });
 
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "#ffffff", display: "flex", flexDirection: "column", alignItems: "center" }}>
@@ -274,6 +274,28 @@ function PedidoDetailContent() {
               </div>
             )}
 
+            {/* Comentarios — trazabilidad */}
+            {((order as any).comments || (order as any).admin_comments) && (
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px", marginBottom: "24px" }}>
+                <div>
+                  <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "10px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(0,0,0,0.4)", margin: "0 0 6px 0" }}>
+                    Mis comentarios
+                  </p>
+                  <div style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "#000", border: "1px solid rgba(0,0,0,0.1)", padding: "12px", minHeight: "40px", backgroundColor: "#fafafa", lineHeight: 1.5 }}>
+                    {(order as any).comments || <span style={{ color: "rgba(0,0,0,0.3)" }}>—</span>}
+                  </div>
+                </div>
+                <div>
+                  <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "10px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(0,0,0,0.4)", margin: "0 0 6px 0" }}>
+                    Respuesta de ARGON
+                  </p>
+                  <div style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "#000", border: "1px solid rgba(0,0,0,0.1)", padding: "12px", minHeight: "40px", backgroundColor: "#fafafa", lineHeight: 1.5 }}>
+                    {(order as any).admin_comments || <span style={{ color: "rgba(0,0,0,0.3)" }}>Pendiente</span>}
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Items */}
             <div>
               <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "11px", fontWeight: 500, letterSpacing: "0.06em", textTransform: "uppercase", color: "rgba(0,0,0,0.4)", margin: "0 0 16px 0" }}>Productos</p>
@@ -358,10 +380,10 @@ function PedidoDetailContent() {
                     </div>
 
                     <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", margin: 0 }}>
-                      ₡{parseFloat(item.unit_price_confirmed ?? item.unit_price_initial).toLocaleString("es-CR")}
+                      ${parseFloat(item.unit_price_confirmed ?? item.unit_price_initial).toLocaleString("en-US", { minimumFractionDigits: 2 })}
                     </p>
                     <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", margin: 0 }}>
-                      ₡{parseFloat(item.line_total_confirmed ?? item.line_total_initial).toLocaleString("es-CR")}
+                      ${parseFloat(item.line_total_confirmed ?? item.line_total_initial).toLocaleString("en-US", { minimumFractionDigits: 2 })}
                     </p>
                   </div>
                 );
@@ -370,8 +392,8 @@ function PedidoDetailContent() {
               {/* Total */}
               <div style={{ display: "flex", justifyContent: "flex-end", paddingTop: "16px" }}>
                 <div style={{ display: "flex", gap: "40px" }}>
-                  <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.6)", margin: 0 }}>Total</p>
-                  <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "14px", fontWeight: 500, margin: 0 }}>₡{subtotal}</p>
+                  <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.6)", margin: 0 }}>Total por confirmar</p>
+                  <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "14px", fontWeight: 500, margin: 0 }}>${subtotal}</p>
                 </div>
               </div>
             </div>

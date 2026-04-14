@@ -12,6 +12,7 @@ export interface CartItem {
   color: string | null;
   size: string | null;
   line_total: string;
+  note: string;
 }
 
 export interface CartSummary {
@@ -37,14 +38,15 @@ export const cartService = {
         color: item.color ?? null,
         size: item.size ?? null,
         line_total: item.line_total ?? item.subtotal ?? "0",
+        note: item.note ?? "",
       })),
       total: raw.total ?? "0",
       items_count: raw.total_items ?? raw.items_count ?? 0,
     };
   },
 
-  async addToCart(product_id: number, quantity: number, variant_id?: number): Promise<void> {
-    await api.post("/cart", { product_id, quantity, variant_id });
+  async addToCart(product_id: number, quantity: number, variant_id?: number, note?: string): Promise<void> {
+    await api.post("/cart", { product_id, quantity, variant_id, note });
   },
 
   async updateItem(cart_item_id: number, quantity: number): Promise<void> {

@@ -47,7 +47,7 @@ export default function MiCuentaPage() {
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "16px" }}>
               {[
                 { label: "Items en carrito", value: count.toString() },
-                { label: "Subtotal carrito", value: `₡${parseFloat(total || "0").toLocaleString("es-CR")}` },
+                { label: "Subtotal carrito", value: `$${parseFloat(total || "0").toLocaleString("en-US", { minimumFractionDigits: 2 })}` },
                 { label: "Rol", value: user.role === "master_admin" ? "Administrador" : "Cliente" },
               ].map((stat) => (
                 <div key={stat.label} style={{ padding: "24px", border: "1px solid rgba(0,0,0,0.08)" }}>

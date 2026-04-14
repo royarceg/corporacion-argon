@@ -1,7 +1,7 @@
 export function formatPrice(value: number | string): string {
-  return parseFloat(String(value)).toLocaleString("es-CR", {
+  return parseFloat(String(value)).toLocaleString("en-US", {
     style: "currency",
-    currency: "CRC",
-    minimumFractionDigits: 0,
+    currency: "USD",
+    minimumFractionDigits: 2,
   });
 }

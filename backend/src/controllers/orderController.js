@@ -21,7 +21,7 @@ const createOrder = async (req, res) => {
   
   try {
     const { client_id, id: user_id } = req.user;
-    const { customer_po, wanted_date, items } = req.body;
+    const { customer_po, wanted_date, items, comments } = req.body;
 
     // Validar datos
     const errors = [];
@@ -54,16 +54,26 @@ const createOrder = async (req, res) => {
     // Iniciar transacción
     await client.query('BEGIN');
 
-    // Generar número de orden único
-    const orderNumber = 'MIWO' + Date.now().toString().slice(-7);
+    // Generar número de orden por cliente (prefijo desde DB)
+    const prefixResult = await client.query(
+      'SELECT order_prefix FROM clients WHERE id = $1',
+      [client_id]
+    );
+    const prefix = prefixResult.rows[0]?.order_prefix || 'ORD';
+    const countResult = await client.query(
+      'SELECT COUNT(*) as total FROM purchase_orders WHERE client_id = $1',
+      [client_id]
+    );
+    const nextNum = parseInt(countResult.rows[0].total) + 1;
+    const orderNumber = `${prefix}-${nextNum}`;
 
     // Crear la orden
     const orderResult = await client.query(
-      `INSERT INTO purchase_orders 
-        (order_number, client_id, user_id, customer_po, wanted_date, status, subtotal_initial) 
-       VALUES ($1, $2, $3, $4, $5, 'pending', 0) 
+      `INSERT INTO purchase_orders
+        (order_number, client_id, user_id, customer_po, wanted_date, comments, status, subtotal_initial)
+       VALUES ($1, $2, $3, $4, $5, $6, 'pending', 0)
        RETURNING *`,
-      [orderNumber, client_id, user_id, customer_po, wanted_date]
+      [orderNumber, client_id, user_id, customer_po, wanted_date, comments || '']
     );
 
     const order = orderResult.rows[0];
@@ -71,7 +81,7 @@ const createOrder = async (req, res) => {
 
     // Insertar items de la orden
     for (const item of items) {
-      const { product_id, quantity } = item;
+      const { product_id, quantity, note } = item;
 
       // Obtener precio de referencia del producto
       const priceResult = await client.query(
@@ -89,10 +99,10 @@ const createOrder = async (req, res) => {
 
       // Insertar item
       await client.query(
-        `INSERT INTO order_items 
-          (purchase_order_id, product_id, quantity_requested, unit_price_initial, line_total_initial) 
-         VALUES ($1, $2, $3, $4, $5)`,
-        [order.id, product_id, quantity, unit_price, line_total]
+        `INSERT INTO order_items
+          (purchase_order_id, product_id, quantity_requested, unit_price_initial, line_total_initial, note)
+         VALUES ($1, $2, $3, $4, $5, $6)`,
+        [order.id, product_id, quantity, unit_price, line_total, note || '']
       );
     }
 
@@ -274,7 +284,7 @@ const confirmOrder = async (req, res) => {
   
   try {
     const { id } = req.params;
-    const { items } = req.body;
+    const { items, admin_comments } = req.body;
 
     // Validar ID
     if (!validateNumericId(id)) {
@@ -336,12 +346,13 @@ const confirmOrder = async (req, res) => {
 
     // Actualizar orden
     await client.query(
-      `UPDATE purchase_orders 
-       SET status = 'confirmed', 
-           subtotal_confirmed = $1, 
-           confirmed_at = NOW() 
+      `UPDATE purchase_orders
+       SET status = 'confirmed',
+           subtotal_confirmed = $1,
+           admin_comments = COALESCE($3, admin_comments),
+           confirmed_at = NOW()
        WHERE id = $2`,
-      [subtotal_confirmed, id]
+      [subtotal_confirmed, id, admin_comments || null]
     );
 
     await client.query('COMMIT');
@@ -384,6 +395,7 @@ const getAdminOrderById = async (req, res) => {
       `SELECT
         po.*,
         u.user_name as created_by,
+        u.name as created_by_name,
         u.email as user_email,
         c.company_name,
         c.email as company_email,

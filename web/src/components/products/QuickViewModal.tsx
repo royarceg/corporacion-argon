@@ -32,6 +32,7 @@ export default function QuickViewModal({ product: initialProduct, onClose }: Pro
   const [added, setAdded] = useState(false);
   const [addError, setAddError] = useState<string | null>(null);
   const [siblings, setSiblings] = useState<Sibling[]>([]);
+  const [note, setNote] = useState("");
   const [swapping, setSwapping] = useState(false);
 
   const colors = current.colors ?? [];
@@ -100,7 +101,7 @@ export default function QuickViewModal({ product: initialProduct, onClose }: Pro
     setAddError(null);
     try {
       const variantId = resolveVariantId();
-      await addToCart(current.id, 1, variantId);
+      await addToCart(current.id, 1, variantId, note.trim() || undefined);
       setAdded(true);
       setTimeout(() => {
         setAdded(false);
@@ -481,6 +482,31 @@ export default function QuickViewModal({ product: initialProduct, onClose }: Pro
           >
             Ver Detalle Completo
           </a>
+
+          {/* Nota / Comentarios */}
+          <div style={{ marginTop: "4px" }}>
+            <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "11px", fontWeight: 500, color: "rgba(0,0,0,0.5)", margin: "0 0 6px 0", letterSpacing: "0.04em", textTransform: "uppercase" }}>
+              Nota o especificación
+            </p>
+            <textarea
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+              placeholder="Ej: bordado con logo, color especial, cantidad exacta..."
+              rows={3}
+              style={{
+                width: "100%",
+                fontFamily: "StyreneA, sans-serif",
+                fontSize: "12px",
+                color: "#000",
+                border: "1px solid rgba(0,0,0,0.15)",
+                padding: "10px 12px",
+                outline: "none",
+                resize: "vertical",
+                boxSizing: "border-box",
+                lineHeight: 1.5,
+              }}
+            />
+          </div>
         </div>
       </div>
     </>
