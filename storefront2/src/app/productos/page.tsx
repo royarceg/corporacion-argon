@@ -143,16 +143,38 @@ function ProductosContent() {
       <main style={{ width: "100%", maxWidth: "1400px", padding: "32px 40px", flex: 1 }}>
 
         {/* Page title */}
-        <h1 style={{
-          fontFamily: "Graphik, sans-serif",
-          fontSize: "24px",
-          fontWeight: 400,
-          color: "#000",
-          margin: "0 0 20px 0",
-          letterSpacing: "-0.01em",
-        }}>
-          {searchQuery.trim() ? `Resultados para "${searchQuery.trim()}"` : "Catálogo"}
-        </h1>
+        <div style={{ display: "flex", alignItems: "center", gap: "16px", margin: "0 0 20px 0" }}>
+          <h1 style={{
+            fontFamily: "Graphik, sans-serif",
+            fontSize: "24px",
+            fontWeight: 400,
+            color: "#000",
+            margin: 0,
+            letterSpacing: "-0.01em",
+          }}>
+            {searchQuery.trim() ? `Resultados para "${searchQuery.trim()}"` : "Catálogo"}
+          </h1>
+          {searchQuery.trim() && (
+            <button
+              onClick={() => router.replace("/productos")}
+              style={{
+                fontFamily: "Graphik, sans-serif",
+                fontSize: "12px",
+                color: "rgba(0,0,0,0.5)",
+                background: "none",
+                border: "1px solid rgba(0,0,0,0.2)",
+                borderRadius: "100px",
+                padding: "4px 12px",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+              }}
+            >
+              ✕ Limpiar búsqueda
+            </button>
+          )}
+        </div>
 
         {/* Filters row */}
         <div style={{
