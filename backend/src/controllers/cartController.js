@@ -242,20 +242,7 @@ const updateCartItem = async (req, res) => {
       });
     }
 
-    // Si tiene variante, verificar stock
-    if (itemCheck.rows[0].variant_id) {
-      const stockCheck = await pool.query(
-        `SELECT stock_quantity FROM product_variants WHERE id = $1`,
-        [itemCheck.rows[0].variant_id]
-      );
-
-      if (stockCheck.rows[0].stock_quantity < quantity) {
-        return res.status(400).json({ 
-          error: 'Stock insuficiente',
-          available_stock: stockCheck.rows[0].stock_quantity
-        });
-      }
-    }
+    // Stock check omitido: plataforma B2B — ARGON confirma disponibilidad antes de procesar
 
     // Actualizar cantidad
     const result = await pool.query(
