@@ -53,6 +53,10 @@ export const cartService = {
     await api.put(`/cart/${cart_item_id}`, { quantity });
   },
 
+  async updateItemNote(cart_item_id: number, note: string): Promise<void> {
+    await api.put(`/cart/${cart_item_id}`, { note });
+  },
+
   async removeItem(cart_item_id: number): Promise<void> {
     await api.delete(`/cart/${cart_item_id}`);
   },

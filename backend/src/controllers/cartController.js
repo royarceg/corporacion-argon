@@ -218,11 +218,20 @@ const updateCartItem = async (req, res) => {
   try {
     const { id: user_id } = req.user;
     const { cart_item_id } = req.params;
-    const { quantity } = req.body;
+    const { quantity, note } = req.body;
 
     // Validar ID del item
     if (!validateNumericId(cart_item_id)) {
       return res.status(400).json({ error: 'ID de item inválido' });
+    }
+
+    // Si solo viene note (sin quantity), actualizar solo la nota
+    if (note !== undefined && !quantity) {
+      await pool.query(
+        'UPDATE cart_items SET note = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2 AND user_id = $3',
+        [note, cart_item_id, user_id]
+      );
+      return res.json({ success: true, message: 'Nota actualizada' });
     }
 
     // Validar cantidad

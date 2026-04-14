@@ -7,6 +7,7 @@ import { useCart } from "@/context/CartContext";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import { formatPrice } from "@/utils/formatPrice";
 import { orderService } from "@/services/orderService";
+import { cartService } from "@/services/cartService";
 import { productService, ApiProduct } from "@/services/productService";
 import AnnouncementBar from "@/components/layout/AnnouncementBar";
 import Header from "@/components/layout/Header";
@@ -195,6 +196,27 @@ export default function CarritoPage() {
                     >
                       <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
                     </button>
+                  </div>
+
+                  {/* Nota */}
+                  <div style={{ padding: "0 16px 10px" }}>
+                    <textarea
+                      defaultValue={item.note || ""}
+                      onBlur={(e) => {
+                        const val = e.target.value.trim();
+                        if (val !== (item.note || "")) {
+                          cartService.updateItemNote(item.id, val);
+                        }
+                      }}
+                      placeholder="Nota: bordado, color especial, cambios..."
+                      rows={2}
+                      style={{
+                        width: "100%", fontFamily: "StyreneA, sans-serif", fontSize: "11px",
+                        color: "#000", border: "1px solid rgba(0,0,0,0.1)", padding: "8px 10px",
+                        outline: "none", resize: "none", boxSizing: "border-box", lineHeight: 1.4,
+                        backgroundColor: item.note ? "#fffff0" : "transparent",
+                      }}
+                    />
                   </div>
 
                   {/* Subtotal */}
