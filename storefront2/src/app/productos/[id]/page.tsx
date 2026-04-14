@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
-import { productService, ApiProductDetail, ApiVariant } from "@/services/productService";
+import { productService, ApiProduct, ApiProductDetail, ApiVariant } from "@/services/productService";
 import { siblingService, Sibling } from "@/services/siblingService";
 import { animate } from "animejs";
 import AnnouncementBar from "@/components/layout/AnnouncementBar";
@@ -26,8 +26,10 @@ export default function ProductDetailPage() {
   const [added, setAdded] = useState(false);
   const [openAccordion, setOpenAccordion] = useState<string | null>("descripcion");
   const [siblings, setSiblings] = useState<Sibling[]>([]);
+  const [related, setRelated] = useState<ApiProduct[]>([]);
   const imagesRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
+  const relatedRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!loading && !isAuthenticated()) router.replace("/login");
@@ -46,6 +48,17 @@ export default function ProductDetailPage() {
       siblingService.getForProduct(Number(id))
         .then(setSiblings)
         .catch(() => setSiblings([]));
+
+      productService.getProducts()
+        .then((all) => {
+          const pid = Number(id);
+          const current = all.find((p) => p.id === pid);
+          const sameCat = all.filter((p) => p.id !== pid && p.category === current?.category);
+          const others = all.filter((p) => p.id !== pid && p.category !== current?.category);
+          const picks = [...sameCat, ...others].slice(0, 5);
+          setRelated(picks);
+        })
+        .catch(() => setRelated([]));
     }
   }, [id, loading, isAuthenticated, router]);
 
@@ -438,6 +451,67 @@ export default function ProductDetailPage() {
 
           </div>
         </div>
+
+        {/* ── Productos relacionados ── */}
+        {related.length > 0 && (
+          <div style={{ marginTop: "80px", borderTop: "1px solid rgba(0,0,0,0.08)", paddingTop: "48px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "28px" }}>
+              <h2 style={{ fontFamily: "StyreneA, sans-serif", fontSize: "20px", fontWeight: 400, color: "#000", margin: 0, letterSpacing: "-0.01em" }}>
+                Completá tu pedido
+              </h2>
+              <a href="/productos" style={{ fontFamily: "StyreneA, sans-serif", fontSize: "12px", color: "#000", textDecoration: "none", letterSpacing: "0.08em", textTransform: "uppercase", borderBottom: "1px solid #000", paddingBottom: "2px" }}>
+                Ver todo →
+              </a>
+            </div>
+            <style>{`
+              .related-card { position: relative; }
+              .related-card .related-cta { opacity: 0; transition: opacity 0.2s; }
+              .related-card:hover .related-cta { opacity: 1; }
+              .related-card:hover .related-img { transform: scale(1.03); }
+              .related-img { transition: transform 0.4s ease; }
+            `}</style>
+            <div ref={relatedRef} style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "16px" }}>
+              {related.map((p) => (
+                <a
+                  key={p.id}
+                  href={`/productos/${p.id}`}
+                  className="related-card"
+                  style={{ textDecoration: "none", display: "flex", flexDirection: "column", gap: "10px" }}
+                >
+                  <div style={{ aspectRatio: "3/4", backgroundColor: "#f5f4f4", overflow: "hidden", position: "relative" }}>
+                    {p.images?.[0] && (
+                      <img className="related-img" src={p.images[0]} alt={p.name} style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+                    )}
+                    <div
+                      className="related-cta"
+                      style={{
+                        position: "absolute",
+                        bottom: "12px",
+                        left: "12px",
+                        right: "12px",
+                        backgroundColor: "#000",
+                        color: "#fff",
+                        fontFamily: "StyreneA, sans-serif",
+                        fontSize: "10px",
+                        fontWeight: 500,
+                        letterSpacing: "0.1em",
+                        textTransform: "uppercase",
+                        textAlign: "center",
+                        padding: "10px",
+                      }}
+                    >
+                      Ver producto
+                    </div>
+                  </div>
+                  <div>
+                    <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "12px", fontWeight: 500, color: "#000", margin: "0 0 2px 0", lineHeight: 1.3 }}>{p.name}</p>
+                    <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "10px", color: "rgba(0,0,0,0.4)", letterSpacing: "0.06em", textTransform: "uppercase", margin: 0 }}>{p.category}</p>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
       </main>
 
       <Footer />
