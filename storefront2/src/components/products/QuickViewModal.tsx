@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { ApiProduct, ApiVariant, productService } from "@/services/productService";
 import { useCart } from "@/context/CartContext";
@@ -114,22 +114,38 @@ export default function QuickViewModal({ product: initialProduct, onClose }: Pro
   }
 
   const skuVariant = resolveSkuVariant();
+  const modalRef = useRef<HTMLDivElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (overlayRef.current) {
+      animate(overlayRef.current, { opacity: [0, 1], duration: 300, ease: "outQuad" });
+    }
+    if (modalRef.current) {
+      animate(modalRef.current, {
+        opacity: [0, 1], scale: [0.96, 1], duration: 400, ease: "outExpo",
+      });
+    }
+  }, []);
 
   return (
     <>
       {/* Overlay */}
       <div
+        ref={overlayRef}
         onClick={onClose}
         style={{
           position: "fixed",
           inset: 0,
           backgroundColor: "rgba(0,0,0,0.45)",
           zIndex: 200,
+          opacity: 0,
         }}
       />
 
       {/* Modal */}
       <div
+        ref={modalRef}
         style={{
           position: "fixed",
           top: "50%",
@@ -141,6 +157,7 @@ export default function QuickViewModal({ product: initialProduct, onClose }: Pro
           maxHeight: "90vh",
           display: "flex",
           overflow: "hidden",
+          opacity: 0,
         }}
       >
         {/* Close button */}

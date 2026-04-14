@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { animate, stagger } from "animejs";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
 import { orderService } from "@/services/orderService";
@@ -34,6 +35,27 @@ export default function CarritoPage() {
       }).catch(() => {});
     }
   }, [loading, isAuthenticated, items]);
+
+  const gridRef = useRef<HTMLDivElement>(null);
+  const summaryRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!loading && items.length > 0) {
+      if (gridRef.current) {
+        const cards = gridRef.current.children;
+        Array.from(cards).forEach((c) => { (c as HTMLElement).style.opacity = "0"; });
+        animate(cards, {
+          opacity: [0, 1], translateY: [20, 0], duration: 500,
+          delay: stagger(80), ease: "outExpo",
+        });
+      }
+      if (summaryRef.current) {
+        animate(summaryRef.current, {
+          opacity: [0, 1], translateX: [20, 0], duration: 600, delay: 200, ease: "outExpo",
+        });
+      }
+    }
+  }, [loading, items.length]);
 
   if (loading) return null;
 
@@ -96,7 +118,7 @@ export default function CarritoPage() {
           <div style={{ display: "grid", gridTemplateColumns: "1fr 320px", gap: "48px", alignItems: "start" }}>
 
             {/* ── Items ── */}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "16px" }}>
+            <div ref={gridRef} style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "16px" }}>
               {items.map((item) => (
                 <div
                   key={item.id}
@@ -192,7 +214,7 @@ export default function CarritoPage() {
             </div>
 
             {/* ── Panel derecho: Order Summary ── */}
-            <div style={{ position: "sticky", top: "24px" }}>
+            <div ref={summaryRef} style={{ position: "sticky", top: "24px", opacity: 0 }}>
               <div style={{ border: "1px solid rgba(0,0,0,0.12)", padding: "24px" }}>
 
                 <h2 style={{ fontFamily: "StyreneA, sans-serif", fontSize: "14px", fontWeight: 400, color: "#000", margin: "0 0 20px 0", textAlign: "center" }}>

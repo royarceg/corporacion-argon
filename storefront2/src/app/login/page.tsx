@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import { animate } from "animejs";
 import AnnouncementBar from "@/components/layout/AnnouncementBar";
 
 export default function LoginPage() {
@@ -14,6 +15,18 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const formRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (formRef.current) {
+      animate(formRef.current, {
+        opacity: [0, 1],
+        translateY: [24, 0],
+        duration: 700,
+        ease: "outExpo",
+      });
+    }
+  }, []);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -82,11 +95,13 @@ export default function LoginPage() {
         }}
       >
         <div
+          ref={formRef}
           style={{
             width: "100%",
             maxWidth: "420px",
             backgroundColor: "#ffffff",
             padding: "48px 40px",
+            opacity: 0,
           }}
         >
           {/* Title */}

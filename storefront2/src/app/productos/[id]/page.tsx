@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
 import { productService, ApiProductDetail, ApiVariant } from "@/services/productService";
 import { siblingService, Sibling } from "@/services/siblingService";
+import { animate } from "animejs";
 import AnnouncementBar from "@/components/layout/AnnouncementBar";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -25,6 +26,8 @@ export default function ProductDetailPage() {
   const [added, setAdded] = useState(false);
   const [openAccordion, setOpenAccordion] = useState<string | null>("descripcion");
   const [siblings, setSiblings] = useState<Sibling[]>([]);
+  const imagesRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!loading && !isAuthenticated()) router.replace("/login");
@@ -67,6 +70,18 @@ export default function ProductDetailPage() {
       setAdding(false);
     }
   }
+
+  // Animate on load
+  useEffect(() => {
+    if (!fetching && product) {
+      if (imagesRef.current) {
+        animate(imagesRef.current, { opacity: [0, 1], translateX: [-20, 0], duration: 600, ease: "outExpo" });
+      }
+      if (panelRef.current) {
+        animate(panelRef.current, { opacity: [0, 1], translateX: [20, 0], duration: 600, delay: 100, ease: "outExpo" });
+      }
+    }
+  }, [fetching, product]);
 
   if (loading || fetching || !product) {
     return (
@@ -115,7 +130,7 @@ export default function ProductDetailPage() {
         }}>
 
           {/* ── LEFT: imágenes apiladas ── */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+          <div ref={imagesRef} style={{ display: "flex", flexDirection: "column", gap: "4px", opacity: 0 }}>
             {images.length > 0 ? images.map((img, i) => (
               <div
                 key={i}
@@ -138,7 +153,7 @@ export default function ProductDetailPage() {
           </div>
 
           {/* ── RIGHT: panel sticky ── */}
-          <div style={{ position: "sticky", top: "32px", display: "flex", flexDirection: "column", gap: "0" }}>
+          <div ref={panelRef} style={{ position: "sticky", top: "32px", display: "flex", flexDirection: "column", gap: "0", opacity: 0 }}>
 
             {/* Breadcrumb */}
             <p style={{

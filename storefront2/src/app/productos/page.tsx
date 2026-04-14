@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState, useMemo, Suspense } from "react";
+import { useEffect, useState, useMemo, Suspense, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { animate, stagger } from "animejs";
 import { useAuth } from "@/context/AuthContext";
 import { productService, ApiProduct } from "@/services/productService";
 import AnnouncementBar from "@/components/layout/AnnouncementBar";
@@ -307,7 +308,7 @@ function ProductosContent() {
             {searchQuery.trim() ? `Sin resultados para "${searchQuery.trim()}".` : "No se encontraron productos."}
           </p>
         ) : (
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "40px 20px" }}>
+          <ProductGridAnimated>
             {displayed.map((product) => (
               <ProductCard
                 key={product.id}
@@ -316,7 +317,7 @@ function ProductosContent() {
                 onAddToCart={(p) => addToCart(p.id)}
               />
             ))}
-          </div>
+          </ProductGridAnimated>
         )}
       </main>
 
@@ -463,6 +464,30 @@ function ProductosContent() {
           onClose={() => setQuickViewProduct(null)}
         />
       )}
+    </div>
+  );
+}
+
+function ProductGridAnimated({ children }: { children: React.ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (ref.current) {
+      const cards = ref.current.children;
+      Array.from(cards).forEach((c) => { (c as HTMLElement).style.opacity = "0"; });
+      animate(cards, {
+        opacity: [0, 1],
+        translateY: [20, 0],
+        duration: 500,
+        delay: stagger(40),
+        ease: "outExpo",
+      });
+    }
+  }, [children]);
+
+  return (
+    <div ref={ref} style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "40px 20px" }}>
+      {children}
     </div>
   );
 }
