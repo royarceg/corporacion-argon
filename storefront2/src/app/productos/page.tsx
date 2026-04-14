@@ -27,6 +27,9 @@ function ProductosContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  const searchQuery = searchParams.get("q") ?? "";
+  const catParam = searchParams.get("cat") ?? "";
+
   const [products, setProducts] = useState<ApiProduct[]>([]);
   const [fetching, setFetching] = useState(true);
   const [activeCategory, setActiveCategory] = useState(catParam || "All");
@@ -36,9 +39,6 @@ function ProductosContent() {
   const [activeColors, setActiveColors] = useState<string[]>([]);
   const [activeSizes, setActiveSizes] = useState<string[]>([]);
   const [quickViewProduct, setQuickViewProduct] = useState<ApiProduct | null>(null);
-
-  const searchQuery = searchParams.get("q") ?? "";
-  const catParam = searchParams.get("cat") ?? "";
   const { addToCart } = useCart();
   const { wishlistedIds } = useWishlist();
 
