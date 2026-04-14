@@ -122,7 +122,7 @@ export default function ShoppingBagDrawer() {
                       style={{
                         fontFamily: "Graphik, sans-serif",
                         fontSize: "12px",
-                        width: "40px",
+                        width: `${Math.max(40, String(item.quantity).length * 10 + 16)}px`,
                         textAlign: "center",
                         borderTop: "none",
                         borderBottom: "none",
