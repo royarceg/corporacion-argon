@@ -45,7 +45,18 @@ export const productService = {
 
   async getAllAdmin(): Promise<ApiProduct[]> {
     const { data } = await api.get("/products/admin/all");
-    return data.products ?? data;
+    const raw = data.products ?? data;
+    return raw.map((p: any) => ({
+      id: p.id,
+      sku: p.sku,
+      name: p.name,
+      description: p.description || "",
+      category: p.category,
+      price: p.reference_price ?? p.price ?? "0",
+      images: p.image_url ? [p.image_url] : (p.images ?? []),
+      colors: p.colors ?? [],
+      sizes: p.sizes ?? [],
+    }));
   },
 
   async searchProducts(query: string): Promise<ApiProduct[]> {
