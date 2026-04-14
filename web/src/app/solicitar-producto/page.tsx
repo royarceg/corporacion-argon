@@ -24,14 +24,10 @@ export default function SolicitarProductoPage() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (!loading && !isAuthenticated()) router.replace("/login");
-  }, [loading, isAuthenticated, router]);
-
-  useEffect(() => {
-    if (formRef.current) {
+    if (!loading && formRef.current) {
       animate(formRef.current, { opacity: [0, 1], translateY: [20, 0], duration: 600, ease: "outExpo" });
     }
-  }, []);
+  }, [loading]);
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
