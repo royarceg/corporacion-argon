@@ -1,8 +1,8 @@
 const cards = [
-  { img: "/images/web/banner-guantes.jpg", label: "Protección personal", title: ["Guantes", "e Higiene"], href: "/productos" },
-  { img: "/images/web/banner-uniforme.jpg", label: "Ropa laboral", title: ["Uniformes", "Corporativos"], href: "/productos" },
-  { img: "/images/web/banner-bujias.jpg", label: "Movilidad", title: ["Accesorios", "para Moto"], href: "/productos" },
-  { img: "/images/web/banner-bulto.jpg", label: "Equipamiento", title: ["Artículos", "Promocionales"], href: "/productos" },
+  { img: "/images/web/banner-guantes.jpg", label: "Protección personal", title: ["Guantes", "e Higiene"], href: "/productos?cat=HIGIENE" },
+  { img: "/images/web/banner-uniforme.jpg", label: "Ropa laboral", title: ["Uniformes", "Corporativos"], href: "/productos?cat=UNIFORME" },
+  { img: "/images/web/banner-bujias.jpg", label: "Movilidad", title: ["Accesorios", "para Moto"], href: "/productos?cat=MOTOCICLETA" },
+  { img: "/images/web/banner-bulto.jpg", label: "Equipamiento", title: ["Artículos", "Promocionales"], href: "/productos?cat=PROMOCIONALES" },
 ];
 
 export default function QuoteSection() {
