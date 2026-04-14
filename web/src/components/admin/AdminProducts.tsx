@@ -105,6 +105,7 @@ export default function AdminProducts() {
         <ProductEditModal
           product={editProduct}
           isCreate={isCreate}
+          existingCategories={Array.from(new Set(products.map((p) => p.category).filter(Boolean)))}
           onClose={() => setEditProduct(null)}
           onSave={handleSave}
         />
@@ -116,9 +117,10 @@ export default function AdminProducts() {
 /* ═══════════════════════════════════════════════════════
    Product Edit Modal
    ═══════════════════════════════════════════════════════ */
-function ProductEditModal({ product, isCreate, onClose, onSave }: {
+function ProductEditModal({ product, isCreate, existingCategories, onClose, onSave }: {
   product: AdminProduct;
   isCreate: boolean;
+  existingCategories: string[];
   onClose: () => void;
   onSave: (payload: ProductPayload) => Promise<void>;
 }) {
@@ -202,7 +204,7 @@ function ProductEditModal({ product, isCreate, onClose, onSave }: {
 
   // Categorías dinámicas: las existentes en productos + las hardcoded como fallback
   const baseCategories = ["UNIFORME", "ZAPATOS DE SEGURIDAD", "MOTOCICLETA", "SEGURIDAD", "PROTECCION", "HIGIENE", "PROMOCIONAL", "PROTECTOR", "PARAGUAS", "ILUMINACION", "PUBLICIDAD EXTERIOR", "PROYECTOS EXTERNOS"];
-  const allCats = Array.from(new Set([...baseCategories, ...products.map((p) => p.category).filter(Boolean)])).sort();
+  const allCats = Array.from(new Set([...baseCategories, ...existingCategories])).sort();
   const categories = allCats;
 
   return (
