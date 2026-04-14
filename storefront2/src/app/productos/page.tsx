@@ -191,7 +191,12 @@ function ProductosContent() {
             {categories.map((cat) => (
               <button
                 key={cat}
-                onClick={() => setActiveCategory(cat)}
+                onClick={() => {
+                  setActiveCategory(cat);
+                  if (searchQuery.trim()) {
+                    router.replace(cat === "All" ? "/productos" : `/productos?cat=${encodeURIComponent(cat)}`);
+                  }
+                }}
                 style={{
                   fontFamily: "Graphik, sans-serif",
                   fontSize: "13px",
