@@ -28,6 +28,7 @@ export default function QuickViewModal({ product: initialProduct, onClose }: Pro
     initialProduct.colors?.[0] ?? null
   );
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
+  const [qty, setQty] = useState(1);
   const [adding, setAdding] = useState(false);
   const [added, setAdded] = useState(false);
   const [addError, setAddError] = useState<string | null>(null);
@@ -101,7 +102,7 @@ export default function QuickViewModal({ product: initialProduct, onClose }: Pro
     setAddError(null);
     try {
       const variantId = resolveVariantId();
-      await addToCart(current.id, 1, variantId, note.trim() || undefined);
+      await addToCart(current.id, qty, variantId, note.trim() || undefined);
       setAdded(true);
       setTimeout(() => {
         setAdded(false);
@@ -429,6 +430,21 @@ export default function QuickViewModal({ product: initialProduct, onClose }: Pro
               )}
             </div>
           )}
+
+          {/* Cantidad */}
+          <div>
+            <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "12px", fontWeight: 500, color: "#000", margin: "0 0 8px 0" }}>Cantidad:</p>
+            <div style={{ display: "flex", alignItems: "center", gap: "0" }}>
+              <button onClick={() => setQty(Math.max(1, qty - 1))} style={{ width: "32px", height: "32px", border: "1px solid rgba(0,0,0,0.15)", background: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2"><line x1="5" y1="12" x2="19" y2="12" /></svg>
+              </button>
+              <input type="number" min="1" value={qty} onChange={(e) => { const v = parseInt(e.target.value); if (!isNaN(v) && v >= 1) setQty(v); }}
+                style={{ width: "50px", height: "32px", border: "1px solid rgba(0,0,0,0.15)", borderLeft: "none", borderRight: "none", textAlign: "center", fontFamily: "StyreneA, sans-serif", fontSize: "13px", outline: "none", MozAppearance: "textfield" } as React.CSSProperties} />
+              <button onClick={() => setQty(qty + 1)} style={{ width: "32px", height: "32px", border: "1px solid rgba(0,0,0,0.15)", background: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
+              </button>
+            </div>
+          </div>
 
           {/* Add to Bag */}
           <button
