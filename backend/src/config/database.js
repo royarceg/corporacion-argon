@@ -10,15 +10,12 @@ require('dotenv').config();
 // mantiene varias conexiones abiertas y reutilizables (rápido)
 
 const pool = new Pool({
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT,
-  database: process.env.DB_NAME,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  max: 10, // Máximo 10 conexiones simultáneas (optimizado para Railway)
-  min: 2, // Mínimo 2 conexiones siempre abiertas
-  idleTimeoutMillis: 30000, // Cierra conexiones inactivas después de 30 segundos
-  connectionTimeoutMillis: 10000, // Timeout de 10 segundos si no puede conectar
+  connectionString: process.env.DATABASE_URL,
+  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+  max: 10,
+  min: 2,
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 10000,
 });
 
 // Verificar conexión SOLO al iniciar (no en cada query)
