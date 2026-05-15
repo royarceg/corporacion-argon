@@ -1,11 +1,11 @@
 import Image from "next/image";
 
 const products = [
-  { name: "GORRO CHAVITO PROTECTOR AZUL", img: "https://res.cloudinary.com/dj0i57kxn/image/upload/v1776101345/productos/GOC-01.png", href: "/productos/117" },
-  { name: "NEUMÁTICO 21\"", img: "https://res.cloudinary.com/dj0i57kxn/image/upload/v1776101379/productos/NEU-21.png", href: "/productos/135" },
-  { name: "PANTALÓN HOMBRE AZUL OSCURO", img: "https://res.cloudinary.com/dj0i57kxn/image/upload/v1776101388/productos/PAN-02.png", href: "/productos/148" },
-  { name: "CADENA PIÑONES MOTO", img: "https://res.cloudinary.com/dj0i57kxn/image/upload/v1776101278/productos/CAD-SPRO.png", href: "/productos/125" },
-  { name: "PARCHE K-9 LETRAS", img: "https://res.cloudinary.com/dj0i57kxn/image/upload/v1776101403/productos/PCH-04.png", href: "/productos/151" },
+  { name: "CHALECO", img: "https://res.cloudinary.com/dj0i57kxn/image/upload/v1776101299/productos/CHA-01-2.png", href: "/productos/98" },
+  { name: "BOTELLA ACERO INOX", img: "https://res.cloudinary.com/dj0i57kxn/image/upload/v1776101267/productos/BOT-03-2.png", href: "/productos/88" },
+  { name: "CASCO MOTORIZADO", img: "https://res.cloudinary.com/dj0i57kxn/image/upload/v1776101291/productos/CAS-01-2.png", href: "/productos/93" },
+  { name: "CADENA PIÑONES MOTO", img: "https://res.cloudinary.com/dj0i57kxn/image/upload/v1776101279/productos/CAD-SPRO-2.png", href: "/productos/125" },
+  { name: "BOTIN BEIGE", img: "https://res.cloudinary.com/dj0i57kxn/image/upload/v1776101433/productos/ZAP-01.png", href: "/productos/7" },
 ];
 
 export default function ProductRow() {
