@@ -589,7 +589,7 @@ export default function ProductDetailPage() {
                   <div className="xsell-img">
                     {p.images?.[0] && <img src={p.images[0]} alt={p.name} />}
                   </div>
-                  <p className="xsell-price">{formatPrice(p.reference_price)}</p>
+                  <p className="xsell-price">{formatPrice(p.price)}</p>
                   <p className="xsell-name">{p.name}</p>
                   <p className="xsell-cat">ARGON</p>
                 </a>
@@ -612,7 +612,7 @@ export default function ProductDetailPage() {
                   <div className="xsell-img">
                     {p.images?.[0] && <img src={p.images[0]} alt={p.name} />}
                   </div>
-                  <p className="xsell-price">{formatPrice(p.reference_price)}</p>
+                  <p className="xsell-price">{formatPrice(p.price)}</p>
                   <p className="xsell-name">{p.name}</p>
                   <p className="xsell-cat">ARGON</p>
                 </a>
@@ -626,7 +626,7 @@ export default function ProductDetailPage() {
       <div className="pdp-sticky-bar" aria-label="Acciones rápidas">
         <div className="pdp-sticky-info">
           <p className="pdp-sticky-name">{product.name}</p>
-          <p className="pdp-sticky-price">{formatPrice(product.reference_price)}</p>
+          <p className="pdp-sticky-price">{formatPrice(product.price)}</p>
         </div>
         <button
           onClick={handleAddToCart}
