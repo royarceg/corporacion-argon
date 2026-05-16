@@ -124,7 +124,7 @@ function ProductosContent() {
 
   if (loading || fetching) {
     return (
-      <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <div className="page-shell-centered">
         <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.4)" }}>
           Loading...
         </p>
@@ -133,7 +133,7 @@ function ProductosContent() {
   }
 
   return (
-    <div style={{ minHeight: "100vh", backgroundColor: "#ffffff", display: "flex", flexDirection: "column", alignItems: "center" }}>
+    <div className="page-shell">
       <AnnouncementBar />
       <Header />
 
@@ -322,7 +322,7 @@ function ProductosContent() {
         <>
           <div
             onClick={() => setFilterOpen(false)}
-            style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.3)", zIndex: 100 }}
+            style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.3)", zIndex: 90 }}
           />
           <div style={{
             position: "fixed",
@@ -331,7 +331,7 @@ function ProductosContent() {
             bottom: 0,
             width: "min(90vw, 380px)",
             backgroundColor: "#ffffff",
-            zIndex: 101,
+            zIndex: 100,
             padding: "clamp(20px, 4vw, 32px)",
             overflowY: "auto",
             display: "flex",

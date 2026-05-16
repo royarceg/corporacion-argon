@@ -17,7 +17,7 @@ export default function ShoppingBagDrawer() {
       {/* Overlay */}
       <div
         onClick={closeDrawer}
-        style={{ position: "fixed", inset: 0, backgroundColor: "rgba(18,18,18,0.4)", zIndex: 200 }}
+        style={{ position: "fixed", inset: 0, backgroundColor: "rgba(18,18,18,0.4)", zIndex: 90 }}
       />
 
       {/* Drawer */}
@@ -28,7 +28,10 @@ export default function ShoppingBagDrawer() {
         bottom: 0,
         width: "min(95vw, 400px)",
         backgroundColor: "#ffffff",
-        zIndex: 201,
+        zIndex: 100,
+        paddingTop: "env(safe-area-inset-top)",
+        paddingBottom: "env(safe-area-inset-bottom)",
+        paddingRight: "env(safe-area-inset-right)",
         display: "flex",
         flexDirection: "column",
       }}>

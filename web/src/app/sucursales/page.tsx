@@ -109,7 +109,7 @@ export default function SucursalesPage() {
   const bars = Array.from({ length: 30 }, (_, i) => i);
 
   return (
-    <div style={{ minHeight: "100vh", backgroundColor: "#ffffff", display: "flex", flexDirection: "column", alignItems: "center" }}>
+    <div className="page-shell">
       <AnnouncementBar />
       <Header />
 

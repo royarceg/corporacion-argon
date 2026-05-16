@@ -209,8 +209,8 @@ function ProductEditModal({ product, isCreate, existingCategories, onClose, onSa
 
   return (
     <>
-      <div onClick={onClose} style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.4)", zIndex: 200 }} />
-      <div style={{ position: "fixed", top: "3%", left: "50%", transform: "translateX(-50%)", backgroundColor: "#fff", width: "680px", maxHeight: "94vh", overflowY: "auto", zIndex: 201, padding: "32px" }}>
+      <div onClick={onClose} style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.4)", zIndex: 90 }} />
+      <div style={{ position: "fixed", top: "3%", left: "50%", transform: "translateX(-50%)", backgroundColor: "#fff", width: "680px", maxHeight: "94vh", overflowY: "auto", zIndex: 100, padding: "32px" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>
           <h3 style={{ fontFamily: "StyreneA, sans-serif", fontSize: "18px", fontWeight: 400, margin: 0 }}>
             {isCreate ? "Nuevo Producto" : `Editar: ${product.name}`}

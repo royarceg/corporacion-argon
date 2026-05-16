@@ -24,7 +24,7 @@ export default function AdminLayout({ activeTab, onTabChange, children }: AdminL
   return (
     <>
       <style>{`
-        .adm-shell { display: flex; min-height: calc(100vh - 112px); position: relative; }
+        .adm-shell { display: flex; min-height: calc(100vh - 112px); min-height: calc(100svh - 112px); position: relative; }
         .adm-sidebar { width: 220px; border-right: 1px solid rgba(0,0,0,0.08); padding: 32px 0; display: flex; flex-direction: column; flex-shrink: 0; background: #fff; }
         @media (max-width: 1023px) {
           .adm-sidebar { position: fixed; top: 0; bottom: 0; left: 0; z-index: 80; transform: translateX(-100%); transition: transform 0.25s ease; width: min(80vw, 280px); box-shadow: 4px 0 20px rgba(0,0,0,0.08); padding-top: 20px; }

@@ -103,7 +103,7 @@ function PedidoDetailContent() {
   }
 
   if (loading || fetching || !order) return (
-    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div className="page-shell-centered">
       <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.4)" }}>Cargando...</p>
     </div>
   );
@@ -112,7 +112,7 @@ function PedidoDetailContent() {
   const subtotal = parseFloat(order.subtotal_confirmed ?? order.subtotal_initial).toLocaleString("en-US", { minimumFractionDigits: 2 });
 
   return (
-    <div style={{ minHeight: "100vh", backgroundColor: "#ffffff", display: "flex", flexDirection: "column", alignItems: "center" }}>
+    <div className="page-shell">
       <AnnouncementBar />
       <Header />
 
@@ -414,7 +414,7 @@ function PedidoDetailContent() {
         <>
           <div
             onClick={() => !deleting && setConfirmDelete(false)}
-            style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.45)", zIndex: 300 }}
+            style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.45)", zIndex: 90 }}
           />
           <div style={{
             position: "fixed",
@@ -422,7 +422,7 @@ function PedidoDetailContent() {
             left: "50%",
             transform: "translate(-50%, -50%)",
             backgroundColor: "#ffffff",
-            zIndex: 301,
+            zIndex: 100,
             padding: "40px",
             width: "min(440px, 90vw)",
             display: "flex",

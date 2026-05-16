@@ -139,7 +139,7 @@ function ConfirmarContent() {
 
 export default function ConfirmarPage() {
   return (
-    <div style={{ minHeight: "100vh", backgroundColor: "#ffffff", display: "flex", flexDirection: "column" }}>
+    <div className="page-shell" style={{ alignItems: "stretch" }}>
       <AnnouncementBar />
       <header style={{ width: "100%", height: "68px", display: "flex", alignItems: "center", justifyContent: "center", borderBottom: "1px solid rgba(0,0,0,0.08)" }}>
         <a href="/" style={{ fontFamily: "StyreneA, sans-serif", fontSize: "20px", fontWeight: 700, color: "#000000", textDecoration: "none", letterSpacing: "-0.02em" }}>

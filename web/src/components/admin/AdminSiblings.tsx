@@ -133,8 +133,8 @@ export default function AdminSiblings() {
       {/* Modal crear/editar grupo */}
       {modalOpen && (
         <>
-          <div onClick={() => setModalOpen(false)} style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.3)", zIndex: 200 }} />
-          <div style={{ position: "fixed", top: "5%", left: "50%", transform: "translateX(-50%)", backgroundColor: "#fff", width: "560px", maxHeight: "90vh", overflowY: "auto", zIndex: 201, padding: "28px" }}>
+          <div onClick={() => setModalOpen(false)} style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.3)", zIndex: 90 }} />
+          <div style={{ position: "fixed", top: "5%", left: "50%", transform: "translateX(-50%)", backgroundColor: "#fff", width: "560px", maxHeight: "90vh", overflowY: "auto", zIndex: 100, padding: "28px" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
               <h3 style={{ fontFamily: "StyreneA, sans-serif", fontSize: "16px", fontWeight: 400, margin: 0 }}>
                 {editingGroup ? `Editar: ${editingGroup.name}` : "Nuevo Grupo de Variantes"}

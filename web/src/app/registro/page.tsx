@@ -39,7 +39,7 @@ export default function RegistroPage() {
   return (
     <div
       style={{
-        minHeight: "100vh",
+        minHeight: "100svh",
         backgroundColor: "#ffffff",
         display: "flex",
         flexDirection: "column",

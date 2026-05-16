@@ -2,7 +2,7 @@ export default function Footer() {
   return (
     <>
       <style>{`
-        .ft { width: 100%; max-width: 1400px; margin: 0 auto; background-color: #f5f4f4; padding: clamp(40px, 6vw, 60px) clamp(16px, 4vw, 32px) clamp(28px, 4vw, 40px); }
+        .ft { width: 100%; max-width: 1400px; margin: 0 auto; background-color: #f5f4f4; padding: clamp(40px, 6vw, 60px) max(clamp(16px, 4vw, 32px), env(safe-area-inset-right)) max(clamp(28px, 4vw, 40px), env(safe-area-inset-bottom)) max(clamp(16px, 4vw, 32px), env(safe-area-inset-left)); }
         .ft-main { display: grid; grid-template-columns: 1fr; gap: clamp(28px, 4vw, 25px); }
         @media (min-width: 768px) { .ft-main { grid-template-columns: repeat(3, 1fr); } }
         @media (min-width: 1024px) { .ft-main { grid-template-columns: repeat(4, 1fr); gap: 25px; } }

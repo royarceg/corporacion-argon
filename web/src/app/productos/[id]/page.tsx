@@ -98,7 +98,7 @@ export default function ProductDetailPage() {
 
   if (loading || fetching || !product) {
     return (
-      <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <div className="page-shell-centered">
         <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.4)" }}>
           Cargando...
         </p>
@@ -126,7 +126,7 @@ export default function ProductDetailPage() {
   ];
 
   return (
-    <div style={{ minHeight: "100vh", backgroundColor: "#ffffff", display: "flex", flexDirection: "column", alignItems: "center" }}>
+    <div className="page-shell">
       <AnnouncementBar />
       <Header />
 

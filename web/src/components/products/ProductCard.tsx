@@ -22,11 +22,19 @@ export default function ProductCard({ product, onAddToCart, onQuickView }: Props
 
   return (
     <div
-      style={{ position: "relative", cursor: "pointer" }}
+      className="product-card"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       onClick={() => onQuickView?.(product)}
     >
+      <style>{`
+        .product-card { position: relative; cursor: pointer; container-type: inline-size; container-name: card; }
+        /* When card has narrow container width (< 200px), hide hover overlays + reduce padding */
+        @container card (max-width: 200px) {
+          .product-card__name { font-size: 12px !important; }
+          .product-card__price { font-size: 12px !important; }
+        }
+      `}</style>
       {/* Image container */}
       <div
         style={{

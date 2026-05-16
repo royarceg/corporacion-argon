@@ -174,3 +174,37 @@ input, textarea, select { font-size: 16px; }
 
 /* Fluid section padding */
 .fluid-section { padding-block: clamp(32px, 6vw, 80px); }
+
+/* ── Safe viewport height (fix #1 from skill audit) ── */
+/* 100vh fallback, 100svh for modern browsers (no overflow behind mobile browser chrome) */
+.page-shell {
+  min-height: 100vh;
+  min-height: 100svh;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Safe-area insets for notched devices (fix #2) */
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+.page-shell-centered {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+/* Z-index scale (fix #4 from skill audit) - prefer isolation: isolate over high z-index */
+.z-overlay { z-index: 40; }
+.z-header { z-index: 50; }
+.z-header-panel { z-index: 60; }
+.z-drawer-overlay { z-index: 70; }
+.z-drawer { z-index: 80; }
+.z-modal-overlay { z-index: 90; }
+.z-modal { z-index: 100; }

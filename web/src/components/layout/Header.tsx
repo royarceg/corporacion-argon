@@ -77,8 +77,8 @@ export default function Header() {
   return (
     <>
       <style>{`
-        .header-wrapper { position: sticky; top: 0; width: 100%; max-width: 1400px; z-index: 50; background-color: #ffffff; margin-inline: auto; }
-        .header-bar { width: 100%; height: 68px; display: flex; align-items: center; justify-content: space-between; padding: 0 clamp(16px, 4vw, 32px); }
+        .header-wrapper { position: sticky; top: 0; width: 100%; max-width: 1400px; z-index: 50; background-color: #ffffff; margin-inline: auto; padding-top: env(safe-area-inset-top); }
+        .header-bar { width: 100%; height: 68px; display: flex; align-items: center; justify-content: space-between; padding-left: max(clamp(16px, 4vw, 32px), env(safe-area-inset-left)); padding-right: max(clamp(16px, 4vw, 32px), env(safe-area-inset-right)); }
         .header-left { display: flex; align-items: center; gap: clamp(16px, 3vw, 32px); }
         .header-logo { font-family: StyreneA, sans-serif; font-size: 20px; font-weight: 700; color: #000; text-decoration: none; letter-spacing: -0.02em; }
         .header-nav-desktop { display: none; }
@@ -92,18 +92,18 @@ export default function Header() {
         .header-cart-count, .header-wishlist-count { font-family: StyreneA, sans-serif; font-size: 13px; font-weight: 400; color: #000; margin-left: 4px; }
         @media (max-width: 480px) { .header-icon-hide-xs { display: none; } }
 
-        .search-panel { position: absolute; top: 68px; left: 0; right: 0; background: #fff; border-top: 1px solid rgba(0,0,0,0.08); display: flex; align-items: center; padding: 0 clamp(16px, 4vw, 32px); height: 56px; z-index: 100; }
+        .search-panel { position: absolute; top: 68px; left: 0; right: 0; background: #fff; border-top: 1px solid rgba(0,0,0,0.08); display: flex; align-items: center; padding: 0 clamp(16px, 4vw, 32px); height: 56px; z-index: 90; }
         .search-input { flex: 1; border: none; outline: none; font-family: StyreneA, sans-serif; font-size: 16px; color: #000; padding: 0 16px; background: transparent; min-width: 0; }
         @media (min-width: 768px) { .search-input { font-size: 14px; } }
 
-        .mega-dropdown { position: absolute; top: 68px; left: 0; right: 0; background: #fff; border-top: 1px solid rgba(0,0,0,0.08); z-index: 100; display: none; align-items: flex-start; padding: 40px clamp(16px, 4vw, 32px); gap: 80px; }
+        .mega-dropdown { position: absolute; top: 68px; left: 0; right: 0; background: #fff; border-top: 1px solid rgba(0,0,0,0.08); z-index: 90; display: none; align-items: flex-start; padding: 40px clamp(16px, 4vw, 32px); gap: 80px; }
         @media (min-width: 1024px) { .mega-dropdown.open { display: flex; } }
         .mega-col-title { font-family: StyreneA, sans-serif; font-size: 11px; font-weight: 400; color: rgba(0,0,0,0.45); margin: 0 0 16px; letter-spacing: 0.02em; }
         .mega-col-list { display: flex; flex-direction: column; gap: 12px; }
         .mega-col-link { font-family: StyreneA, sans-serif; font-size: 13px; font-weight: 400; color: #000; text-decoration: none; display: block; }
         .mega-image { margin-left: auto; width: 270px; height: 290px; flex-shrink: 0; overflow: hidden; }
 
-        .mobile-drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(90vw, 360px); background: #fff; z-index: 60; transform: translateX(100%); transition: transform .25s ease; display: flex; flex-direction: column; }
+        .mobile-drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(90vw, 360px); background: #fff; z-index: 60; transform: translateX(100%); transition: transform .25s ease; display: flex; flex-direction: column; padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); padding-right: env(safe-area-inset-right); }
         .mobile-drawer.open { transform: translateX(0); }
         .mobile-drawer-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid rgba(0,0,0,0.08); height: 68px; flex-shrink: 0; }
         .mobile-drawer-body { flex: 1; overflow-y: auto; padding: 20px; }

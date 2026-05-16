@@ -140,7 +140,7 @@ export default function QuickViewModal({ product: initialProduct, onClose }: Pro
           position: "fixed",
           inset: 0,
           backgroundColor: "rgba(0,0,0,0.45)",
-          zIndex: 200,
+          zIndex: 90,
           opacity: 0,
         }}
       />

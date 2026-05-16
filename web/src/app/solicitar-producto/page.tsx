@@ -69,7 +69,7 @@ export default function SolicitarProductoPage() {
   };
 
   return (
-    <div style={{ minHeight: "100vh", backgroundColor: "#ffffff", display: "flex", flexDirection: "column", alignItems: "center" }}>
+    <div className="page-shell">
       <AnnouncementBar />
       <Header />
 
