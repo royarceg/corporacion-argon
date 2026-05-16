@@ -35,6 +35,8 @@ export default function ProductDetailPage() {
   const imagesRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const relatedRef = useRef<HTMLDivElement>(null);
+  const completeLookTrackRef = useRef<HTMLDivElement>(null);
+  const relatedTrackRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!loading && isAuthenticated()) {
@@ -109,6 +111,11 @@ export default function ProductDetailPage() {
         (selectedSize ? v.size === selectedSize : true) &&
         (selectedColor ? v.color === selectedColor : true)
     ) ?? null;
+  }
+
+  function scrollTrack(ref: React.RefObject<HTMLDivElement>, dir: 'left' | 'right') {
+    if (!ref.current) return;
+    ref.current.scrollBy({ left: dir === 'right' ? ref.current.offsetWidth * 0.8 : -ref.current.offsetWidth * 0.8, behavior: 'smooth' });
   }
 
   async function handleAddToCart() {
@@ -549,16 +556,23 @@ export default function ProductDetailPage() {
           </div>
         </div>
 
-        {/* ── Cross-sell: Adidas-style ── */}
+        {/* ── Cross-sell: carrusel horizontal ── */}
         <style>{`
           .xsell-section { margin-top: 64px; padding-top: 48px; border-top: 1px solid rgba(0,0,0,0.08); }
-          .xsell-header { margin-bottom: 28px; }
+          .xsell-header { margin-bottom: 28px; display: flex; align-items: flex-end; justify-content: space-between; }
+          .xsell-header-left { }
           .xsell-title { font-family: StyreneA, sans-serif; font-size: clamp(20px, 3vw, 26px); font-weight: 700; color: #000; margin: 0 0 6px; letter-spacing: -0.01em; text-transform: uppercase; }
           .xsell-sub { font-family: StyreneA, sans-serif; font-size: 13px; color: rgba(0,0,0,0.55); margin: 0; }
-          .xsell-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
-          @media (min-width: 640px) { .xsell-grid { grid-template-columns: repeat(3, 1fr); } }
-          @media (min-width: 1024px) { .xsell-grid { grid-template-columns: repeat(5, 1fr); gap: 16px; } }
-          .xsell-card { position: relative; cursor: pointer; border: 1.5px solid transparent; padding: 12px; transition: border-color 0.2s; text-decoration: none; color: inherit; display: block; }
+          .xsell-nav { display: flex; gap: 8px; flex-shrink: 0; }
+          @media (max-width: 767px) { .xsell-nav { display: none; } }
+          .xsell-nav-btn { width: 36px; height: 36px; border: 1px solid rgba(0,0,0,0.2); background: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.15s, border-color 0.15s; }
+          .xsell-nav-btn:hover { background: #000; border-color: #000; }
+          .xsell-nav-btn:hover svg { stroke: #fff; }
+          .xsell-track { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+          .xsell-track::-webkit-scrollbar { display: none; }
+          .xsell-card { flex: 0 0 auto; width: calc(45vw - 20px); scroll-snap-align: start; position: relative; cursor: pointer; border: 1.5px solid transparent; padding: 12px; transition: border-color 0.2s; text-decoration: none; color: inherit; display: block; box-sizing: border-box; }
+          @media (min-width: 640px) { .xsell-card { width: calc(33.33% - 9px); } }
+          @media (min-width: 1024px) { .xsell-card { width: calc(20% - 10px); } }
           .xsell-card:hover { border-color: rgba(0,0,0,0.15); }
           .xsell-heart { position: absolute; top: 16px; right: 16px; width: 28px; height: 28px; border: none; background: transparent; cursor: pointer; font-size: 22px; line-height: 1; z-index: 2; color: rgba(0,0,0,0.5); padding: 0; }
           .xsell-heart:hover { color: #000; }
@@ -568,27 +582,30 @@ export default function ProductDetailPage() {
           .xsell-price { font-family: StyreneA, sans-serif; font-size: 13px; font-weight: 500; margin: 0 0 4px; color: #000; }
           .xsell-name { font-family: StyreneA, sans-serif; font-size: 12px; color: #000; margin: 0 0 4px; line-height: 1.35; min-height: 32px; }
           .xsell-cat { font-family: StyreneA, sans-serif; font-size: 11px; color: rgba(0,0,0,0.45); margin: 0; text-transform: uppercase; letter-spacing: 0.04em; }
-          /* Second grid (Te puede interesar) shows up to 12 items */
-          .xsell-grid-wide { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
-          @media (min-width: 640px) { .xsell-grid-wide { grid-template-columns: repeat(3, 1fr); } }
-          @media (min-width: 1024px) { .xsell-grid-wide { grid-template-columns: repeat(4, 1fr); gap: 16px; } }
-          @media (min-width: 1400px) { .xsell-grid-wide { grid-template-columns: repeat(6, 1fr); } }
         `}</style>
 
-        {/* COMPLETÁ TU EQUIPO — siempre 5 productos */}
+        {/* COMPLETÁ TU EQUIPO */}
         {completeLook.length > 0 && (
           <section className="xsell-section">
             <div className="xsell-header">
-              <h2 className="xsell-title">Completá tu equipo</h2>
-              <p className="xsell-sub">Productos que se usan junto con este</p>
+              <div className="xsell-header-left">
+                <h2 className="xsell-title">Completá tu equipo</h2>
+                <p className="xsell-sub">Productos que se usan junto con este</p>
+              </div>
+              <div className="xsell-nav">
+                <button className="xsell-nav-btn" aria-label="Anterior" onClick={() => scrollTrack(completeLookTrackRef, 'left')}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="1.8"><polyline points="15 18 9 12 15 6" /></svg>
+                </button>
+                <button className="xsell-nav-btn" aria-label="Siguiente" onClick={() => scrollTrack(completeLookTrackRef, 'right')}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="1.8"><polyline points="9 18 15 12 9 6" /></svg>
+                </button>
+              </div>
             </div>
-            <div className="xsell-grid">
+            <div ref={completeLookTrackRef} className="xsell-track">
               {completeLook.map((p) => (
                 <a key={p.id} href={`/productos/${p.id}`} className="xsell-card">
                   <button className="xsell-heart" aria-label="Guardar" onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}>♡</button>
-                  <div className="xsell-img">
-                    {p.images?.[0] && <img src={p.images[0]} alt={p.name} />}
-                  </div>
+                  <div className="xsell-img">{p.images?.[0] && <img src={p.images[0]} alt={p.name} />}</div>
                   <p className="xsell-price">{formatPrice(p.price)}</p>
                   <p className="xsell-name">{p.name}</p>
                   <p className="xsell-cat">ARGON</p>
@@ -598,20 +615,28 @@ export default function ProductDetailPage() {
           </section>
         )}
 
-        {/* TAMBIÉN TE PUEDE INTERESAR — 8-12 productos mix */}
+        {/* TAMBIÉN TE PUEDE INTERESAR */}
         {related.length > 0 && (
           <section className="xsell-section" ref={relatedRef}>
             <div className="xsell-header">
-              <h2 className="xsell-title">También te puede interesar</h2>
-              <p className="xsell-sub">Otras opciones que podrían encajar</p>
+              <div className="xsell-header-left">
+                <h2 className="xsell-title">También te puede interesar</h2>
+                <p className="xsell-sub">Otras opciones que podrían encajar</p>
+              </div>
+              <div className="xsell-nav">
+                <button className="xsell-nav-btn" aria-label="Anterior" onClick={() => scrollTrack(relatedTrackRef, 'left')}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="1.8"><polyline points="15 18 9 12 15 6" /></svg>
+                </button>
+                <button className="xsell-nav-btn" aria-label="Siguiente" onClick={() => scrollTrack(relatedTrackRef, 'right')}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="1.8"><polyline points="9 18 15 12 9 6" /></svg>
+                </button>
+              </div>
             </div>
-            <div className="xsell-grid-wide">
+            <div ref={relatedTrackRef} className="xsell-track">
               {related.map((p) => (
                 <a key={p.id} href={`/productos/${p.id}`} className="xsell-card">
                   <button className="xsell-heart" aria-label="Guardar" onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}>♡</button>
-                  <div className="xsell-img">
-                    {p.images?.[0] && <img src={p.images[0]} alt={p.name} />}
-                  </div>
+                  <div className="xsell-img">{p.images?.[0] && <img src={p.images[0]} alt={p.name} />}</div>
                   <p className="xsell-price">{formatPrice(p.price)}</p>
                   <p className="xsell-name">{p.name}</p>
                   <p className="xsell-cat">ARGON</p>
