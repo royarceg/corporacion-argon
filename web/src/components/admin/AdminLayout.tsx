@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 
 const navItems = [
@@ -8,7 +7,7 @@ const navItems = [
   { key: "usuarios", label: "Usuarios", icon: "👥" },
   { key: "productos", label: "Productos", icon: "📋" },
   { key: "clientes", label: "Clientes", icon: "🏢" },
-  { key: "variantes", label: "Variantes Color", icon: "🎨" },
+  { key: "variantes", label: "Variantes", icon: "🎨" },
 ];
 
 interface AdminLayoutProps {
@@ -19,34 +18,53 @@ interface AdminLayoutProps {
 
 export default function AdminLayout({ activeTab, onTabChange, children }: AdminLayoutProps) {
   const { user, logout } = useAuth();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
     <>
       <style>{`
         .adm-shell { display: flex; min-height: calc(100vh - 112px); min-height: calc(100svh - 112px); position: relative; }
+
+        /* Desktop sidebar (1024px+) */
         .adm-sidebar { width: 220px; border-right: 1px solid rgba(0,0,0,0.08); padding: 32px 0; display: flex; flex-direction: column; flex-shrink: 0; background: #fff; }
+        @media (max-width: 1023px) { .adm-sidebar { display: none; } }
+
+        /* Mobile bottom tabs (<1024px) */
+        .adm-bottom-tabs { display: none; }
         @media (max-width: 1023px) {
-          .adm-sidebar { position: fixed; top: 0; bottom: 0; left: 0; z-index: 80; transform: translateX(-100%); transition: transform 0.25s ease; width: min(80vw, 280px); box-shadow: 4px 0 20px rgba(0,0,0,0.08); padding-top: 20px; }
-          .adm-sidebar.open { transform: translateX(0); }
+          .adm-bottom-tabs {
+            display: flex;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 64px;
+            background: #fff;
+            border-top: 1px solid rgba(0,0,0,0.08);
+            z-index: 50;
+            padding-bottom: env(safe-area-inset-bottom);
+            padding-left: env(safe-area-inset-left);
+            padding-right: env(safe-area-inset-right);
+          }
         }
-        .adm-overlay { display: none; }
+        .adm-tab { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-family: StyreneA, sans-serif; font-size: 9px; color: rgba(0,0,0,0.5); background: none; border: none; cursor: pointer; padding: 8px 2px; min-height: 44px; }
+        .adm-tab.active { color: #000; font-weight: 500; }
+        .adm-tab-icon { font-size: 18px; }
+
+        /* Mobile admin top bar (logout + email) */
+        .adm-mobile-bar { display: none; }
         @media (max-width: 1023px) {
-          .adm-overlay.show { display: block; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 75; }
+          .adm-mobile-bar { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: rgba(0,0,0,0.03); border-bottom: 1px solid rgba(0,0,0,0.06); }
+          .adm-mobile-bar-email { font-family: StyreneA, sans-serif; font-size: 11px; color: rgba(0,0,0,0.5); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+          .adm-mobile-bar-logout { font-family: StyreneA, sans-serif; font-size: 11px; color: rgba(0,0,0,0.6); background: none; border: none; cursor: pointer; padding: 0; text-decoration: underline; flex-shrink: 0; margin-left: 12px; }
         }
-        .adm-toggle { display: none; }
-        @media (max-width: 1023px) {
-          .adm-toggle { display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; background: #000; color: #fff; border: none; font-family: StyreneA, sans-serif; font-size: 13px; cursor: pointer; position: sticky; top: 0; z-index: 5; align-self: flex-start; margin: 12px 16px 0; }
-        }
+
         .adm-content { flex: 1; padding: clamp(20px, 4vw, 32px) clamp(16px, 4vw, 40px); overflow-x: auto; min-width: 0; }
+        @media (max-width: 1023px) { .adm-content { padding-bottom: calc(80px + env(safe-area-inset-bottom)); } }
       `}</style>
 
       <div className="adm-shell">
-        {/* Overlay for mobile */}
-        <div className={`adm-overlay${sidebarOpen ? " show" : ""}`} onClick={() => setSidebarOpen(false)} />
-
-        {/* Sidebar */}
-        <aside className={`adm-sidebar${sidebarOpen ? " open" : ""}`}>
+        {/* Desktop sidebar */}
+        <aside className="adm-sidebar">
           <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "10px", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(0,0,0,0.35)", padding: "0 20px", margin: "0 0 16px 0" }}>
             Administración
           </p>
@@ -55,7 +73,7 @@ export default function AdminLayout({ activeTab, onTabChange, children }: AdminL
             {navItems.map((item) => (
               <button
                 key={item.key}
-                onClick={() => { onTabChange(item.key); setSidebarOpen(false); }}
+                onClick={() => onTabChange(item.key)}
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -95,14 +113,31 @@ export default function AdminLayout({ activeTab, onTabChange, children }: AdminL
 
         {/* Main content */}
         <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column" }}>
-          <button onClick={() => setSidebarOpen(true)} className="adm-toggle" aria-label="Abrir menú admin">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M3 6h18M3 12h18M3 18h18" /></svg>
-            Menú admin
-          </button>
+          {/* Mobile-only bar with email + logout (since they don't fit in bottom tabs) */}
+          <div className="adm-mobile-bar">
+            <span className="adm-mobile-bar-email">Admin: {user?.email}</span>
+            <button onClick={logout} className="adm-mobile-bar-logout">Cerrar sesión</button>
+          </div>
+
           <div className="adm-content">
             {children}
           </div>
         </div>
+
+        {/* Mobile bottom tabs */}
+        <nav className="adm-bottom-tabs" aria-label="Navegación admin">
+          {navItems.map((item) => (
+            <button
+              key={item.key}
+              onClick={() => onTabChange(item.key)}
+              className={`adm-tab${activeTab === item.key ? " active" : ""}`}
+              aria-label={item.label}
+            >
+              <span className="adm-tab-icon">{item.icon}</span>
+              {item.label}
+            </button>
+          ))}
+        </nav>
       </div>
     </>
   );
