@@ -208,3 +208,100 @@ input, textarea, select { font-size: 16px; }
 .z-drawer { z-index: 80; }
 .z-modal-overlay { z-index: 90; }
 .z-modal { z-index: 100; }
+
+/* ── Admin table — mobile expand/collapse (Fork 3) ── */
+/* Desktop: grid normal. Mobile (<768px): stack vertical with summary + details */
+@media (max-width: 767px) {
+  .adm-table-row {
+    display: block !important;
+    padding: 0 !important;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+  }
+  .adm-table-row > .adm-row-primary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 12px;
+    gap: 12px;
+    cursor: pointer;
+    min-height: 48px;
+  }
+  .adm-table-row > .adm-row-primary::after {
+    content: "▾";
+    font-size: 12px;
+    color: rgba(0,0,0,0.3);
+    transition: transform 0.2s;
+  }
+  .adm-table-row[open] > .adm-row-primary::after { transform: rotate(180deg); }
+  .adm-table-row > .adm-row-detail {
+    display: grid !important;
+    grid-template-columns: max-content 1fr !important;
+    gap: 8px 16px !important;
+    padding: 4px 12px 16px !important;
+    background: rgba(0,0,0,0.02);
+    font-size: 12px;
+  }
+  .adm-table-row > .adm-row-detail > .adm-cell-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: rgba(0,0,0,0.5);
+    align-self: center;
+  }
+  .adm-table-row > .adm-row-detail > .adm-cell-value {
+    font-size: 12px;
+    color: #000;
+    align-self: center;
+  }
+  /* Hide table headers on mobile (each row has its own labels) */
+  .adm-table-header { display: none !important; }
+  /* Action buttons full width on mobile */
+  .adm-row-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+}
+@media (min-width: 768px) {
+  /* On desktop, hide labels (only show values in grid) */
+  .adm-cell-label { display: none; }
+  /* Hide the disclosure marker */
+  .adm-table-row > .adm-row-primary { all: unset; }
+}
+
+/* Simpler approach: stack table cells vertically on mobile with labels */
+@media (max-width: 767px) {
+  .adm-stack-mobile {
+    display: block !important;
+  }
+  .adm-stack-mobile > .adm-stack-row {
+    display: block !important;
+    padding: 16px 12px !important;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+  }
+  /* First child (usually name/id) gets bigger styling */
+  .adm-stack-mobile > .adm-stack-row > *:first-child {
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    margin-bottom: 8px !important;
+  }
+  /* Other cells with data-label show label: value */
+  .adm-stack-mobile > .adm-stack-row > *[data-label] {
+    display: flex !important;
+    justify-content: space-between;
+    padding: 4px 0;
+    gap: 12px;
+    font-size: 12px !important;
+  }
+  .adm-stack-mobile > .adm-stack-row > *[data-label]::before {
+    content: attr(data-label);
+    color: rgba(0,0,0,0.5);
+    text-transform: uppercase;
+    font-size: 10px;
+    letter-spacing: 0.05em;
+    align-self: center;
+  }
+  /* Action buttons row */
+  .adm-stack-mobile > .adm-stack-row > .adm-actions {
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+  /* Hide header row on mobile */
+  .adm-stack-mobile-hide-header { display: none !important; }
+}

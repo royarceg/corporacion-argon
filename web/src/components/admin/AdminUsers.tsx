@@ -181,31 +181,32 @@ export default function AdminUsers() {
       {fetching ? (
         <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.4)" }}>Cargando...</p>
       ) : (
-        <div style={{ overflowX: "auto", WebkitOverflowScrolling: "touch" }}><div style={{ minWidth: 880 }}>
-          <div style={{ display: "grid", gridTemplateColumns: "0.5fr 1.5fr 1.5fr 2fr 1fr 0.8fr 1.5fr", gap: "12px", padding: "0 0 10px 0", borderBottom: "1px solid rgba(0,0,0,0.1)" }}>
+        <div className="adm-stack-mobile" style={{ overflowX: "auto", WebkitOverflowScrolling: "touch" }}>
+          <div className="adm-stack-mobile-hide-header" style={{ display: "grid", gridTemplateColumns: "0.5fr 1.5fr 1.5fr 2fr 1fr 0.8fr 1.5fr", gap: "12px", padding: "0 0 10px 0", borderBottom: "1px solid rgba(0,0,0,0.1)", minWidth: 880 }}>
             {["ID", "Usuario", "Nombre", "Email", "Rol", "Estado", "Acciones"].map((h) => (
               <p key={h} style={{ fontFamily: "StyreneA, sans-serif", fontSize: "10px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(0,0,0,0.35)", margin: 0 }}>{h}</p>
             ))}
           </div>
+          <div style={{ minWidth: 0 }}>
           {filtered.map((u) => (
-            <div key={u.id} style={{ display: "grid", gridTemplateColumns: "0.5fr 1.5fr 1.5fr 2fr 1fr 0.8fr 1.5fr", gap: "12px", padding: "12px 0", borderBottom: "1px solid rgba(0,0,0,0.06)", alignItems: "center" }}>
-              <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "12px", color: "rgba(0,0,0,0.4)", margin: 0 }}>{u.id}</p>
+            <div key={u.id} className="adm-stack-row" style={{ display: "grid", gridTemplateColumns: "0.5fr 1.5fr 1.5fr 2fr 1fr 0.8fr 1.5fr", gap: "12px", padding: "12px 0", borderBottom: "1px solid rgba(0,0,0,0.06)", alignItems: "center", minWidth: 880 }}>
+              <p data-label="ID" style={{ fontFamily: "StyreneA, sans-serif", fontSize: "12px", color: "rgba(0,0,0,0.4)", margin: 0 }}>{u.id}</p>
               <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "#000", margin: 0 }}>{u.user_name}</p>
-              <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.7)", margin: 0 }}>{u.name || "—"}</p>
-              <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "12px", color: "rgba(0,0,0,0.6)", margin: 0 }}>{u.email}</p>
-              <span style={{
+              <p data-label="Nombre" style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.7)", margin: 0 }}>{u.name || "—"}</p>
+              <p data-label="Email" style={{ fontFamily: "StyreneA, sans-serif", fontSize: "12px", color: "rgba(0,0,0,0.6)", margin: 0 }}>{u.email}</p>
+              <span data-label="Rol" style={{
                 fontFamily: "StyreneA, sans-serif", fontSize: "10px", fontWeight: 600, letterSpacing: "0.06em", textTransform: "uppercase",
                 color: u.role === "master_admin" ? "#7c3aed" : "#0369a1",
               }}>
                 {u.role === "master_admin" ? "Admin" : "Cliente"}
               </span>
-              <span style={{
+              <span data-label="Estado" style={{
                 fontFamily: "StyreneA, sans-serif", fontSize: "10px", fontWeight: 600,
                 color: u.active ? "#3a6b3a" : "#9c0f0f",
               }}>
                 {u.active ? "Activo" : "Inactivo"}
               </span>
-              <div style={{ display: "flex", gap: "6px" }}>
+              <div className="adm-actions" style={{ display: "flex", gap: "6px" }}>
                 <button onClick={() => openEdit(u)} style={{ fontFamily: "StyreneA, sans-serif", fontSize: "11px", color: "#000", border: "1px solid rgba(0,0,0,0.2)", background: "none", padding: "5px 10px", cursor: "pointer" }}>Editar</button>
                 <button onClick={() => openReset(u)} style={{ fontFamily: "StyreneA, sans-serif", fontSize: "11px", color: "#000", border: "1px solid rgba(0,0,0,0.2)", background: "none", padding: "5px 10px", cursor: "pointer" }}>Clave</button>
                 <button onClick={() => toggleStatus(u)} style={{ fontFamily: "StyreneA, sans-serif", fontSize: "11px", color: u.active ? "#9c0f0f" : "#3a6b3a", border: "1px solid rgba(0,0,0,0.2)", background: "none", padding: "5px 10px", cursor: "pointer" }}>
@@ -214,7 +215,8 @@ export default function AdminUsers() {
               </div>
             </div>
           ))}
-        </div></div>
+          </div>
+        </div>
       )}
 
       {/* ── Modal: Editar usuario ── */}

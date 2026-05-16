@@ -74,30 +74,32 @@ export default function AdminProducts() {
       {fetching ? (
         <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.4)" }}>Cargando...</p>
       ) : (
-        <div style={{ overflowX: "auto", WebkitOverflowScrolling: "touch" }}><div style={{ minWidth: 880 }}>
-          <div style={{ display: "grid", gridTemplateColumns: "0.5fr 1fr 2fr 1fr 1fr 0.8fr 1.2fr", gap: "12px", padding: "0 0 10px 0", borderBottom: "1px solid rgba(0,0,0,0.1)" }}>
+        <div className="adm-stack-mobile" style={{ overflowX: "auto", WebkitOverflowScrolling: "touch" }}>
+          <div className="adm-stack-mobile-hide-header" style={{ display: "grid", gridTemplateColumns: "0.5fr 1fr 2fr 1fr 1fr 0.8fr 1.2fr", gap: "12px", padding: "0 0 10px 0", borderBottom: "1px solid rgba(0,0,0,0.1)", minWidth: 880 }}>
             {["ID", "SKU", "Nombre", "Categoría", "Precio", "Variantes", "Acciones"].map((h) => (
               <p key={h} style={{ fontFamily: "StyreneA, sans-serif", fontSize: "10px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(0,0,0,0.35)", margin: 0 }}>{h}</p>
             ))}
           </div>
+          <div style={{ minWidth: 0 }}>
           {filtered.map((p) => (
-            <div key={p.id} style={{ display: "grid", gridTemplateColumns: "0.5fr 1fr 2fr 1fr 1fr 0.8fr 1.2fr", gap: "12px", padding: "12px 0", borderBottom: "1px solid rgba(0,0,0,0.06)", alignItems: "center" }}>
-              <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "12px", color: "rgba(0,0,0,0.4)", margin: 0 }}>{p.id}</p>
-              <p style={{ fontFamily: "monospace", fontSize: "12px", color: "rgba(0,0,0,0.6)", margin: 0 }}>{p.sku}</p>
+            <div key={p.id} className="adm-stack-row" style={{ display: "grid", gridTemplateColumns: "0.5fr 1fr 2fr 1fr 1fr 0.8fr 1.2fr", gap: "12px", padding: "12px 0", borderBottom: "1px solid rgba(0,0,0,0.06)", alignItems: "center", minWidth: 880 }}>
+              <p data-label="ID" style={{ fontFamily: "StyreneA, sans-serif", fontSize: "12px", color: "rgba(0,0,0,0.4)", margin: 0 }}>{p.id}</p>
+              <p data-label="SKU" style={{ fontFamily: "monospace", fontSize: "12px", color: "rgba(0,0,0,0.6)", margin: 0 }}>{p.sku}</p>
               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                 {p.images?.[0] && <img src={p.images[0]} alt="" style={{ width: "32px", height: "32px", objectFit: "contain", borderRadius: "4px", backgroundColor: "#f5f4f4" }} />}
                 <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "#000", margin: 0 }}>{p.name}</p>
               </div>
-              <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "12px", color: "rgba(0,0,0,0.6)", margin: 0 }}>{p.category}</p>
-              <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "12px", color: "#000", margin: 0 }}>${parseFloat(p.reference_price).toLocaleString("en-US", { minimumFractionDigits: 2 })}</p>
-              <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "12px", color: "rgba(0,0,0,0.5)", margin: 0 }}>{p.variants?.length ?? 0}</p>
-              <div style={{ display: "flex", gap: "6px" }}>
+              <p data-label="Categoría" style={{ fontFamily: "StyreneA, sans-serif", fontSize: "12px", color: "rgba(0,0,0,0.6)", margin: 0 }}>{p.category}</p>
+              <p data-label="Precio" style={{ fontFamily: "StyreneA, sans-serif", fontSize: "12px", color: "#000", margin: 0 }}>${parseFloat(p.reference_price).toLocaleString("en-US", { minimumFractionDigits: 2 })}</p>
+              <p data-label="Variantes" style={{ fontFamily: "StyreneA, sans-serif", fontSize: "12px", color: "rgba(0,0,0,0.5)", margin: 0 }}>{p.variants?.length ?? 0}</p>
+              <div className="adm-actions" style={{ display: "flex", gap: "6px" }}>
                 <button onClick={() => handleEdit(p.id)} style={{ fontFamily: "StyreneA, sans-serif", fontSize: "11px", color: "#000", border: "1px solid rgba(0,0,0,0.2)", background: "none", padding: "5px 10px", cursor: "pointer" }}>Editar</button>
                 <button onClick={() => handleDelete(p.id)} style={{ fontFamily: "StyreneA, sans-serif", fontSize: "11px", color: "#9c0f0f", border: "1px solid rgba(0,0,0,0.2)", background: "none", padding: "5px 10px", cursor: "pointer" }}>Eliminar</button>
               </div>
             </div>
           ))}
-        </div></div>
+          </div>
+        </div>
       )}
 
       {/* Product Edit Modal */}
