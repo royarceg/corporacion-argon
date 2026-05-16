@@ -22,10 +22,26 @@ const getProducts = async (req, res) => {
   try {
     const { client_id } = req.user;
 
-    // Verificar que sea un cliente (no admin)
+    // Admin sin client_id: devolver todos los productos activos para previsualización
     if (!client_id) {
-      return res.status(403).json({ 
-        error: 'Solo clientes pueden ver productos' 
+      const adminProducts = await pool.query(
+        `SELECT id, sku, name, description, category, reference_price as price
+         FROM products WHERE active = true ORDER BY category, name`
+      );
+      if (adminProducts.rows.length === 0) return res.json({ success: true, products: [] });
+      const adminIds = adminProducts.rows.map(p => p.id);
+      const [adminImgs, adminColors, adminSizes] = await Promise.all([
+        pool.query(`SELECT product_id, image_url FROM product_images WHERE product_id = ANY($1) ORDER BY product_id, is_primary DESC, display_order ASC`, [adminIds]),
+        pool.query(`SELECT DISTINCT product_id, color FROM product_variants WHERE product_id = ANY($1) AND active = true AND color IS NOT NULL ORDER BY product_id, color`, [adminIds]),
+        pool.query(`SELECT DISTINCT product_id, size FROM product_variants WHERE product_id = ANY($1) AND active = true AND size IS NOT NULL ORDER BY product_id, size`, [adminIds]),
+      ]);
+      const iMap = {}, cMap = {}, sMap = {};
+      adminImgs.rows.forEach(r => { if (!iMap[r.product_id]) iMap[r.product_id] = []; iMap[r.product_id].push(r.image_url); });
+      adminColors.rows.forEach(r => { if (!cMap[r.product_id]) cMap[r.product_id] = []; cMap[r.product_id].push(r.color); });
+      adminSizes.rows.forEach(r => { if (!sMap[r.product_id]) sMap[r.product_id] = []; sMap[r.product_id].push(r.size); });
+      return res.json({
+        success: true,
+        products: adminProducts.rows.map(p => ({ ...p, images: iMap[p.id] || [], colors: cMap[p.id] || [], sizes: sMap[p.id] || [] }))
       });
     }
 
