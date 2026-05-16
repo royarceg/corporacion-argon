@@ -4,6 +4,7 @@ import { AuthProvider } from "@/context/AuthContext";
 import { CartProvider } from "@/context/CartContext";
 import { WishlistProvider } from "@/context/WishlistContext";
 import ShoppingBagDrawer from "@/components/cart/ShoppingBagDrawer";
+import MobileBottomNav from "@/components/layout/MobileBottomNav";
 
 export const metadata: Metadata = {
   title: "Corporación ARGON | Equipamiento Profesional",
@@ -30,6 +31,7 @@ export default function RootLayout({
             <WishlistProvider>
               {children}
               <ShoppingBagDrawer />
+              <MobileBottomNav />
             </WishlistProvider>
           </CartProvider>
         </AuthProvider>
