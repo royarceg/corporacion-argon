@@ -592,14 +592,6 @@ export default function ProductDetailPage() {
                 <h2 className="xsell-title">Completá tu equipo</h2>
                 <p className="xsell-sub">Productos que se usan junto con este</p>
               </div>
-              <div className="xsell-nav">
-                <button className="xsell-nav-btn" aria-label="Anterior" onClick={() => scrollTrack(completeLookTrackRef, 'left')}>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="1.8"><polyline points="15 18 9 12 15 6" /></svg>
-                </button>
-                <button className="xsell-nav-btn" aria-label="Siguiente" onClick={() => scrollTrack(completeLookTrackRef, 'right')}>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="1.8"><polyline points="9 18 15 12 9 6" /></svg>
-                </button>
-              </div>
             </div>
             <div ref={completeLookTrackRef} className="xsell-track">
               {completeLook.map((p) => (
