@@ -113,7 +113,7 @@ export default function ProductDetailPage() {
     ) ?? null;
   }
 
-  function scrollTrack(ref: React.RefObject<HTMLDivElement>, dir: 'left' | 'right') {
+  function scrollTrack(ref: React.RefObject<HTMLDivElement | null>, dir: 'left' | 'right') {
     if (!ref.current) return;
     ref.current.scrollBy({ left: dir === 'right' ? ref.current.offsetWidth * 0.8 : -ref.current.offsetWidth * 0.8, behavior: 'smooth' });
   }
