@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://backend-production-32b0.up.railway.app/api";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://backend-production-e716.up.railway.app/api";
 
 function authHeader(): Record<string, string> {
   const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
