@@ -74,7 +74,13 @@ export default function AdminClients() {
         Asignación de Productos a Clientes
       </h2>
 
-      <div style={{ display: "grid", gridTemplateColumns: "280px 1fr", gap: "32px", minHeight: "500px" }}>
+      <div className="adm-clients-layout">
+        <style>{`
+          .adm-clients-layout { display: grid; grid-template-columns: 1fr; gap: 24px; min-height: 500px; }
+          @media (min-width: 1024px) { .adm-clients-layout { grid-template-columns: 280px 1fr; gap: 32px; } }
+          .adm-client-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; min-width: 0; }
+          .adm-client-table { min-width: 640px; }
+        `}</style>
 
         {/* Left: Client list */}
         <div style={{ borderRight: "1px solid rgba(0,0,0,0.08)", paddingRight: "24px" }}>
@@ -130,7 +136,8 @@ export default function AdminClients() {
                 </div>
               </div>
 
-              {/* Product table */}
+              {/* Product table - wrapped for horizontal scroll on mobile */}
+              <div className="adm-client-table-wrap"><div className="adm-client-table">
               <div style={{ display: "grid", gridTemplateColumns: "40px 1fr 1.5fr 1fr 0.8fr", gap: "12px", padding: "0 0 10px 0", borderBottom: "1px solid rgba(0,0,0,0.1)" }}>
                 {["", "SKU", "Nombre", "Categoría", "Estado"].map((h) => (
                   <p key={h || "check"} style={{ fontFamily: "StyreneA, sans-serif", fontSize: "10px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(0,0,0,0.35)", margin: 0 }}>{h}</p>
@@ -155,6 +162,7 @@ export default function AdminClients() {
                   </span>
                 </div>
               ))}
+              </div></div>
             </>
           )}
         </div>

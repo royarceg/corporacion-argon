@@ -25,7 +25,14 @@ export default function AdminOrders() {
   return (
     <>
       {/* Stats */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "16px", marginBottom: "32px" }}>
+      <div className="adm-orders-stats" style={{ marginBottom: "32px" }}>
+        <style>{`
+          .adm-orders-stats { display: grid; grid-template-columns: 1fr; gap: 16px; }
+          @media (min-width: 640px) { .adm-orders-stats { grid-template-columns: repeat(3, 1fr); } }
+          .adm-orders-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+          .adm-orders-table { min-width: 720px; }
+          .adm-orders-tabs { display: flex; gap: 0; margin-bottom: 24px; border-bottom: 1px solid rgba(0,0,0,0.1); overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        `}</style>
         {[
           { label: "Pendientes", value: pending, color: "#d4a017" },
           { label: "Confirmadas", value: confirmed, color: "#3a6b3a" },
@@ -39,7 +46,7 @@ export default function AdminOrders() {
       </div>
 
       {/* Filter tabs */}
-      <div style={{ display: "flex", gap: "0", marginBottom: "24px", borderBottom: "1px solid rgba(0,0,0,0.1)" }}>
+      <div className="adm-orders-tabs">
         {(["pending", "confirmed", "all"] as const).map((f) => {
           const labels = { pending: "Pendientes", confirmed: "Confirmadas", all: "Todas" };
           return (
@@ -67,7 +74,7 @@ export default function AdminOrders() {
       ) : displayed.length === 0 ? (
         <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.4)", padding: "40px 0" }}>No hay órdenes.</p>
       ) : (
-        <>
+        <div className="adm-orders-table-wrap"><div className="adm-orders-table">
           <div style={{ display: "grid", gridTemplateColumns: "1.5fr 1.5fr 1fr 1fr 1fr 1fr", gap: "16px", padding: "0 0 12px 0", borderBottom: "1px solid rgba(0,0,0,0.1)" }}>
             {["Orden", "Cliente", "PO", "Fecha", "Estado", "Total"].map((h) => (
               <p key={h} style={{ fontFamily: "StyreneA, sans-serif", fontSize: "10px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(0,0,0,0.35)", margin: 0 }}>{h}</p>
@@ -87,7 +94,7 @@ export default function AdminOrders() {
               <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "#000", margin: 0 }}>${parseFloat(order.subtotal_confirmed ?? order.subtotal_initial).toLocaleString("en-US", { minimumFractionDigits: 2 })}</p>
             </div>
           ))}
-        </>
+        </div></div>
       )}
     </>
   );

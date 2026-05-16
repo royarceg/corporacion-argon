@@ -7,55 +7,22 @@ const banners = [
 
 export default function TwoColumnBanners() {
   return (
-    <section
-      style={{
-        width: "100%",
-        maxWidth: "1400px",
-        margin: "0 auto",
-        padding: "0 32px",
-        display: "flex",
-        gap: "20px",
-        justifyContent: "center",
-      }}
-    >
-      {banners.map((banner) => (
-        <a
-          key={banner.title}
-          href={banner.href}
-          style={{
-            width: "658px",
-            height: "719px",
-            borderRadius: "8px",
-            overflow: "hidden",
-            position: "relative",
-            display: "block",
-            textDecoration: "none",
-            flexShrink: 0,
-          }}
-        >
-          <Image
-            src={banner.img}
-            alt={banner.title}
-            fill
-            className="object-cover"
-            sizes="658px"
-          />
-          <span
-            style={{
-              position: "absolute",
-              bottom: "32px",
-              left: "32px",
-              fontFamily: "StyreneA, sans-serif",
-              fontSize: "18px",
-              fontWeight: 400,
-              color: "#ffffff",
-              zIndex: 1,
-            }}
-          >
-            {banner.title}
-          </span>
-        </a>
-      ))}
-    </section>
+    <>
+      <style>{`
+        .tcb-section { width: 100%; max-width: 1400px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 32px); display: grid; grid-template-columns: 1fr; gap: clamp(12px, 2.5vw, 20px); }
+        @media (min-width: 768px) { .tcb-section { grid-template-columns: repeat(2, 1fr); } }
+        .tcb-card { aspect-ratio: 658/719; border-radius: 8px; overflow: hidden; position: relative; display: block; text-decoration: none; }
+        @media (max-width: 767px) { .tcb-card { aspect-ratio: 4/5; } }
+        .tcb-title { position: absolute; bottom: clamp(20px, 3vw, 32px); left: clamp(20px, 3vw, 32px); font-family: StyreneA, sans-serif; font-size: clamp(16px, 2vw, 18px); font-weight: 400; color: #fff; z-index: 1; }
+      `}</style>
+      <section className="tcb-section">
+        {banners.map((banner) => (
+          <a key={banner.title} href={banner.href} className="tcb-card">
+            <Image src={banner.img} alt={banner.title} fill className="object-cover" sizes="(min-width: 768px) 50vw, 100vw" />
+            <span className="tcb-title">{banner.title}</span>
+          </a>
+        ))}
+      </section>
+    </>
   );
 }

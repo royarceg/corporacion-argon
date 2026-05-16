@@ -8,84 +8,30 @@ const collections = [
 
 export default function CollectionBanners() {
   return (
-    <section
-      style={{
-        width: "100%",
-        maxWidth: "1400px",
-        margin: "0 auto",
-        padding: "0 32px",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        gap: "48px",
-      }}
-    >
-      {/* Title */}
-      <div style={{ width: "1336px", maxWidth: "100%", padding: "16px 0" }}>
-        <p
-          style={{
-            fontFamily: "StyreneA, sans-serif",
-            fontSize: "18px",
-            fontWeight: 400,
-            color: "#000000",
-            margin: 0,
-            lineHeight: 1.5,
-            maxWidth: "1304px",
-          }}
-        >
-          Equipamos a los equipos que hacen posible el trabajo. Uniformes, calzado y protección con calidad que dura.
-        </p>
-      </div>
-
-      {/* 3 Collection cards */}
-      <div
-        style={{
-          width: "1336px",
-          maxWidth: "100%",
-          display: "flex",
-          gap: "20px",
-          justifyContent: "center",
-        }}
-      >
-        {collections.map((col) => (
-          <a
-            key={col.title}
-            href={col.href}
-            style={{
-              width: "432px",
-              height: "532px",
-              borderRadius: "8px",
-              overflow: "hidden",
-              position: "relative",
-              display: "block",
-              textDecoration: "none",
-              flexShrink: 0,
-            }}
-          >
-            <Image
-              src={col.img}
-              alt={col.title}
-              fill
-              className="object-cover"
-              sizes="432px"
-            />
-            <span
-              style={{
-                position: "absolute",
-                bottom: "24px",
-                left: "24px",
-                fontFamily: "StyreneA, sans-serif",
-                fontSize: "18px",
-                fontWeight: 400,
-                color: "#ffffff",
-                zIndex: 1,
-              }}
-            >
-              {col.title}
-            </span>
-          </a>
-        ))}
-      </div>
-    </section>
+    <>
+      <style>{`
+        .cb-section { width: 100%; max-width: 1400px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 32px); display: flex; flex-direction: column; align-items: stretch; gap: clamp(24px, 4vw, 48px); }
+        .cb-intro { padding: 16px 0; }
+        .cb-text { font-family: StyreneA, sans-serif; font-size: clamp(14px, 2vw, 18px); font-weight: 400; color: #000; margin: 0; line-height: 1.5; max-width: 1304px; }
+        .cb-grid { width: 100%; display: grid; grid-template-columns: 1fr; gap: clamp(12px, 2.5vw, 20px); }
+        @media (min-width: 768px) { .cb-grid { grid-template-columns: repeat(3, 1fr); } }
+        .cb-card { aspect-ratio: 432/532; border-radius: 8px; overflow: hidden; position: relative; display: block; text-decoration: none; }
+        @media (max-width: 767px) { .cb-card { aspect-ratio: 16/10; } }
+        .cb-card-title { position: absolute; bottom: 24px; left: 24px; font-family: StyreneA, sans-serif; font-size: clamp(16px, 2vw, 18px); font-weight: 400; color: #fff; z-index: 1; }
+      `}</style>
+      <section className="cb-section">
+        <div className="cb-intro">
+          <p className="cb-text">Equipamos a los equipos que hacen posible el trabajo. Uniformes, calzado y protección con calidad que dura.</p>
+        </div>
+        <div className="cb-grid">
+          {collections.map((col) => (
+            <a key={col.title} href={col.href} className="cb-card">
+              <Image src={col.img} alt={col.title} fill className="object-cover" sizes="(min-width: 768px) 33vw, 100vw" />
+              <span className="cb-card-title">{col.title}</span>
+            </a>
+          ))}
+        </div>
+      </section>
+    </>
   );
 }

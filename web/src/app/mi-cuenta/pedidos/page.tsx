@@ -30,15 +30,21 @@ export default function PedidosPage() {
       <AnnouncementBar />
       <Header />
 
-      <main style={{ width: "100%", maxWidth: "1400px", padding: "48px 32px", flex: 1 }}>
-        <h1 style={{ fontFamily: "StyreneA, sans-serif", fontSize: "28px", fontWeight: 400, color: "#000", margin: "0 0 48px 0", letterSpacing: "-0.02em" }}>
+      <main style={{ width: "100%", maxWidth: "1400px", padding: "clamp(28px, 5vw, 48px) clamp(16px, 4vw, 32px)", flex: 1 }}>
+        <h1 style={{ fontFamily: "StyreneA, sans-serif", fontSize: "clamp(22px, 4vw, 28px)", fontWeight: 400, color: "#000", margin: "0 0 clamp(28px, 5vw, 48px) 0", letterSpacing: "-0.02em" }}>
           Mis Pedidos
         </h1>
 
-        <div style={{ display: "flex", gap: "80px", alignItems: "flex-start" }}>
+        <div className="pd-layout">
+          <style>{`
+            .pd-layout { display: flex; flex-direction: column; gap: clamp(24px, 4vw, 80px); align-items: stretch; }
+            @media (min-width: 1024px) { .pd-layout { flex-direction: row; align-items: flex-start; } }
+            .pd-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; min-width: 0; }
+            .pd-table { min-width: 720px; }
+          `}</style>
           <AccountSidebar />
 
-          <div style={{ flex: 1 }}>
+          <div style={{ flex: 1, minWidth: 0 }} className="pd-table-wrap"><div className="pd-table">
             {fetching ? (
               <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.4)" }}>Cargando pedidos...</p>
             ) : orders.length === 0 ? (
@@ -97,7 +103,7 @@ export default function PedidosPage() {
                 ))}
               </div>
             )}
-          </div>
+          </div></div>
         </div>
       </main>
 

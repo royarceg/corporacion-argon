@@ -130,13 +130,12 @@ export default function ProductDetailPage() {
       <AnnouncementBar />
       <Header />
 
-      <main style={{ width: "100%", maxWidth: "1400px", padding: "40px 40px 80px", flex: 1 }}>
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "minmax(0, 1fr) 400px",
-          gap: "60px",
-          alignItems: "start",
-        }}>
+      <main style={{ width: "100%", maxWidth: "1400px", padding: "clamp(20px, 4vw, 40px) clamp(16px, 4vw, 40px) clamp(40px, 8vw, 80px)", flex: 1 }}>
+        <div className="pdp-layout">
+          <style>{`
+            .pdp-layout { display: grid; grid-template-columns: 1fr; gap: clamp(24px, 4vw, 60px); align-items: start; }
+            @media (min-width: 1024px) { .pdp-layout { grid-template-columns: minmax(0, 1fr) 400px; } }
+          `}</style>
 
           {/* ── LEFT: imágenes apiladas ── */}
           <div ref={imagesRef} style={{ display: "flex", flexDirection: "column", gap: "4px", opacity: 0 }}>
@@ -484,7 +483,12 @@ export default function ProductDetailPage() {
               .related-card:hover .related-img { transform: scale(1.03); }
               .related-img { transition: transform 0.4s ease; }
             `}</style>
-            <div ref={relatedRef} style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "16px" }}>
+            <div ref={relatedRef} className="pdp-related">
+              <style>{`
+                .pdp-related { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+                @media (min-width: 640px) { .pdp-related { grid-template-columns: repeat(3, 1fr); } }
+                @media (min-width: 1024px) { .pdp-related { grid-template-columns: repeat(5, 1fr); } }
+              `}</style>
               {related.map((p) => (
                 <a
                   key={p.id}

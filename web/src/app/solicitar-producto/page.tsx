@@ -73,7 +73,7 @@ export default function SolicitarProductoPage() {
       <AnnouncementBar />
       <Header />
 
-      <main style={{ width: "100%", maxWidth: "1400px", padding: "48px 40px 80px", flex: 1, display: "flex", justifyContent: "center" }}>
+      <main style={{ width: "100%", maxWidth: "1400px", padding: "clamp(28px, 5vw, 48px) clamp(16px, 4vw, 40px) clamp(40px, 8vw, 80px)", flex: 1, display: "flex", justifyContent: "center" }}>
         <div ref={formRef} style={{ width: "100%", maxWidth: "560px", opacity: 0 }}>
 
           {submitted ? (

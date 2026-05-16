@@ -181,7 +181,7 @@ export default function AdminUsers() {
       {fetching ? (
         <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.4)" }}>Cargando...</p>
       ) : (
-        <>
+        <div style={{ overflowX: "auto", WebkitOverflowScrolling: "touch" }}><div style={{ minWidth: 880 }}>
           <div style={{ display: "grid", gridTemplateColumns: "0.5fr 1.5fr 1.5fr 2fr 1fr 0.8fr 1.5fr", gap: "12px", padding: "0 0 10px 0", borderBottom: "1px solid rgba(0,0,0,0.1)" }}>
             {["ID", "Usuario", "Nombre", "Email", "Rol", "Estado", "Acciones"].map((h) => (
               <p key={h} style={{ fontFamily: "StyreneA, sans-serif", fontSize: "10px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(0,0,0,0.35)", margin: 0 }}>{h}</p>
@@ -214,7 +214,7 @@ export default function AdminUsers() {
               </div>
             </div>
           ))}
-        </>
+        </div></div>
       )}
 
       {/* ── Modal: Editar usuario ── */}

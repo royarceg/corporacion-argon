@@ -46,14 +46,21 @@ export default function WishlistPage() {
       <AnnouncementBar />
       <Header />
 
-      <main style={{ width: "100%", maxWidth: "1400px", padding: "48px 32px", flex: 1 }}>
-        <h1 style={{ fontFamily: "StyreneA, sans-serif", fontSize: "28px", fontWeight: 400, color: "#000", margin: "0 0 48px 0", letterSpacing: "-0.02em" }}>
+      <main style={{ width: "100%", maxWidth: "1400px", padding: "clamp(28px, 5vw, 48px) clamp(16px, 4vw, 32px)", flex: 1 }}>
+        <h1 style={{ fontFamily: "StyreneA, sans-serif", fontSize: "clamp(22px, 4vw, 28px)", fontWeight: 400, color: "#000", margin: "0 0 clamp(28px, 5vw, 48px) 0", letterSpacing: "-0.02em" }}>
           Lista de Deseos
         </h1>
 
-        <div style={{ display: "flex", gap: "80px", alignItems: "flex-start" }}>
+        <div className="wl-layout">
+          <style>{`
+            .wl-layout { display: flex; flex-direction: column; gap: clamp(24px, 4vw, 80px); align-items: stretch; }
+            @media (min-width: 1024px) { .wl-layout { flex-direction: row; align-items: flex-start; } }
+            .wl-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(20px, 3vw, 24px) clamp(12px, 2vw, 16px); }
+            @media (min-width: 640px) { .wl-grid { grid-template-columns: repeat(3, 1fr); } }
+            @media (min-width: 1024px) { .wl-grid { grid-template-columns: repeat(4, 1fr); } }
+          `}</style>
           <AccountSidebar />
-          <div style={{ flex: 1 }}>
+          <div style={{ flex: 1, minWidth: 0 }}>
             {fetching ? (
               <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.4)" }}>Cargando...</p>
             ) : products.length === 0 ? (
@@ -62,7 +69,7 @@ export default function WishlistPage() {
                 <a href="/productos" style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "#000", textDecoration: "underline" }}>Explorar catálogo</a>
               </div>
             ) : (
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "24px 16px" }}>
+              <div className="wl-grid">
                 {products.map((product) => (
                   <div key={product.id} style={{ position: "relative" }}>
                     <ProductCard product={product} onAddToCart={(p) => addToCart(p.id, 1)} />

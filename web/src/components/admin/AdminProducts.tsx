@@ -74,7 +74,7 @@ export default function AdminProducts() {
       {fetching ? (
         <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.4)" }}>Cargando...</p>
       ) : (
-        <>
+        <div style={{ overflowX: "auto", WebkitOverflowScrolling: "touch" }}><div style={{ minWidth: 880 }}>
           <div style={{ display: "grid", gridTemplateColumns: "0.5fr 1fr 2fr 1fr 1fr 0.8fr 1.2fr", gap: "12px", padding: "0 0 10px 0", borderBottom: "1px solid rgba(0,0,0,0.1)" }}>
             {["ID", "SKU", "Nombre", "Categoría", "Precio", "Variantes", "Acciones"].map((h) => (
               <p key={h} style={{ fontFamily: "StyreneA, sans-serif", fontSize: "10px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(0,0,0,0.35)", margin: 0 }}>{h}</p>
@@ -97,7 +97,7 @@ export default function AdminProducts() {
               </div>
             </div>
           ))}
-        </>
+        </div></div>
       )}
 
       {/* Product Edit Modal */}
@@ -226,7 +226,7 @@ function ProductEditModal({ product, isCreate, existingCategories, onClose, onSa
 
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
           {/* Basic info */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "14px" }} className="adm-2col"><style>{`@media (min-width: 640px) { .adm-2col { grid-template-columns: 1fr 1fr !important; } }`}</style>
             <div><p style={labelStyle}>SKU *</p><input style={inputStyle} value={form.sku} onChange={(e) => set("sku", e.target.value)} /></div>
             <div>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -257,7 +257,7 @@ function ProductEditModal({ product, isCreate, existingCategories, onClose, onSa
           </div>
           <div><p style={labelStyle}>Nombre *</p><input style={inputStyle} value={form.name} onChange={(e) => set("name", e.target.value)} /></div>
           <div><p style={labelStyle}>Descripción</p><textarea style={{ ...inputStyle, minHeight: "60px", resize: "vertical" }} value={form.description} onChange={(e) => set("description", e.target.value)} /></div>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "14px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "14px" }} className="adm-3col"><style>{`@media (min-width: 768px) { .adm-3col { grid-template-columns: 1fr 1fr 1fr !important; } }`}</style>
             <div><p style={labelStyle}>Precio Referencia</p><input type="number" style={inputStyle} value={form.reference_price} onChange={(e) => set("reference_price", e.target.value)} /></div>
             <div><p style={labelStyle}>Colores (separados por coma)</p><input style={inputStyle} value={form.colors} onChange={(e) => set("colors", e.target.value)} /></div>
             <div><p style={labelStyle}>Tallas (separados por coma)</p><input style={inputStyle} value={form.sizes} onChange={(e) => set("sizes", e.target.value)} /></div>

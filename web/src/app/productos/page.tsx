@@ -137,13 +137,13 @@ function ProductosContent() {
       <AnnouncementBar />
       <Header />
 
-      <main style={{ width: "100%", maxWidth: "1400px", padding: "32px 40px", flex: 1 }}>
+      <main style={{ width: "100%", maxWidth: "1400px", padding: "clamp(20px, 4vw, 32px) clamp(16px, 4vw, 40px)", flex: 1 }}>
 
         {/* Page title */}
         <div style={{ display: "flex", alignItems: "center", gap: "16px", margin: "0 0 20px 0" }}>
           <h1 style={{
             fontFamily: "StyreneA, sans-serif",
-            fontSize: "24px",
+            fontSize: "clamp(18px, 3vw, 24px)",
             fontWeight: 400,
             color: "#000",
             margin: 0,
@@ -329,10 +329,10 @@ function ProductosContent() {
             top: 0,
             right: 0,
             bottom: 0,
-            width: "380px",
+            width: "min(90vw, 380px)",
             backgroundColor: "#ffffff",
             zIndex: 101,
-            padding: "32px",
+            padding: "clamp(20px, 4vw, 32px)",
             overflowY: "auto",
             display: "flex",
             flexDirection: "column",
@@ -480,7 +480,12 @@ function ProductGridAnimated({ children }: { children: React.ReactNode }) {
   }, [children]);
 
   return (
-    <div ref={ref} style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "40px 20px" }}>
+    <div ref={ref} className="product-grid-responsive">
+      <style>{`
+        .product-grid-responsive { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(24px, 4vw, 40px) clamp(12px, 2vw, 20px); }
+        @media (min-width: 640px) { .product-grid-responsive { grid-template-columns: repeat(3, 1fr); } }
+        @media (min-width: 1024px) { .product-grid-responsive { grid-template-columns: repeat(4, 1fr); } }
+      `}</style>
       {children}
     </div>
   );

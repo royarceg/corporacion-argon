@@ -7,119 +7,35 @@ const cards = [
 
 export default function QuoteSection() {
   return (
-    <section
-      style={{
-        width: "100%",
-        maxWidth: "1400px",
-        margin: "0 auto",
-        overflow: "hidden",
-      }}
-    >
+    <>
       <style>{`
-        .quote-card { flex: 1; transition: flex 0.4s ease; }
-        .quote-card:hover { flex: 1.6; }
-        .quote-card .quote-img { transition: transform 0.5s ease; }
-        .quote-card:hover .quote-img { transform: scale(1.05); }
+        .qs-section { width: 100%; max-width: 1400px; margin: 0 auto; overflow: hidden; }
+        .qs-grid { display: grid; grid-template-columns: 1fr 1fr; }
+        @media (min-width: 1024px) { .qs-grid { display: flex; height: 480px; } }
+        .qs-card { position: relative; display: flex; flex-direction: column; justify-content: flex-end; padding: clamp(20px, 3vw, 28px) clamp(16px, 2.5vw, 24px); overflow: hidden; text-decoration: none; aspect-ratio: 1/1.1; }
+        @media (min-width: 768px) { .qs-card { aspect-ratio: 16/10; } }
+        @media (min-width: 1024px) { .qs-card { aspect-ratio: auto; flex: 1; transition: flex 0.4s ease; height: 480px; } }
+        @media (min-width: 1024px) { .qs-card:hover { flex: 1.6; } }
+        .qs-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; transition: transform 0.5s ease; }
+        @media (min-width: 1024px) { .qs-card:hover .qs-img { transform: scale(1.05); } }
+        .qs-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.15) 60%); pointer-events: none; }
+        .qs-arrow { position: absolute; top: clamp(14px, 2vw, 24px); right: clamp(14px, 2vw, 24px); width: 32px; height: 32px; border: 1px solid rgba(255,255,255,0.4); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.7); font-size: 14px; z-index: 1; }
+        .qs-label { font-family: StyreneA, sans-serif; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.6); position: relative; z-index: 1; margin: 0 0 8px; }
+        .qs-title { font-family: StyreneA, sans-serif; font-size: clamp(16px, 2.4vw, 20px); font-weight: 400; color: #fff; line-height: 1.2; position: relative; z-index: 1; margin: 0; }
       `}</style>
-
-      <div style={{ display: "flex", height: "480px" }}>
-        {cards.map((card) => (
-          <a
-            key={card.label}
-            href={card.href}
-            className="quote-card"
-            style={{
-              position: "relative",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "flex-end",
-              padding: "28px 24px",
-              overflow: "hidden",
-              textDecoration: "none",
-            }}
-          >
-            {/* Photo background */}
-            <img
-              src={card.img}
-              alt={card.label}
-              className="quote-img"
-              style={{
-                position: "absolute",
-                inset: 0,
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                pointerEvents: "none",
-              }}
-            />
-
-            {/* Dark overlay */}
-            <div
-              style={{
-                position: "absolute",
-                inset: 0,
-                background: "linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.15) 60%)",
-                pointerEvents: "none",
-              }}
-            />
-
-            {/* Arrow */}
-            <span
-              style={{
-                position: "absolute",
-                top: "24px",
-                right: "24px",
-                width: "32px",
-                height: "32px",
-                border: "1px solid rgba(255,255,255,0.4)",
-                borderRadius: "50%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "rgba(255,255,255,0.7)",
-                fontSize: "14px",
-                zIndex: 1,
-              }}
-            >
-              ↗
-            </span>
-
-            {/* Label */}
-            <p
-              style={{
-                fontFamily: "StyreneA, sans-serif",
-                fontSize: "10px",
-                letterSpacing: "2px",
-                textTransform: "uppercase",
-                color: "rgba(255,255,255,0.6)",
-                position: "relative",
-                zIndex: 1,
-                margin: "0 0 8px 0",
-              }}
-            >
-              {card.label}
-            </p>
-
-            {/* Title */}
-            <p
-              style={{
-                fontFamily: "StyreneA, sans-serif",
-                fontSize: "20px",
-                fontWeight: 400,
-                color: "#ffffff",
-                lineHeight: 1.2,
-                position: "relative",
-                zIndex: 1,
-                margin: 0,
-              }}
-            >
-              {card.title[0]}
-              <br />
-              {card.title[1]}
-            </p>
-          </a>
-        ))}
-      </div>
-    </section>
+      <section className="qs-section">
+        <div className="qs-grid">
+          {cards.map((card) => (
+            <a key={card.label} href={card.href} className="qs-card">
+              <img src={card.img} alt={card.label} className="qs-img" />
+              <div className="qs-overlay" />
+              <span className="qs-arrow">↗</span>
+              <p className="qs-label">{card.label}</p>
+              <p className="qs-title">{card.title[0]}<br />{card.title[1]}</p>
+            </a>
+          ))}
+        </div>
+      </section>
+    </>
   );
 }

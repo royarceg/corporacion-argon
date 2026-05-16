@@ -26,7 +26,7 @@ export default function ShoppingBagDrawer() {
         top: 0,
         right: 0,
         bottom: 0,
-        width: "400px",
+        width: "min(95vw, 400px)",
         backgroundColor: "#ffffff",
         zIndex: 201,
         display: "flex",

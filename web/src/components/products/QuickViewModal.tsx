@@ -148,20 +148,17 @@ export default function QuickViewModal({ product: initialProduct, onClose }: Pro
       {/* Modal */}
       <div
         ref={modalRef}
-        style={{
-          position: "fixed",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          backgroundColor: "#ffffff",
-          zIndex: 201,
-          width: "min(860px, 92vw)",
-          maxHeight: "90vh",
-          display: "flex",
-          overflow: "hidden",
-          opacity: 0,
-        }}
+        className="qv-modal"
+        style={{ opacity: 0 }}
       >
+        <style>{`
+          .qv-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #fff; z-index: 201; width: min(860px, 92vw); max-height: 90svh; display: flex; flex-direction: column; overflow: hidden; }
+          @media (min-width: 768px) { .qv-modal { flex-direction: row; max-height: 90vh; } }
+          @media (max-width: 767px) { .qv-modal { width: 100vw; height: 100svh; max-height: 100svh; top: 0; left: 0; transform: none; } }
+          .qv-left { flex: 0 0 auto; display: flex; background: #f5f4f4; overflow: hidden; }
+          @media (min-width: 768px) { .qv-left { flex: 0 0 55%; } }
+          @media (max-width: 767px) { .qv-left { flex: 0 0 auto; height: 50vh; } }
+        `}</style>
         {/* Close button */}
         <button
           onClick={onClose}
@@ -184,14 +181,7 @@ export default function QuickViewModal({ product: initialProduct, onClose }: Pro
         </button>
 
         {/* LEFT — Images */}
-        <div
-          style={{
-            flex: "0 0 55%",
-            display: "flex",
-            backgroundColor: "#f5f4f4",
-            overflow: "hidden",
-          }}
-        >
+        <div className="qv-left">
           {/* Thumbnail strip */}
           {images.length > 1 && (
             <div

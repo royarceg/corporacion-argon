@@ -1,85 +1,33 @@
 export default function Hero() {
   return (
-    <section
-      style={{
-        width: "100%",
-        maxWidth: "1400px",
-        margin: "0 auto",
-        height: "712px",
-        backgroundColor: "#000000",
-        position: "relative",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: "20px",
-        overflow: "hidden",
-      }}
-    >
-      {/* Hero background video */}
-      <video
-        src="/images/web/hero-collection-01.mp4"
-        autoPlay
-        muted
-        loop
-        playsInline
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          objectFit: "cover",
-        }}
-      />
-
-      {/* Content overlay */}
-      <div
-        style={{
-          position: "relative",
-          zIndex: 1,
-          textAlign: "center",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: "20px",
-          maxWidth: "1272px",
-        }}
-      >
-        <h1
-          style={{
-            fontFamily: "StyreneA, sans-serif",
-            fontSize: "24px",
-            fontWeight: 400,
-            color: "#ffffff",
-            lineHeight: 1.5,
-            margin: 0,
-            whiteSpace: "pre-line",
-          }}
-        >
-          {"Equipa a tu equipo.\nUniformes y protección de alto rendimiento."}
-        </h1>
-
-        <a
-          href="/producto/acceso"
-          style={{
-            fontFamily: "StyreneA, sans-serif",
-            fontSize: "15px",
-            fontWeight: 400,
-            color: "#000000",
-            backgroundColor: "#f8f9fa",
-            width: "116px",
-            height: "42px",
-            display: "inline-flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "10px",
-            textDecoration: "none",
-          }}
-        >
-          Comprar Ya
-        </a>
-      </div>
-    </section>
+    <>
+      <style>{`
+        .hero-section {
+          width: 100%;
+          max-width: 1400px;
+          margin: 0 auto;
+          height: clamp(420px, 75svh, 712px);
+          background-color: #000;
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 20px;
+          overflow: hidden;
+        }
+        .hero-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+        .hero-content { position: relative; z-index: 1; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 20px; max-width: 1272px; padding: 0 clamp(16px, 4vw, 32px); }
+        .hero-title { font-family: StyreneA, sans-serif; font-weight: 400; color: #fff; line-height: 1.35; margin: 0; white-space: pre-line; font-size: clamp(18px, 3.4vw, 24px); }
+        .hero-cta { font-family: StyreneA, sans-serif; font-size: 15px; font-weight: 400; color: #000; background-color: #f8f9fa; min-width: 140px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; padding: 0 20px; }
+      `}</style>
+      <section className="hero-section">
+        <video src="/images/web/hero-collection-01.mp4" autoPlay muted loop playsInline className="hero-video" />
+        <div className="hero-content">
+          <h1 className="hero-title">{"Equipa a tu equipo.\nUniformes y protección de alto rendimiento."}</h1>
+          <a href="/producto/acceso" className="hero-cta">Comprar Ya</a>
+        </div>
+      </section>
+    </>
   );
 }

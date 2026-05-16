@@ -143,3 +143,34 @@ input[type="number"] {
   opacity: 1;
   transform: translateY(0);
 }
+
+/* ── Responsive foundations ── */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+img, video { max-width: 100%; height: auto; display: block; }
+button, input, select, textarea { font: inherit; }
+input, textarea, select { font-size: 16px; }
+@media (min-width: 768px) { input, textarea, select { font-size: 14px; } }
+
+/* Hide on mobile, show on desktop */
+.desktop-only { display: none; }
+@media (min-width: 1024px) { .desktop-only { display: flex; } }
+@media (min-width: 1024px) { .desktop-only-block { display: block; } }
+
+/* Hide on desktop, show on mobile */
+.mobile-only { display: flex; }
+@media (min-width: 1024px) { .mobile-only { display: none; } }
+
+/* Touch target minimum 44x44 */
+.touch-target { min-width: 44px; min-height: 44px; }
+
+/* Fluid container */
+.fluid-container {
+  width: 100%;
+  max-width: 1400px;
+  margin-inline: auto;
+  padding-inline: clamp(16px, 4vw, 32px);
+}
+
+/* Fluid section padding */
+.fluid-section { padding-block: clamp(32px, 6vw, 80px); }

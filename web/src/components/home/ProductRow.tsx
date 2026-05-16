@@ -11,131 +11,41 @@ const products = [
 export default function ProductRow() {
   return (
     <>
-    <style>{`
-      .cta-cotizar {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        font-family: StyreneA, sans-serif;
-        font-size: 10px;
-        font-weight: 400;
-        letter-spacing: 2.5px;
-        text-transform: uppercase;
-        color: #888;
-        text-decoration: none;
-        transition: color .2s;
-      }
-      .cta-cotizar span {
-        display: inline-block;
-        transition: transform .2s, color .2s;
-        color: #aaa;
-      }
-      .cta-cotizar:hover { color: #000; }
-      .cta-cotizar:hover span { color: #000; transform: translateX(3px); }
-    `}</style>
-    <section
-      style={{
-        width: "100%",
-        maxWidth: "1400px",
-        margin: "0 auto",
-        padding: "0 32px",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        gap: "48px",
-      }}
-    >
-      {/* Title frame */}
-      <div
-        style={{
-          width: "1336px",
-          maxWidth: "100%",
-          padding: "16px 0",
-        }}
-      >
-        <h2
-          style={{
-            fontFamily: "StyreneA, sans-serif",
-            fontSize: "18px",
-            fontWeight: 400,
-            color: "#000000",
-            margin: 0,
-          }}
-        >
-          Lo Que Necesitas Ahora
-        </h2>
-      </div>
+      <style>{`
+        .pr-section { width: 100%; max-width: 1400px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 32px); display: flex; flex-direction: column; align-items: stretch; gap: clamp(24px, 4vw, 48px); }
+        .pr-title-frame { width: 100%; padding: 16px 0; }
+        .pr-title { font-family: StyreneA, sans-serif; font-size: clamp(16px, 2.2vw, 18px); font-weight: 400; color: #000; margin: 0; }
+        .pr-grid { width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(12px, 2.5vw, 20px); }
+        @media (min-width: 640px) { .pr-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (min-width: 1024px) { .pr-grid { grid-template-columns: repeat(5, 1fr); } }
+        .pr-card { display: flex; flex-direction: column; gap: 13px; min-width: 0; }
+        .pr-img-link { display: block; width: 100%; aspect-ratio: 251/279; border-radius: 4px; overflow: hidden; position: relative; background: #f5f4f4; }
+        .pr-detail { display: flex; flex-direction: column; gap: 3px; align-items: center; text-align: center; }
+        .pr-name { font-family: StyreneA, sans-serif; font-size: clamp(11px, 1.5vw, 13px); font-weight: 400; color: #000; margin: 0; overflow-wrap: anywhere; }
+        .cta-cotizar { display: inline-flex; align-items: center; gap: 6px; font-family: StyreneA, sans-serif; font-size: 10px; font-weight: 400; letter-spacing: 2.5px; text-transform: uppercase; color: #888; text-decoration: none; transition: color .2s; }
+        .cta-cotizar span { display: inline-block; transition: transform .2s, color .2s; color: #aaa; }
+        .cta-cotizar:hover { color: #000; }
+        .cta-cotizar:hover span { color: #000; transform: translateX(3px); }
+      `}</style>
+      <section className="pr-section">
+        <div className="pr-title-frame">
+          <h2 className="pr-title">Lo Que Necesitas Ahora</h2>
+        </div>
 
-      {/* 5 Product cards */}
-      <div
-        style={{
-          width: "1336px",
-          maxWidth: "100%",
-          display: "flex",
-          gap: "20px",
-          justifyContent: "center",
-        }}
-      >
-        {products.map((product) => (
-          <div
-            key={product.name}
-            style={{
-              width: "251px",
-              flexShrink: 0,
-              display: "flex",
-              flexDirection: "column",
-              gap: "13px",
-            }}
-          >
-            {/* Product image */}
-            <a
-              href={product.href}
-              style={{
-                display: "block",
-                width: "251px",
-                height: "279px",
-                borderRadius: "4px",
-                overflow: "hidden",
-                position: "relative",
-              }}
-            >
-              <Image
-                src={product.img}
-                alt={product.name}
-                fill
-                className="object-cover"
-                sizes="251px"
-              />
-            </a>
-            {/* Detail frame */}
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "3px",
-                alignItems: "center",
-                textAlign: "center",
-              }}
-            >
-              <p
-                style={{
-                  fontFamily: "StyreneA, sans-serif",
-                  fontSize: "13px",
-                  fontWeight: 400,
-                  color: "#000000",
-                  margin: 0,
-                }}
-              >
-                {product.name}
-              </p>
-              <a href={product.href} className="cta-cotizar">
-                Cotizar ya <span>→</span>
+        <div className="pr-grid">
+          {products.map((product) => (
+            <div key={product.name} className="pr-card">
+              <a href={product.href} className="pr-img-link">
+                <Image src={product.img} alt={product.name} fill className="object-cover" sizes="(min-width: 1024px) 251px, (min-width: 640px) 33vw, 50vw" />
               </a>
+              <div className="pr-detail">
+                <p className="pr-name">{product.name}</p>
+                <a href={product.href} className="cta-cotizar">Cotizar ya <span>→</span></a>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
-    </section>
+          ))}
+        </div>
+      </section>
     </>
   );
 }

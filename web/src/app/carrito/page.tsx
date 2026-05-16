@@ -86,15 +86,15 @@ export default function CarritoPage() {
       <AnnouncementBar />
       <Header />
 
-      <main style={{ width: "100%", maxWidth: "1400px", padding: "48px 40px 80px", flex: 1 }}>
+      <main style={{ width: "100%", maxWidth: "1400px", padding: "clamp(24px, 5vw, 48px) clamp(16px, 4vw, 40px) clamp(40px, 8vw, 80px)", flex: 1 }}>
 
         {/* Title */}
         <h1 style={{
           fontFamily: "StyreneA, sans-serif",
-          fontSize: "26px",
+          fontSize: "clamp(20px, 3.5vw, 26px)",
           fontWeight: 400,
           color: "#000",
-          margin: "0 0 40px 0",
+          margin: "0 0 clamp(24px, 4vw, 40px) 0",
           textAlign: "center",
           letterSpacing: "-0.02em",
         }}>
@@ -111,10 +111,16 @@ export default function CarritoPage() {
             </a>
           </div>
         ) : (
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 320px", gap: "48px", alignItems: "start" }}>
+          <div className="cart-layout">
+            <style>{`
+              .cart-layout { display: grid; grid-template-columns: 1fr; gap: clamp(24px, 4vw, 48px); align-items: start; }
+              @media (min-width: 1024px) { .cart-layout { grid-template-columns: 1fr 320px; } }
+              .cart-items-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+              @media (min-width: 640px) { .cart-items-grid { grid-template-columns: repeat(2, 1fr); } }
+            `}</style>
 
             {/* ── Items ── */}
-            <div ref={gridRef} style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "16px" }}>
+            <div ref={gridRef} className="cart-items-grid">
               {items.map((item) => (
                 <div
                   key={item.id}
@@ -313,7 +319,12 @@ export default function CarritoPage() {
               Lo Que Necesitas Ahora
             </h2>
 
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "20px" }}>
+            <div className="cart-related-grid">
+              <style>{`
+                .cart-related-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(12px, 2vw, 20px); }
+                @media (min-width: 640px) { .cart-related-grid { grid-template-columns: repeat(3, 1fr); } }
+                @media (min-width: 1024px) { .cart-related-grid { grid-template-columns: repeat(4, 1fr); } }
+              `}</style>
               {related.map((product) => (
                 <div
                   key={product.id}

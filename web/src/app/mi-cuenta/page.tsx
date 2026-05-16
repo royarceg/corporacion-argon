@@ -26,39 +26,47 @@ export default function MiCuentaPage() {
       <AnnouncementBar />
       <Header />
 
-      <main style={{ width: "100%", maxWidth: "1400px", padding: "48px 32px", flex: 1 }}>
-        <h1 style={{ fontFamily: "StyreneA, sans-serif", fontSize: "28px", fontWeight: 400, color: "#000", margin: "0 0 48px 0", letterSpacing: "-0.02em" }}>
+      <main style={{ width: "100%", maxWidth: "1400px", padding: "clamp(28px, 5vw, 48px) clamp(16px, 4vw, 32px)", flex: 1 }}>
+        <h1 style={{ fontFamily: "StyreneA, sans-serif", fontSize: "clamp(22px, 4vw, 28px)", fontWeight: 400, color: "#000", margin: "0 0 clamp(28px, 5vw, 48px) 0", letterSpacing: "-0.02em" }}>
           Mi Cuenta
         </h1>
 
-        <div style={{ display: "flex", gap: "80px", alignItems: "flex-start" }}>
+        <div className="mc-layout">
+          <style>{`
+            .mc-layout { display: flex; flex-direction: column; gap: clamp(24px, 4vw, 80px); align-items: stretch; }
+            @media (min-width: 1024px) { .mc-layout { flex-direction: row; align-items: flex-start; } }
+            .mc-stats { display: grid; grid-template-columns: 1fr; gap: 16px; }
+            @media (min-width: 640px) { .mc-stats { grid-template-columns: repeat(3, 1fr); } }
+            .mc-cta { display: grid; grid-template-columns: 1fr; gap: 12px; }
+            @media (min-width: 640px) { .mc-cta { grid-template-columns: 1fr 1fr; } }
+          `}</style>
           <AccountSidebar />
 
           {/* Dashboard content */}
-          <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "24px" }}>
+          <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "24px", minWidth: 0 }}>
 
             {/* Welcome */}
-            <div style={{ padding: "32px", backgroundColor: "#f5f4f4" }}>
+            <div style={{ padding: "clamp(20px, 4vw, 32px)", backgroundColor: "#f5f4f4" }}>
               <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "14px", color: "rgba(0,0,0,0.6)", margin: "0 0 4px 0" }}>Bienvenido de vuelta,</p>
-              <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "20px", fontWeight: 400, color: "#000", margin: 0 }}>{user.name}</p>
+              <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "clamp(17px, 2.4vw, 20px)", fontWeight: 400, color: "#000", margin: 0 }}>{user.name}</p>
             </div>
 
             {/* Stats row */}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "16px" }}>
+            <div className="mc-stats">
               {[
                 { label: "Items en carrito", value: count.toString() },
                 { label: "Subtotal carrito", value: `$${parseFloat(total || "0").toLocaleString("en-US", { minimumFractionDigits: 2 })}` },
                 { label: "Rol", value: user.role === "master_admin" ? "Administrador" : "Cliente" },
               ].map((stat) => (
-                <div key={stat.label} style={{ padding: "24px", border: "1px solid rgba(0,0,0,0.08)" }}>
+                <div key={stat.label} style={{ padding: "clamp(16px, 3vw, 24px)", border: "1px solid rgba(0,0,0,0.08)" }}>
                   <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "11px", color: "rgba(0,0,0,0.4)", margin: "0 0 8px 0", letterSpacing: "0.06em", textTransform: "uppercase" }}>{stat.label}</p>
-                  <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "20px", fontWeight: 400, color: "#000", margin: 0 }}>{stat.value}</p>
+                  <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "clamp(17px, 2.4vw, 20px)", fontWeight: 400, color: "#000", margin: 0 }}>{stat.value}</p>
                 </div>
               ))}
             </div>
 
             {/* Quick links */}
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
+            <div className="mc-cta">
               <a href="/productos" style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "#fff", backgroundColor: "#000", padding: "14px 24px", textDecoration: "none", textAlign: "center", letterSpacing: "0.04em", textTransform: "uppercase" }}>
                 Ver Catálogo
               </a>

@@ -149,7 +149,14 @@ export default function AdminOrderDetailPage() {
         </div>
 
         {/* Info cards */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1px", backgroundColor: "rgba(0,0,0,0.08)", border: "1px solid rgba(0,0,0,0.08)", marginBottom: "40px" }}>
+        <div className="admo-info-grid" style={{ gap: "1px", backgroundColor: "rgba(0,0,0,0.08)", border: "1px solid rgba(0,0,0,0.08)", marginBottom: "40px" }}>
+          <style>{`
+            .admo-info-grid { display: grid; grid-template-columns: 1fr; }
+            @media (min-width: 640px) { .admo-info-grid { grid-template-columns: repeat(2, 1fr); } }
+            @media (min-width: 1024px) { .admo-info-grid { grid-template-columns: repeat(4, 1fr); } }
+            .admo-items-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+            .admo-items-table { min-width: 860px; }
+          `}</style>
           {[
             { label: "Cliente", value: (order as any).company_name ?? "—" },
             { label: "Creado por", value: (order as any).created_by_name ? `${(order as any).created_by_name} (${(order as any).created_by})` : (order as any).created_by ?? "—" },
@@ -185,8 +192,8 @@ export default function AdminOrderDetailPage() {
           </button>
         </div>
 
-        {/* Items table */}
-        <div style={{ border: "1px solid rgba(0,0,0,0.08)" }}>
+        {/* Items table - horizontal scroll on mobile */}
+        <div className="admo-items-wrap"><div className="admo-items-table" style={{ border: "1px solid rgba(0,0,0,0.08)" }}>
 
           {/* Table header: SKU - Producto - Imagen - Cant. Pedida - Cant. Confirmada - Precio Unit. - Total */}
           <div style={{
@@ -303,7 +310,7 @@ export default function AdminOrderDetailPage() {
               {formatPrice(subtotalConfirmed)}
             </p>
           </div>
-        </div>
+        </div></div>
 
         {/* Comentarios por producto ya están inline en cada fila */}
 

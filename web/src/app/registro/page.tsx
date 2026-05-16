@@ -79,7 +79,7 @@ export default function RegistroPage() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          padding: "60px 32px",
+          padding: "clamp(32px, 6vw, 60px) clamp(16px, 4vw, 32px)",
           backgroundColor: "#f5f4f4",
         }}
       >
@@ -88,7 +88,7 @@ export default function RegistroPage() {
             width: "100%",
             maxWidth: "480px",
             backgroundColor: "#ffffff",
-            padding: "48px 40px",
+            padding: "clamp(28px, 5vw, 48px) clamp(20px, 4vw, 40px)",
           }}
         >
           {state === "success" ? (
