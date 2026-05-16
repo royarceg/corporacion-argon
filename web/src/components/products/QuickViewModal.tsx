@@ -125,7 +125,7 @@ export default function QuickViewModal({ product: initialProduct, onClose }: Pro
     }
     if (modalRef.current) {
       animate(modalRef.current, {
-        opacity: [0, 1], scale: [0.96, 1], duration: 400, ease: "outExpo",
+        opacity: [0, 1], duration: 400, ease: "outExpo",
       });
     }
   }, []);
