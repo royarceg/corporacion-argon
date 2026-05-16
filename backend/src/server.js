@@ -19,8 +19,24 @@ const PORT = process.env.PORT || 5000;
 app.use(helmet());
 
 // CORS = permite que el frontend (React) hable con el backend
+// Genera automáticamente las variantes con/sin www para evitar problemas de redirect
+function expandWwwVariants(url) {
+  if (!url) return [];
+  const variants = [url];
+  try {
+    const u = new URL(url);
+    if (u.hostname.startsWith('www.')) {
+      variants.push(`${u.protocol}//${u.hostname.slice(4)}${u.pathname.replace(/\/$/, '')}`);
+    } else {
+      variants.push(`${u.protocol}//www.${u.hostname}${u.pathname.replace(/\/$/, '')}`);
+    }
+  } catch { /* ignore invalid URLs */ }
+  return variants;
+}
+
 const allowedOrigins = [
-  process.env.FRONTEND_URL,
+  ...expandWwwVariants(process.env.FRONTEND_URL),
+  ...(process.env.FRONTEND_URLS || '').split(',').map(s => s.trim()).filter(Boolean).flatMap(expandWwwVariants),
   'http://localhost:3000',
   'http://localhost:3001',
   'http://localhost:3002',
