@@ -2,7 +2,7 @@ import Image from "next/image";
 
 const products = [
   { name: "CHALECO", img: "https://res.cloudinary.com/dj0i57kxn/image/upload/v1776101299/productos/CHA-01-2.png", href: "/productos/98" },
-  { name: "BOTELLA ACERO INOX", img: "https://res.cloudinary.com/dj0i57kxn/image/upload/v1778888112/productos/BOT-03-2.png", href: "/productos/88" },
+  { name: "BOTELLA ACERO INOX", img: "https://res.cloudinary.com/dj0i57kxn/image/upload/v1777009710/products/images/ptt0odfeskijbadl8m3u.png", href: "/productos/88" },
   { name: "CASCO MOTORIZADO", img: "https://res.cloudinary.com/dj0i57kxn/image/upload/v1776101291/productos/CAS-01-2.png", href: "/productos/93" },
   { name: "CADENA PIÑONES MOTO", img: "https://res.cloudinary.com/dj0i57kxn/image/upload/v1776101279/productos/CAD-SPRO-2.png", href: "/productos/125" },
   { name: "BOTIN BEIGE", img: "https://res.cloudinary.com/dj0i57kxn/image/upload/v1776101433/productos/ZAP-01.png", href: "/productos/7" },
