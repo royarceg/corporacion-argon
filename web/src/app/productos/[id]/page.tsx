@@ -31,6 +31,7 @@ export default function ProductDetailPage() {
   const [openAccordion, setOpenAccordion] = useState<string | null>("descripcion");
   const [siblings, setSiblings] = useState<Sibling[]>([]);
   const [related, setRelated] = useState<ApiProduct[]>([]);
+  const [completeLook, setCompleteLook] = useState<ApiProduct[]>([]);
   const imagesRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const relatedRef = useRef<HTMLDivElement>(null);
@@ -53,12 +54,51 @@ export default function ProductDetailPage() {
         .then((all) => {
           const pid = Number(id);
           const current = all.find((p) => p.id === pid);
-          const sameCat = all.filter((p) => p.id !== pid && p.category === current?.category);
-          const others = all.filter((p) => p.id !== pid && p.category !== current?.category);
-          const picks = [...sameCat, ...others].slice(0, 5);
-          setRelated(picks);
+          const others = all.filter((p) => p.id !== pid);
+
+          // Mapeo de categorías complementarias para "Completá tu equipo"
+          const complementMap: Record<string, string[]> = {
+            "ZAPATOS DE SEGURIDAD": ["UNIFORME", "SEGURIDAD", "PROTECCION", "PROMOCIONALES"],
+            "UNIFORME": ["ZAPATOS DE SEGURIDAD", "PROTECCION", "SEGURIDAD"],
+            "PROTECCION": ["UNIFORME", "ZAPATOS DE SEGURIDAD", "SEGURIDAD"],
+            "SEGURIDAD": ["UNIFORME", "PROTECCION", "ZAPATOS DE SEGURIDAD"],
+            "MOTOCICLETA": ["PROTECCION", "SEGURIDAD", "UNIFORME"],
+            "HIGIENE": ["UNIFORME", "PROTECCION"],
+            "ILUMINACION": ["SEGURIDAD", "MOTOCICLETA"],
+            "PROMOCIONALES": ["UNIFORME", "PROMOCIONALES"],
+            "PARAGUAS": ["UNIFORME", "PROMOCIONALES"],
+            "PUBLICIDAD EXTERIOR": ["PROMOCIONALES"],
+          };
+
+          // COMPLETA TU EQUIPO — siempre 5 productos
+          const complementaryCats = complementMap[current?.category ?? ""] ?? [];
+          const complementary = others.filter((p) => complementaryCats.includes(p.category ?? ""));
+          // Shuffle complementary for variety
+          const shuffled = [...complementary].sort(() => Math.random() - 0.5);
+          let lookPicks = shuffled.slice(0, 5);
+          if (lookPicks.length < 5) {
+            // Si no alcanza, rellenar con otros productos (no la categoría actual)
+            const fillers = others.filter(
+              (p) => p.category !== current?.category && !lookPicks.some((x) => x.id === p.id)
+            ).sort(() => Math.random() - 0.5);
+            lookPicks = [...lookPicks, ...fillers].slice(0, 5);
+          }
+          if (lookPicks.length < 5) {
+            // Última chance: rellenar con cualquier otro (incluso misma cat)
+            const remaining = others.filter((p) => !lookPicks.some((x) => x.id === p.id));
+            lookPicks = [...lookPicks, ...remaining].slice(0, 5);
+          }
+          setCompleteLook(lookPicks);
+
+          // TAMBIÉN TE PUEDE INTERESAR — mix 12 productos (misma cat + variado)
+          const sameCat = others.filter((p) => p.category === current?.category);
+          const diffCat = others.filter(
+            (p) => p.category !== current?.category && !lookPicks.some((x) => x.id === p.id)
+          ).sort(() => Math.random() - 0.5);
+          const interestPicks = [...sameCat, ...diffCat].slice(0, 12);
+          setRelated(interestPicks);
         })
-        .catch(() => setRelated([]));
+        .catch(() => { setRelated([]); setCompleteLook([]); });
     }
   }, [id, loading, isAuthenticated, router]);
 
@@ -509,70 +549,76 @@ export default function ProductDetailPage() {
           </div>
         </div>
 
-        {/* ── Productos relacionados ── */}
-        {related.length > 0 && (
-          <div style={{ marginTop: "80px", borderTop: "1px solid rgba(0,0,0,0.08)", paddingTop: "48px" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "28px" }}>
-              <h2 style={{ fontFamily: "StyreneA, sans-serif", fontSize: "20px", fontWeight: 400, color: "#000", margin: 0, letterSpacing: "-0.01em" }}>
-                Completá tu pedido
-              </h2>
-              <a href="/productos" style={{ fontFamily: "StyreneA, sans-serif", fontSize: "12px", color: "#000", textDecoration: "none", letterSpacing: "0.08em", textTransform: "uppercase", borderBottom: "1px solid #000", paddingBottom: "2px" }}>
-                Ver todo →
-              </a>
+        {/* ── Cross-sell: Adidas-style ── */}
+        <style>{`
+          .xsell-section { margin-top: 64px; padding-top: 48px; border-top: 1px solid rgba(0,0,0,0.08); }
+          .xsell-header { margin-bottom: 28px; }
+          .xsell-title { font-family: StyreneA, sans-serif; font-size: clamp(20px, 3vw, 26px); font-weight: 700; color: #000; margin: 0 0 6px; letter-spacing: -0.01em; text-transform: uppercase; }
+          .xsell-sub { font-family: StyreneA, sans-serif; font-size: 13px; color: rgba(0,0,0,0.55); margin: 0; }
+          .xsell-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+          @media (min-width: 640px) { .xsell-grid { grid-template-columns: repeat(3, 1fr); } }
+          @media (min-width: 1024px) { .xsell-grid { grid-template-columns: repeat(5, 1fr); gap: 16px; } }
+          .xsell-card { position: relative; cursor: pointer; border: 1.5px solid transparent; padding: 12px; transition: border-color 0.2s; text-decoration: none; color: inherit; display: block; }
+          .xsell-card:hover { border-color: rgba(0,0,0,0.15); }
+          .xsell-heart { position: absolute; top: 16px; right: 16px; width: 28px; height: 28px; border: none; background: transparent; cursor: pointer; font-size: 22px; line-height: 1; z-index: 2; color: rgba(0,0,0,0.5); padding: 0; }
+          .xsell-heart:hover { color: #000; }
+          .xsell-img { aspect-ratio: 1/1; background-color: #f5f4f4; overflow: hidden; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; }
+          .xsell-img img { width: 100%; height: 100%; object-fit: contain; transition: transform 0.4s ease; }
+          .xsell-card:hover .xsell-img img { transform: scale(1.03); }
+          .xsell-price { font-family: StyreneA, sans-serif; font-size: 13px; font-weight: 500; margin: 0 0 4px; color: #000; }
+          .xsell-name { font-family: StyreneA, sans-serif; font-size: 12px; color: #000; margin: 0 0 4px; line-height: 1.35; min-height: 32px; }
+          .xsell-cat { font-family: StyreneA, sans-serif; font-size: 11px; color: rgba(0,0,0,0.45); margin: 0; text-transform: uppercase; letter-spacing: 0.04em; }
+          /* Second grid (Te puede interesar) shows up to 12 items */
+          .xsell-grid-wide { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+          @media (min-width: 640px) { .xsell-grid-wide { grid-template-columns: repeat(3, 1fr); } }
+          @media (min-width: 1024px) { .xsell-grid-wide { grid-template-columns: repeat(4, 1fr); gap: 16px; } }
+          @media (min-width: 1400px) { .xsell-grid-wide { grid-template-columns: repeat(6, 1fr); } }
+        `}</style>
+
+        {/* COMPLETÁ TU EQUIPO — siempre 5 productos */}
+        {completeLook.length > 0 && (
+          <section className="xsell-section">
+            <div className="xsell-header">
+              <h2 className="xsell-title">Completá tu equipo</h2>
+              <p className="xsell-sub">Productos que se usan junto con este</p>
             </div>
-            <style>{`
-              .related-card { position: relative; }
-              .related-card .related-cta { opacity: 0; transition: opacity 0.2s; }
-              .related-card:hover .related-cta { opacity: 1; }
-              .related-card:hover .related-img { transform: scale(1.03); }
-              .related-img { transition: transform 0.4s ease; }
-            `}</style>
-            <div ref={relatedRef} className="pdp-related">
-              <style>{`
-                .pdp-related { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
-                @media (min-width: 640px) { .pdp-related { grid-template-columns: repeat(3, 1fr); } }
-                @media (min-width: 1024px) { .pdp-related { grid-template-columns: repeat(5, 1fr); } }
-              `}</style>
-              {related.map((p) => (
-                <a
-                  key={p.id}
-                  href={`/productos/${p.id}`}
-                  className="related-card"
-                  style={{ textDecoration: "none", display: "flex", flexDirection: "column", gap: "10px" }}
-                >
-                  <div style={{ aspectRatio: "3/4", backgroundColor: "#f5f4f4", overflow: "hidden", position: "relative" }}>
-                    {p.images?.[0] && (
-                      <img className="related-img" src={p.images[0]} alt={p.name} style={{ width: "100%", height: "100%", objectFit: "contain" }} />
-                    )}
-                    <div
-                      className="related-cta"
-                      style={{
-                        position: "absolute",
-                        bottom: "12px",
-                        left: "12px",
-                        right: "12px",
-                        backgroundColor: "#000",
-                        color: "#fff",
-                        fontFamily: "StyreneA, sans-serif",
-                        fontSize: "10px",
-                        fontWeight: 500,
-                        letterSpacing: "0.1em",
-                        textTransform: "uppercase",
-                        textAlign: "center",
-                        padding: "10px",
-                      }}
-                    >
-                      Ver producto
-                    </div>
+            <div className="xsell-grid">
+              {completeLook.map((p) => (
+                <a key={p.id} href={`/productos/${p.id}`} className="xsell-card">
+                  <button className="xsell-heart" aria-label="Guardar" onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}>♡</button>
+                  <div className="xsell-img">
+                    {p.images?.[0] && <img src={p.images[0]} alt={p.name} />}
                   </div>
-                  <div>
-                    <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "12px", fontWeight: 500, color: "#000", margin: "0 0 2px 0", lineHeight: 1.3 }}>{p.name}</p>
-                    <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "10px", color: "rgba(0,0,0,0.4)", letterSpacing: "0.06em", textTransform: "uppercase", margin: 0 }}>{p.category}</p>
-                  </div>
+                  <p className="xsell-price">{formatPrice(p.reference_price)}</p>
+                  <p className="xsell-name">{p.name}</p>
+                  <p className="xsell-cat">ARGON</p>
                 </a>
               ))}
             </div>
-          </div>
+          </section>
+        )}
+
+        {/* TAMBIÉN TE PUEDE INTERESAR — 8-12 productos mix */}
+        {related.length > 0 && (
+          <section className="xsell-section" ref={relatedRef}>
+            <div className="xsell-header">
+              <h2 className="xsell-title">También te puede interesar</h2>
+              <p className="xsell-sub">Otras opciones que podrían encajar</p>
+            </div>
+            <div className="xsell-grid-wide">
+              {related.map((p) => (
+                <a key={p.id} href={`/productos/${p.id}`} className="xsell-card">
+                  <button className="xsell-heart" aria-label="Guardar" onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}>♡</button>
+                  <div className="xsell-img">
+                    {p.images?.[0] && <img src={p.images[0]} alt={p.name} />}
+                  </div>
+                  <p className="xsell-price">{formatPrice(p.reference_price)}</p>
+                  <p className="xsell-name">{p.name}</p>
+                  <p className="xsell-cat">ARGON</p>
+                </a>
+              ))}
+            </div>
+          </section>
         )}
       </main>
 
