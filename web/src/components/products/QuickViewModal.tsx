@@ -152,12 +152,49 @@ export default function QuickViewModal({ product: initialProduct, onClose }: Pro
         style={{ opacity: 0 }}
       >
         <style>{`
-          .qv-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #fff; z-index: 201; width: min(860px, 92vw); max-height: 90svh; display: flex; flex-direction: column; overflow: hidden; }
-          @media (min-width: 768px) { .qv-modal { flex-direction: row; max-height: 90vh; } }
-          @media (max-width: 767px) { .qv-modal { width: 100vw; height: 100svh; max-height: 100svh; top: 0; left: 0; transform: none; } }
+          .qv-modal { position: fixed; background: #fff; z-index: 100; display: flex; overflow: hidden; }
+          /* Desktop (768+): centered modal */
+          @media (min-width: 768px) {
+            .qv-modal {
+              top: 50%; left: 50%;
+              transform: translate(-50%, -50%);
+              width: min(860px, 92vw);
+              max-height: 90vh;
+              flex-direction: row;
+              border-radius: 4px;
+            }
+          }
+          /* Mobile (<768px): BOTTOM SHEET — slides up from bottom, 90% viewport */
+          @media (max-width: 767px) {
+            .qv-modal {
+              left: 0; right: 0; bottom: 0;
+              width: 100vw;
+              max-height: 90svh;
+              flex-direction: column;
+              border-radius: 16px 16px 0 0;
+              animation: qv-slide-up 0.3s ease-out;
+              padding-bottom: env(safe-area-inset-bottom);
+            }
+            .qv-modal::before {
+              content: "";
+              position: absolute;
+              top: 8px;
+              left: 50%;
+              transform: translateX(-50%);
+              width: 36px;
+              height: 4px;
+              background: rgba(0,0,0,0.2);
+              border-radius: 2px;
+              z-index: 2;
+            }
+          }
+          @keyframes qv-slide-up {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+          }
           .qv-left { flex: 0 0 auto; display: flex; background: #f5f4f4; overflow: hidden; }
           @media (min-width: 768px) { .qv-left { flex: 0 0 55%; } }
-          @media (max-width: 767px) { .qv-left { flex: 0 0 auto; height: 50vh; } }
+          @media (max-width: 767px) { .qv-left { flex: 0 0 auto; height: 45svh; padding-top: 20px; } }
         `}</style>
         {/* Close button */}
         <button

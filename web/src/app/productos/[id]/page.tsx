@@ -137,8 +137,52 @@ export default function ProductDetailPage() {
             @media (min-width: 1024px) { .pdp-layout { grid-template-columns: minmax(0, 1fr) 400px; } }
           `}</style>
 
-          {/* ── LEFT: imágenes apiladas ── */}
-          <div ref={imagesRef} style={{ display: "flex", flexDirection: "column", gap: "4px", opacity: 0 }}>
+          {/* ── LEFT: imágenes — apiladas en desktop, carousel en mobile ── */}
+          <style>{`
+            .pdp-images { display: flex; flex-direction: column; gap: 4px; }
+            @media (max-width: 767px) {
+              .pdp-images {
+                flex-direction: row;
+                overflow-x: auto;
+                scroll-snap-type: x mandatory;
+                -webkit-overflow-scrolling: touch;
+                gap: 0;
+                margin-inline: calc(clamp(16px, 4vw, 40px) * -1);
+              }
+              .pdp-images::-webkit-scrollbar { display: none; }
+              .pdp-images > div {
+                flex: 0 0 100%;
+                scroll-snap-align: start;
+                aspect-ratio: 1/1 !important;
+              }
+            }
+            /* Sticky bar mobile only */
+            .pdp-sticky-bar { display: none; }
+            @media (max-width: 1023px) {
+              .pdp-sticky-bar {
+                display: flex;
+                position: fixed;
+                bottom: 64px;
+                left: 0;
+                right: 0;
+                background: #fff;
+                border-top: 1px solid rgba(0,0,0,0.08);
+                padding: 10px 16px;
+                z-index: 40;
+                align-items: center;
+                gap: 12px;
+                padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+              }
+              .pdp-sticky-info { flex: 1; min-width: 0; }
+              .pdp-sticky-name { font-family: StyreneA, sans-serif; font-size: 12px; font-weight: 500; color: #000; margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+              .pdp-sticky-price { font-family: StyreneA, sans-serif; font-size: 14px; color: rgba(0,0,0,0.7); margin: 0; }
+              .pdp-sticky-cta { padding: 10px 16px; background: #000; color: #fff; font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; border: none; font-family: StyreneA, sans-serif; cursor: pointer; flex-shrink: 0; min-height: 40px; }
+              /* Push body content to account for sticky bar */
+              .pdp-bottom-spacer { height: 72px; }
+            }
+            @media (min-width: 1024px) { .pdp-bottom-spacer { display: none; } }
+          `}</style>
+          <div ref={imagesRef} className="pdp-images" style={{ opacity: 0 }}>
             {images.length > 0 ? images.map((img, i) => (
               <div
                 key={i}
@@ -531,6 +575,23 @@ export default function ProductDetailPage() {
           </div>
         )}
       </main>
+
+      {/* Mobile sticky bar — name + price + add to cart */}
+      <div className="pdp-sticky-bar" aria-label="Acciones rápidas">
+        <div className="pdp-sticky-info">
+          <p className="pdp-sticky-name">{product.name}</p>
+          <p className="pdp-sticky-price">{formatPrice(product.reference_price)}</p>
+        </div>
+        <button
+          onClick={handleAddToCart}
+          disabled={adding || added}
+          className="pdp-sticky-cta"
+          style={{ opacity: adding ? 0.5 : 1 }}
+        >
+          {added ? "✓ Agregado" : adding ? "Agregando..." : "Agregar"}
+        </button>
+      </div>
+      <div className="pdp-bottom-spacer" aria-hidden="true" />
 
       <Footer />
     </div>
