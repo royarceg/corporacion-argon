@@ -1,9 +1,9 @@
 import Image from "next/image";
 
 const collections = [
-  { title: "Novedades", href: "/producto/acceso", img: "/images/web/banner-collection-03.svg" },
-  { title: "Colección Laboral", href: "/producto/acceso", img: "/images/web/banner-collection-02.svg" },
-  { title: "Más Vendidos", href: "/producto/acceso", img: "/images/web/banner-collection-01.svg" },
+  { title: "Novedades", href: "/productos", img: "/images/web/banner-collection-03.svg" },
+  { title: "Colección Laboral", href: "/productos", img: "/images/web/banner-collection-02.svg" },
+  { title: "Más Vendidos", href: "/productos", img: "/images/web/banner-collection-01.svg" },
 ];
 
 export default function CollectionBanners() {

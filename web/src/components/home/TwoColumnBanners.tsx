@@ -1,8 +1,8 @@
 import Image from "next/image";
 
 const banners = [
-  { title: "CHALECO REFLECTIVO", href: "/producto/acceso", img: "/images/web/banner-two-col-01.svg" },
-  { title: "VASO ACERO INOX", href: "/producto/acceso", img: "/images/web/banner-two-col-02.svg" },
+  { title: "CHALECO REFLECTIVO", href: "/productos", img: "/images/web/banner-two-col-01.svg" },
+  { title: "VASO ACERO INOX", href: "/productos", img: "/images/web/banner-two-col-02.svg" },
 ];
 
 export default function TwoColumnBanners() {

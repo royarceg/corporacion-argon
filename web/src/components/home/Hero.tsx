@@ -25,7 +25,7 @@ export default function Hero() {
         <video src="/images/web/hero-collection-01.mp4" autoPlay muted loop playsInline className="hero-video" />
         <div className="hero-content">
           <h1 className="hero-title">{"Equipa a tu equipo.\nUniformes y protección de alto rendimiento."}</h1>
-          <a href="/producto/acceso" className="hero-cta">Comprar Ya</a>
+          <a href="/productos" className="hero-cta">Comprar Ya</a>
         </div>
       </section>
     </>
