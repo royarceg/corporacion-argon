@@ -318,9 +318,25 @@ const confirmOrder = async (req, res) => {
     const order = orderCheck.rows[0];
     let subtotal_confirmed = 0;
 
+    // Cargar los items que realmente pertenecen a esta orden: item_id -> product_id
+    const orderItemsResult = await client.query(
+      'SELECT id, product_id FROM order_items WHERE purchase_order_id = $1',
+      [id]
+    );
+    const productByItemId = new Map(
+      orderItemsResult.rows.map((row) => [Number(row.id), row.product_id])
+    );
+
     // Actualizar items
     for (const item of items) {
       const { id: item_id, quantity_confirmed, unit_price_confirmed } = item;
+
+      // El item DEBE pertenecer a esta orden (evita corromper precios de otros productos)
+      if (!productByItemId.has(Number(item_id))) {
+        await client.query('ROLLBACK');
+        return res.status(400).json({ error: `El item ${item_id} no pertenece a esta orden.` });
+      }
+      const product_id = productByItemId.get(Number(item_id));
       
       const line_total = quantity_confirmed * unit_price_confirmed;
       subtotal_confirmed += line_total;
@@ -338,13 +354,13 @@ const confirmOrder = async (req, res) => {
       // Actualizar precio de referencia del cliente
       await client.query(
         `INSERT INTO client_product_prices (client_id, product_id, price, last_order_id, updated_at)
-         VALUES ($1, (SELECT product_id FROM order_items WHERE id = $2), $3, $4, NOW())
-         ON CONFLICT (client_id, product_id) 
-         DO UPDATE SET 
-           price = $3, 
-           last_order_id = $4, 
+         VALUES ($1, $2, $3, $4, NOW())
+         ON CONFLICT (client_id, product_id)
+         DO UPDATE SET
+           price = $3,
+           last_order_id = $4,
            updated_at = NOW()`,
-        [order.client_id, item_id, unit_price_confirmed, id]
+        [order.client_id, product_id, unit_price_confirmed, id]
       );
     }
 
