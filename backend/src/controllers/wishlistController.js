@@ -37,23 +37,23 @@ const getWishlist = async (req, res) => {
       [client_id, user_id]
     );
 
-    // Para cada producto, obtener su imagen principal
-    const wishlistItems = await Promise.all(
-      wishlistResult.rows.map(async (item) => {
-        const imageResult = await pool.query(
-          `SELECT image_url 
-           FROM product_images 
-           WHERE product_id = $1 AND is_primary = true
-           LIMIT 1`,
-          [item.product_id]
-        );
+    // Traer todas las imágenes principales en UNA sola query (evita N+1)
+    const productIds = [...new Set(wishlistResult.rows.map((r) => r.product_id))];
+    const imagesResult = productIds.length
+      ? await pool.query(
+          `SELECT DISTINCT ON (product_id) product_id, image_url
+           FROM product_images
+           WHERE product_id = ANY($1) AND is_primary = true
+           ORDER BY product_id`,
+          [productIds]
+        )
+      : { rows: [] };
+    const imageByProduct = new Map(imagesResult.rows.map((r) => [r.product_id, r.image_url]));
 
-        return {
-          ...item,
-          image_url: imageResult.rows[0]?.image_url || null
-        };
-      })
-    );
+    const wishlistItems = wishlistResult.rows.map((item) => ({
+      ...item,
+      image_url: imageByProduct.get(item.product_id) || null
+    }));
 
     res.json({
       success: true,

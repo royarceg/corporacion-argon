@@ -49,26 +49,28 @@ const getCart = async (req, res) => {
       [user_id]
     );
 
-    // Para cada item, obtener su imagen principal y calcular subtotal
-    const cartItems = await Promise.all(
-      cartResult.rows.map(async (item) => {
-        const imageResult = await pool.query(
-          `SELECT image_url 
-           FROM product_images 
-           WHERE product_id = $1 AND is_primary = true
-           LIMIT 1`,
-          [item.product_id]
-        );
+    // Traer todas las imágenes principales en UNA sola query (evita N+1)
+    const productIds = [...new Set(cartResult.rows.map((r) => r.product_id))];
+    const imagesResult = productIds.length
+      ? await pool.query(
+          `SELECT DISTINCT ON (product_id) product_id, image_url
+           FROM product_images
+           WHERE product_id = ANY($1) AND is_primary = true
+           ORDER BY product_id`,
+          [productIds]
+        )
+      : { rows: [] };
+    const imageByProduct = new Map(imagesResult.rows.map((r) => [r.product_id, r.image_url]));
 
-        const subtotal = parseFloat(item.unit_price) * item.quantity;
-
-        return {
-          ...item,
-          image_url: imageResult.rows[0]?.image_url || null,
-          subtotal: subtotal.toFixed(2)
-        };
-      })
-    );
+    // Calcular subtotal y adjuntar la imagen principal
+    const cartItems = cartResult.rows.map((item) => {
+      const subtotal = parseFloat(item.unit_price) * item.quantity;
+      return {
+        ...item,
+        image_url: imageByProduct.get(item.product_id) || null,
+        subtotal: subtotal.toFixed(2)
+      };
+    });
 
     // Calcular total del carrito
     const total = cartItems.reduce((sum, item) => sum + parseFloat(item.subtotal), 0);
