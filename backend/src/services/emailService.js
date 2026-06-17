@@ -4,6 +4,7 @@
 
 const { Resend } = require('resend');
 const pool = require('../config/database');
+const formatMoney = require('../utils/formatMoney');
 
 // Resend vía API HTTP (puerto 443). Railway bloquea los puertos SMTP salientes,
 // por eso no usamos nodemailer. Reutiliza EMAIL_PASSWORD si no hay RESEND_API_KEY
@@ -101,15 +102,15 @@ const sendOrderAcknowledgement = async (orderId) => {
                   <td>${item.sku}</td>
                   <td>${item.product_name}</td>
                   <td style="text-align: center;">${item.quantity_requested}</td>
-                  <td style="text-align: right;">$${item.unit_price_initial.toFixed(2)}</td>
-                  <td style="text-align: right;">$${item.line_total_initial.toFixed(2)}</td>
+                  <td style="text-align: right;">$${formatMoney(item.unit_price_initial)}</td>
+                  <td style="text-align: right;">$${formatMoney(item.line_total_initial)}</td>
                 </tr>
               `).join('')}
             </tbody>
             <tfoot>
               <tr style="background-color: #ecf0f1;">
                 <td colspan="4" style="text-align: right; font-weight: bold;">Subtotal:</td>
-                <td style="text-align: right; font-weight: bold;">$${order.subtotal_initial.toFixed(2)}</td>
+                <td style="text-align: right; font-weight: bold;">$${formatMoney(order.subtotal_initial)}</td>
               </tr>
             </tfoot>
           </table>
@@ -242,15 +243,15 @@ const sendOrderConfirmation = async (orderId) => {
                   <td>${item.sku}</td>
                   <td>${item.product_name}</td>
                   <td style="text-align: center;">${item.quantity_confirmed || item.quantity_requested}</td>
-                  <td style="text-align: right;">$${(item.unit_price_confirmed || item.unit_price_initial).toFixed(2)}</td>
-                  <td style="text-align: right;">$${(item.line_total_confirmed || item.line_total_initial).toFixed(2)}</td>
+                  <td style="text-align: right;">$${formatMoney(item.unit_price_confirmed || item.unit_price_initial)}</td>
+                  <td style="text-align: right;">$${formatMoney(item.line_total_confirmed || item.line_total_initial)}</td>
                 </tr>
               `).join('')}
             </tbody>
             <tfoot>
               <tr style="background-color: #ecf0f1;">
                 <td colspan="5" style="text-align: right; font-weight: bold;">Total:</td>
-                <td style="text-align: right; font-weight: bold;">$${(order.subtotal_confirmed || order.subtotal_initial).toFixed(2)}</td>
+                <td style="text-align: right; font-weight: bold;">$${formatMoney(order.subtotal_confirmed || order.subtotal_initial)}</td>
               </tr>
             </tfoot>
           </table>
