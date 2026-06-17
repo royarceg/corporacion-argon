@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, useCallback, useMemo, ReactNode } from "react";
 import { User, authService } from "@/services/authService";
 
 interface AuthContextType {
@@ -32,15 +32,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setLoading(false);
   }, []);
 
-  async function login(username: string, password: string) {
+  const login = useCallback(async (username: string, password: string) => {
     // El backend setea la cookie httpOnly con el JWT; aquí solo guardamos el user (UI).
     const data = await authService.login(username, password);
     localStorage.setItem("user", JSON.stringify(data.user));
     setUser(data.user);
     return { user: data.user };
-  }
+  }, []);
 
-  async function logout() {
+  const logout = useCallback(async () => {
     try {
       await authService.logout(); // el backend limpia la cookie httpOnly
     } catch {
@@ -49,19 +49,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem("user");
     setUser(null);
     window.location.href = "/login";
-  }
+  }, []);
 
-  const isAuthenticated = () => !!user;
-  const isAdmin = () => user?.role === "master_admin";
-  const isClient = () => user?.role === "client_user";
+  const isAuthenticated = useCallback(() => !!user, [user]);
+  const isAdmin = useCallback(() => user?.role === "master_admin", [user]);
+  const isClient = useCallback(() => user?.role === "client_user", [user]);
 
-  return (
-    <AuthContext.Provider
-      value={{ user, loading, login, logout, isAuthenticated, isAdmin, isClient }}
-    >
-      {children}
-    </AuthContext.Provider>
+  const value = useMemo(
+    () => ({ user, loading, login, logout, isAuthenticated, isAdmin, isClient }),
+    [user, loading, login, logout, isAuthenticated, isAdmin, isClient]
   );
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {
