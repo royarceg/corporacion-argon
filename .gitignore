@@ -7,7 +7,7 @@ node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-package-lock.json
+# package-lock.json se versiona para builds reproducibles y que los fixes de seguridad lleguen a prod
 
 # Variables de entorno (NUNCA subir)
 .env
