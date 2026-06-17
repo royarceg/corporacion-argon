@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || "https://backend-production-e716.up.railway.app/api",
+  baseURL: process.env.NEXT_PUBLIC_API_URL || "https://api.corporacionargon.com/api",
   headers: { "Content-Type": "application/json" },
   withCredentials: true, // envía/recibe la cookie httpOnly de sesión (el JWT ya no vive en JS)
 });

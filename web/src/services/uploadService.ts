@@ -1,17 +1,13 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://backend-production-e716.up.railway.app/api";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://api.corporacionargon.com/api";
 
-function authHeader(): Record<string, string> {
-  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-  return token ? { Authorization: `Bearer ${token}` } : {};
-}
-
+// La auth viaja en la cookie httpOnly (credentials: "include"), no en un header.
 export const uploadService = {
   uploadImages: async (files: File[]): Promise<{ url: string; public_id: string }[]> => {
     const formData = new FormData();
     files.forEach((f) => formData.append("files", f));
     const res = await fetch(`${API_URL}/upload/images`, {
       method: "POST",
-      headers: authHeader(),
+      credentials: "include",
       body: formData,
     });
     if (!res.ok) throw await res.json();
@@ -24,7 +20,7 @@ export const uploadService = {
     files.forEach((f) => formData.append("files", f));
     const res = await fetch(`${API_URL}/upload/videos`, {
       method: "POST",
-      headers: authHeader(),
+      credentials: "include",
       body: formData,
     });
     if (!res.ok) throw await res.json();
@@ -35,7 +31,8 @@ export const uploadService = {
   deleteFile: async (publicId: string, resourceType: string = "image"): Promise<void> => {
     const res = await fetch(`${API_URL}/upload/file`, {
       method: "DELETE",
-      headers: { "Content-Type": "application/json", ...authHeader() },
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ public_id: publicId, resource_type: resourceType }),
     });
     if (!res.ok) throw await res.json();
