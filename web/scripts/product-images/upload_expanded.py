@@ -15,25 +15,24 @@ import cloudinary
 import cloudinary.uploader
 import psycopg2
 
-# ── Cloudinary ──────────────────────────────────────────────────────────────
+# ── Cloudinary (credenciales desde el entorno) ───────────────────────────────
 cloudinary.config(
-    cloud_name="dj0i57kxn",
-    api_key="248317427133951",
-    api_secret="fIPY6XcjQqaoWkOlpkwb09xVt5k",
+    cloud_name=os.environ["CLOUDINARY_CLOUD_NAME"],
+    api_key=os.environ["CLOUDINARY_API_KEY"],
+    api_secret=os.environ["CLOUDINARY_API_SECRET"],
 )
 
-# ── Base de datos ────────────────────────────────────────────────────────────
-conn = psycopg2.connect(
-    host="gondola.proxy.rlwy.net",
-    port=24536,
-    dbname="railway",
-    user="postgres",
-    password="dRtMUdZXhodgRhxHDtAeoBIHZsuLGiLK",
-)
+# ── Base de datos (DATABASE_URL desde el entorno, igual que el backend) ───────
+# Ej: export DATABASE_URL="postgresql://postgres:PASS@host:port/railway"
+conn = psycopg2.connect(os.environ["DATABASE_URL"])
 cur = conn.cursor()
 
-# ── Carpeta de imágenes expandidas ───────────────────────────────────────────
-EXPANDED_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "expanded")
+# ── Carpeta de imágenes expandidas (configurable con PRODUCT_IMAGES_DIR) ──────
+BASE_DIR = os.environ.get(
+    "PRODUCT_IMAGES_DIR",
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "public", "products"),
+)
+EXPANDED_DIR = os.path.join(BASE_DIR, "expanded")
 
 # ── Obtener todos los registros de imágenes ──────────────────────────────────
 cur.execute("""

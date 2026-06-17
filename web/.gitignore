@@ -23,3 +23,7 @@ public/products/expanded/
 *.html
 !src/**/*.html
 .vercel
+
+# Artefactos de tooling local
+src/.agents/
+src/skills-lock.json

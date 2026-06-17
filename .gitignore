@@ -74,3 +74,12 @@ FUZZY_SEARCH_DOCS.md
 FUZZY_SEARCH_IMPLEMENTADO.md
 CLOUDINARY_SETUP.md
 .vercel
+
+# Exports de datos y comprimidos (datos sensibles, NUNCA subir)
+*.xlsx
+*.zip
+data/inventario-privado/
+
+# Artefactos de tooling local
+web/src/.agents/
+web/src/skills-lock.json
