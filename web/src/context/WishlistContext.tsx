@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState, ReactNode, useCallback } from "react";
+import { createContext, useContext, useEffect, useState, ReactNode, useCallback, useMemo } from "react";
 import { wishlistService } from "@/services/wishlistService";
 import { useAuth } from "./AuthContext";
 
@@ -30,33 +30,41 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => { refresh(); }, [refresh]);
 
-  async function toggle(product_id: number) {
-    if (wishlistedIds.has(product_id)) {
-      await wishlistService.remove(product_id);
+  const toggle = useCallback(async (product_id: number) => {
+    const wasWishlisted = wishlistedIds.has(product_id);
+    // Update optimista (UI instantánea)
+    setWishlistedIds((prev) => {
+      const next = new Set(prev);
+      if (wasWishlisted) next.delete(product_id);
+      else next.add(product_id);
+      return next;
+    });
+    try {
+      if (wasWishlisted) await wishlistService.remove(product_id);
+      else await wishlistService.add(product_id);
+    } catch (e) {
+      // Si el servicio falla, revertimos el cambio optimista (no falla en silencio)
       setWishlistedIds((prev) => {
         const next = new Set(prev);
-        next.delete(product_id);
+        if (wasWishlisted) next.add(product_id);
+        else next.delete(product_id);
         return next;
       });
-    } else {
-      await wishlistService.add(product_id);
-      setWishlistedIds((prev) => new Set([...prev, product_id]));
+      console.error("No se pudo actualizar la wishlist:", e);
     }
-  }
+  }, [wishlistedIds]);
 
-  const isWishlisted = (product_id: number) => wishlistedIds.has(product_id);
-
-  return (
-    <WishlistContext.Provider value={{
-      wishlistedIds,
-      count: wishlistedIds.size,
-      toggle,
-      isWishlisted,
-      refresh,
-    }}>
-      {children}
-    </WishlistContext.Provider>
+  const isWishlisted = useCallback(
+    (product_id: number) => wishlistedIds.has(product_id),
+    [wishlistedIds]
   );
+
+  const value = useMemo(
+    () => ({ wishlistedIds, count: wishlistedIds.size, toggle, isWishlisted, refresh }),
+    [wishlistedIds, toggle, isWishlisted, refresh]
+  );
+
+  return <WishlistContext.Provider value={value}>{children}</WishlistContext.Provider>;
 }
 
 export function useWishlist() {
