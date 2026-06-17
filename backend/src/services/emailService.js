@@ -2,39 +2,19 @@
 // SERVICIO DE ENVÍO DE EMAILS
 // =====================================================
 
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 const pool = require('../config/database');
 
-// Verificar si las variables de email están configuradas
-const isEmailConfigured = () => {
-  return process.env.EMAIL_HOST && 
-         process.env.EMAIL_PORT && 
-         process.env.EMAIL_USER && 
-         process.env.EMAIL_PASSWORD;
-};
+// Resend vía API HTTP (puerto 443). Railway bloquea los puertos SMTP salientes,
+// por eso no usamos nodemailer. Reutiliza EMAIL_PASSWORD si no hay RESEND_API_KEY
+// (ambas guardan la API key re_...).
+const RESEND_API_KEY = process.env.RESEND_API_KEY || process.env.EMAIL_PASSWORD;
+const EMAIL_FROM = process.env.EMAIL_FROM || 'noreply@corporacionargon.com';
 
-// Configurar transportador de email solo si está configurado
-let transporter = null;
+const resend = RESEND_API_KEY ? new Resend(RESEND_API_KEY) : null;
 
-if (isEmailConfigured()) {
-  transporter = nodemailer.createTransport({
-    host: process.env.EMAIL_HOST,
-    port: process.env.EMAIL_PORT,
-    secure: false, // true para 465, false para otros puertos
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASSWORD,
-    },
-  });
-
-  // Verificar configuración de email
-  transporter.verify((error, success) => {
-    if (error) {
-      console.error('⚠️  Error en configuración de email:', error.message);
-    } else {
-      console.log('✅ Servidor de email listo para enviar mensajes');
-    }
-  });
+if (resend) {
+  console.log('✅ Resend configurado - emails vía API HTTP');
 } else {
   console.log('⚠️  Email no configurado - Los emails no se enviarán');
 }
@@ -45,7 +25,7 @@ if (isEmailConfigured()) {
 const sendOrderAcknowledgement = async (orderId) => {
   try {
     // Verificar si email está configurado
-    if (!transporter) {
+    if (!resend) {
       console.log('⚠️  Email no configurado - Saltando envío de Order Acknowledgement');
       return { success: false, message: 'Email no configurado' };
     }
@@ -158,7 +138,7 @@ const sendOrderAcknowledgement = async (orderId) => {
 
     // Enviar email
     const mailOptions = {
-      from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
+      from: EMAIL_FROM,
       to: order.user_email,
       subject: subject,
       html: htmlContent,
@@ -170,10 +150,11 @@ const sendOrderAcknowledgement = async (orderId) => {
       // ]
     };
 
-    const info = await transporter.sendMail(mailOptions);
-    console.log('Email enviado:', info.messageId);
-    
-    return { success: true, messageId: info.messageId };
+    const { data, error } = await resend.emails.send(mailOptions);
+    if (error) throw new Error(error.message || JSON.stringify(error));
+    console.log('Email enviado:', data?.id);
+
+    return { success: true, messageId: data?.id };
 
   } catch (error) {
     console.error('Error enviando Order Acknowledgement:', error);
@@ -187,7 +168,7 @@ const sendOrderAcknowledgement = async (orderId) => {
 const sendOrderConfirmation = async (orderId) => {
   try {
     // Verificar si email está configurado
-    if (!transporter) {
+    if (!resend) {
       console.log('⚠️  Email no configurado - Saltando envío de Order Confirmation');
       return { success: false, message: 'Email no configurado' };
     }
@@ -339,7 +320,7 @@ const sendOrderConfirmation = async (orderId) => {
 
     // Enviar email
     const mailOptions = {
-      from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
+      from: EMAIL_FROM,
       to: order.user_email,
       subject: subject,
       html: htmlContent,
@@ -351,10 +332,11 @@ const sendOrderConfirmation = async (orderId) => {
       // ]
     };
 
-    const info = await transporter.sendMail(mailOptions);
-    console.log('Email enviado:', info.messageId);
-    
-    return { success: true, messageId: info.messageId };
+    const { data, error } = await resend.emails.send(mailOptions);
+    if (error) throw new Error(error.message || JSON.stringify(error));
+    console.log('Email enviado:', data?.id);
+
+    return { success: true, messageId: data?.id };
 
   } catch (error) {
     console.error('Error enviando Order Confirmation:', error);
@@ -367,7 +349,7 @@ const sendOrderConfirmation = async (orderId) => {
 // =====================================================
 const sendPasswordReset = async (toEmail, resetLink, userName) => {
   try {
-    if (!transporter) {
+    if (!resend) {
       console.log('⚠️  Email no configurado - No se pudo enviar el reset de contraseña');
       return { success: false, message: 'Email no configurado' };
     }
@@ -395,14 +377,15 @@ const sendPasswordReset = async (toEmail, resetLink, userName) => {
       </html>
     `;
 
-    const info = await transporter.sendMail({
-      from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
+    const { data, error } = await resend.emails.send({
+      from: EMAIL_FROM,
       to: toEmail,
       subject,
       html: htmlContent,
     });
-    console.log('Email de reset enviado:', info.messageId);
-    return { success: true, messageId: info.messageId };
+    if (error) throw new Error(error.message || JSON.stringify(error));
+    console.log('Email de reset enviado:', data?.id);
+    return { success: true, messageId: data?.id };
 
   } catch (error) {
     console.error('Error enviando reset de contraseña:', error);

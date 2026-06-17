@@ -78,7 +78,9 @@ CLOUDINARY_SETUP.md
 # Exports de datos y comprimidos (datos sensibles, NUNCA subir)
 *.xlsx
 *.zip
+*.sql
 data/inventario-privado/
+backups/
 
 # Artefactos de tooling local
 web/src/.agents/

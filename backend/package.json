@@ -28,7 +28,8 @@
     "multer": "^2.0.2",
     "nodemailer": "^6.9.7",
     "pdfkit": "^0.13.0",
-    "pg": "^8.11.3"
+    "pg": "^8.11.3",
+    "resend": "^6.12.4"
   },
   "devDependencies": {
     "jest": "^30.4.2",

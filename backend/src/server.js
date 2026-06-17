@@ -9,6 +9,10 @@ const rateLimit = require('express-rate-limit');
 require('dotenv').config();
 
 const app = express();
+
+// Railway (y otros PaaS) ponen un proxy delante. Sin esto, express-rate-limit
+// no identifica bien la IP del cliente y lanza ValidationError por X-Forwarded-For.
+app.set('trust proxy', 1);
 const PORT = process.env.PORT || 5000;
 
 // =====================================================
