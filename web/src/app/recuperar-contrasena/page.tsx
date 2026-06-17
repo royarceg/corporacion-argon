@@ -9,7 +9,6 @@ export default function RecuperarContrasenaPage() {
   const [username, setUsername] = useState("");
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState<Step>("form");
-  const [resetLink, setResetLink] = useState("");
   const [error, setError] = useState("");
 
   async function handleSubmit(e: React.FormEvent) {
@@ -24,10 +23,6 @@ export default function RecuperarContrasenaPage() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Error");
-      if (data.token) {
-        const origin = typeof window !== "undefined" ? window.location.origin : "";
-        setResetLink(`${origin}/recuperar-contrasena/confirmar?token=${data.token}`);
-      }
       setStep("sent");
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Error al procesar la solicitud.");
@@ -55,7 +50,7 @@ export default function RecuperarContrasenaPage() {
                 Recuperar contraseña
               </h1>
               <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.5)", margin: "0 0 32px 0", lineHeight: 1.6 }}>
-                Ingresá tu nombre de usuario y te generaremos un enlace para restablecer tu contraseña.
+                Ingresá tu nombre de usuario y te enviaremos un enlace a tu correo para restablecer tu contraseña.
               </p>
 
               <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
@@ -83,7 +78,7 @@ export default function RecuperarContrasenaPage() {
                   disabled={loading}
                   style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", fontWeight: 500, color: "#ffffff", backgroundColor: loading ? "rgba(0,0,0,0.4)" : "#000000", border: "none", padding: "14px", cursor: loading ? "not-allowed" : "pointer", letterSpacing: "0.06em", textTransform: "uppercase", width: "100%", marginTop: "4px" }}
                 >
-                  {loading ? "Procesando..." : "Generar Enlace"}
+                  {loading ? "Procesando..." : "Enviar enlace"}
                 </button>
               </form>
 
@@ -100,28 +95,17 @@ export default function RecuperarContrasenaPage() {
                 <polyline points="22 4 12 14.01 9 11.01" />
               </svg>
               <h1 style={{ fontFamily: "StyreneA, sans-serif", fontSize: "20px", fontWeight: 400, color: "#000000", margin: "0 0 12px 0", letterSpacing: "-0.02em" }}>
-                Enlace generado
+                Revisá tu correo
               </h1>
               <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", color: "rgba(0,0,0,0.5)", lineHeight: 1.6, margin: "0 0 24px 0" }}>
-                Copiá el enlace de abajo y usalo para crear tu nueva contraseña. El enlace expira en 1 hora.
+                Si el usuario existe, te enviamos un enlace a tu correo para restablecer la contraseña. El enlace expira en 1 hora. Revisá también la carpeta de spam por si acaso.
               </p>
 
-              {resetLink && (
-                <div style={{ backgroundColor: "#f5f4f4", padding: "16px", marginBottom: "24px", wordBreak: "break-all", textAlign: "left" }}>
-                  <p style={{ fontFamily: "StyreneA, sans-serif", fontSize: "11px", color: "rgba(0,0,0,0.45)", margin: "0 0 8px 0", textTransform: "uppercase", letterSpacing: "0.06em" }}>
-                    Tu enlace de recuperación:
-                  </p>
-                  <a href={resetLink} style={{ fontFamily: "StyreneA, sans-serif", fontSize: "12px", color: "#000", wordBreak: "break-all" }}>
-                    {resetLink}
-                  </a>
-                </div>
-              )}
-
               <a
-                href={resetLink || "/login"}
+                href="/login"
                 style={{ fontFamily: "StyreneA, sans-serif", fontSize: "13px", fontWeight: 500, color: "#ffffff", backgroundColor: "#000000", textDecoration: "none", padding: "14px 32px", display: "inline-block", letterSpacing: "0.04em" }}
               >
-                Continuar al Enlace
+                Volver al inicio de sesión
               </a>
             </div>
           )}

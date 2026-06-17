@@ -362,7 +362,56 @@ const sendOrderConfirmation = async (orderId) => {
   }
 };
 
+// =====================================================
+// ENVIAR RESET DE CONTRASEÑA
+// =====================================================
+const sendPasswordReset = async (toEmail, resetLink, userName) => {
+  try {
+    if (!transporter) {
+      console.log('⚠️  Email no configurado - No se pudo enviar el reset de contraseña');
+      return { success: false, message: 'Email no configurado' };
+    }
+
+    const subject = 'Restablecé tu contraseña — Corporación ARGON';
+    const htmlContent = `
+      <!DOCTYPE html>
+      <html>
+        <body style="font-family: Arial, sans-serif; color: #1a1a1a; max-width: 560px; margin: 0 auto;">
+          <div style="background:#000; color:#fff; padding: 24px 32px;">
+            <h1 style="margin:0; font-size:22px; letter-spacing:1px;">CORPORACIÓN ARGON.</h1>
+          </div>
+          <div style="padding: 32px;">
+            <p>Hola${userName ? ' ' + userName : ''},</p>
+            <p>Recibimos una solicitud para restablecer la contraseña de tu cuenta. Hacé clic en el botón para crear una nueva contraseña. El enlace expira en 1 hora.</p>
+            <p style="text-align:center; margin: 32px 0;">
+              <a href="${resetLink}" style="background:#000; color:#fff; text-decoration:none; padding: 14px 28px; display:inline-block; letter-spacing:0.04em;">Restablecer contraseña</a>
+            </p>
+            <p style="font-size:12px; color:#888;">Si vos no solicitaste esto, ignorá este correo — tu contraseña no cambiará.</p>
+            <p style="font-size:12px; color:#888; word-break:break-all;">O copiá este enlace en tu navegador:<br>${resetLink}</p>
+          </div>
+          <hr style="border:none; border-top:1px solid #ddd; margin: 0;">
+          <p style="color:#aaa; font-size:11px; padding: 16px 32px;">Este es un mensaje automático, por favor no respondas directamente a este correo.</p>
+        </body>
+      </html>
+    `;
+
+    const info = await transporter.sendMail({
+      from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
+      to: toEmail,
+      subject,
+      html: htmlContent,
+    });
+    console.log('Email de reset enviado:', info.messageId);
+    return { success: true, messageId: info.messageId };
+
+  } catch (error) {
+    console.error('Error enviando reset de contraseña:', error);
+    throw error;
+  }
+};
+
 module.exports = {
   sendOrderAcknowledgement,
-  sendOrderConfirmation
+  sendOrderConfirmation,
+  sendPasswordReset
 };

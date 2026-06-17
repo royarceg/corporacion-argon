@@ -77,6 +77,21 @@ const loginLimiter = rateLimit({
 // Aplicar limitador solo a la ruta de login
 app.use('/api/auth/login', loginLimiter);
 
+// Limitador para recuperación de contraseña: máximo 5 solicitudes por 15 minutos por IP
+const resetLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutos
+  max: 5,
+  message: {
+    error: 'Demasiadas solicitudes. Intenta de nuevo en unos minutos.'
+  },
+  standardHeaders: true,
+  legacyHeaders: false
+});
+
+// Aplicar a las rutas de recuperación de contraseña
+app.use('/api/auth/request-reset', resetLimiter);
+app.use('/api/auth/reset-password', resetLimiter);
+
 // =====================================================
 // RUTAS
 // =====================================================

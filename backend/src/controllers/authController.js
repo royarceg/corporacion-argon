@@ -5,6 +5,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const pool = require('../config/database');
+const emailService = require('../services/emailService');
 const {
   validateRequired,
   validateEmail,
@@ -202,16 +203,29 @@ const requestReset = async (req, res) => {
     }
 
     const result = await pool.query(
-      'SELECT id, user_name, active FROM users WHERE user_name = $1',
+      'SELECT id, user_name, email, active FROM users WHERE user_name = $1',
       [username.trim()]
     );
 
-    // Respuesta genérica para no revelar si el usuario existe
+    // Respuesta genérica SIEMPRE — no revela si el usuario existe ni el resultado del envío
+    const genericResponse = {
+      success: true,
+      message: 'Si el usuario existe, te enviamos instrucciones a tu correo.',
+    };
+
+    // Usuario inexistente o inactivo → respuesta genérica, sin token, sin email
     if (result.rows.length === 0 || !result.rows[0].active) {
-      return res.json({ success: true, message: 'Si el usuario existe, recibirás instrucciones.' });
+      return res.json(genericResponse);
     }
 
     const user = result.rows[0];
+
+    // Sin email registrado no podemos enviar el enlace (el admin lo resetea manualmente)
+    if (!user.email) {
+      console.warn(`requestReset: usuario ${user.user_name} (id ${user.id}) sin email; reset por correo no enviado.`);
+      return res.json(genericResponse);
+    }
+
     const token = crypto.randomBytes(32).toString('hex');
     const expires = new Date(Date.now() + 3600 * 1000); // 1 hora
 
@@ -220,7 +234,18 @@ const requestReset = async (req, res) => {
       [token, expires, user.id]
     );
 
-    res.json({ success: true, token, message: 'Token generado correctamente.' });
+    // Construir el enlace al frontend y enviarlo por correo (NUNCA en la respuesta)
+    const baseUrl = (process.env.FRONTEND_URL || '').replace(/\/$/, '');
+    const resetLink = `${baseUrl}/recuperar-contrasena/confirmar?token=${token}`;
+
+    try {
+      await emailService.sendPasswordReset(user.email, resetLink, user.user_name);
+    } catch (mailErr) {
+      // No filtramos el fallo al cliente; el token ya quedó guardado y el admin puede reintentar
+      console.error('requestReset: fallo al enviar el email de reset:', mailErr.message);
+    }
+
+    return res.json(genericResponse);
 
   } catch (error) {
     console.error('Error en requestReset:', error);
