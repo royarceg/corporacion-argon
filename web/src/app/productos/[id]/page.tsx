@@ -232,7 +232,7 @@ export default function ProductDetailPage() {
           <div ref={imagesRef} className="pdp-images" style={{ opacity: 0 }}>
             {images.length > 0 ? images.map((img, i) => (
               <div
-                key={i}
+                key={img ?? i}
                 style={{
                   width: "100%",
                   aspectRatio: "3/4",

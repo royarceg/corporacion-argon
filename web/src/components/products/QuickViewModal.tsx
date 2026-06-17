@@ -234,7 +234,7 @@ export default function QuickViewModal({ product: initialProduct, onClose }: Pro
             >
               {images.map((img, i) => (
                 <div
-                  key={i}
+                  key={img ?? i}
                   onClick={() => setSelectedImage(i)}
                   style={{
                     width: "44px",

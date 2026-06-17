@@ -271,7 +271,7 @@ function ProductEditModal({ product, isCreate, existingCategories, onClose, onSa
               <p style={labelStyle}>Imágenes actuales</p>
               <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
                 {existingImages.map((url, i) => (
-                  <div key={i} style={{ position: "relative", width: "80px", height: "80px", backgroundColor: "#f5f4f4", borderRadius: "4px", overflow: "hidden" }}>
+                  <div key={url ?? i} style={{ position: "relative", width: "80px", height: "80px", backgroundColor: "#f5f4f4", borderRadius: "4px", overflow: "hidden" }}>
                     <img src={url} alt="" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
                     <button
                       onClick={() => setExistingImages((imgs) => imgs.filter((_, j) => j !== i))}
@@ -298,7 +298,7 @@ function ProductEditModal({ product, isCreate, existingCategories, onClose, onSa
               <p style={labelStyle}>Videos actuales ({existingVideos.length})</p>
               <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
                 {existingVideos.map((url, i) => (
-                  <div key={i} style={{ position: "relative" }}>
+                  <div key={url ?? i} style={{ position: "relative" }}>
                     <video src={url} style={{ width: "120px", height: "80px", objectFit: "cover", borderRadius: "4px", backgroundColor: "#000" }} />
                     <button
                       onClick={() => setExistingVideos((vids) => vids.filter((_, j) => j !== i))}

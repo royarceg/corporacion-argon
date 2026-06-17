@@ -96,7 +96,7 @@ function ProductosContent() {
     }
 
     return list;
-  }, [products, searchQuery, wishlistedIds, activeCategory, activeColors, activeSizes, sort]);
+  }, [products, searchQuery, activeCategory, activeColors, activeSizes, sort]);
 
   const sortLabels: Record<SortOption, string> = {
     featured: "Featured",
