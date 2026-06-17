@@ -54,9 +54,12 @@ const createOrder = async (req, res) => {
     // Iniciar transacción
     await client.query('BEGIN');
 
-    // Generar número de orden por cliente (prefijo desde DB)
+    // Generar número de orden por cliente (prefijo desde DB).
+    // FOR UPDATE bloquea la fila del cliente: dos órdenes simultáneas del mismo
+    // cliente se serializan, evitando que ambas lean el mismo COUNT y generen
+    // el mismo order_number (race condition).
     const prefixResult = await client.query(
-      'SELECT order_prefix FROM clients WHERE id = $1',
+      'SELECT order_prefix FROM clients WHERE id = $1 FOR UPDATE',
       [client_id]
     );
     const prefix = prefixResult.rows[0]?.order_prefix || 'ORD';
