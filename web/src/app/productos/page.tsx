@@ -6,7 +6,8 @@ import { animate, stagger } from "animejs";
 import { colorToHex } from "@/utils/colorToHex";
 import { fuzzyFilter } from "@/utils/fuzzySearch";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
-import { productService, ApiProduct } from "@/services/productService";
+import { useProductsData } from "@/hooks/useProductsData";
+import { ApiProduct } from "@/services/productService";
 import AnnouncementBar from "@/components/layout/AnnouncementBar";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -33,8 +34,7 @@ function ProductosContent() {
   const searchQuery = searchParams.get("q") ?? "";
   const catParam = searchParams.get("cat") ?? "";
 
-  const [products, setProducts] = useState<ApiProduct[]>([]);
-  const [fetching, setFetching] = useState(true);
+  const { products, fetching } = useProductsData(loading, isAuthenticated, isAdmin);
   const [activeCategory, setActiveCategory] = useState(catParam || "All");
   const [sort, setSort] = useState<SortOption>("featured");
   const [sortOpen, setSortOpen] = useState(false);
@@ -49,16 +49,6 @@ function ProductosContent() {
   useEffect(() => {
     setActiveCategory(catParam || "All");
   }, [catParam]);
-
-  useEffect(() => {
-    if (!loading && isAuthenticated()) {
-      const fetch = isAdmin() ? productService.getAllAdmin() : productService.getProducts();
-      fetch
-        .then(setProducts)
-        .catch(console.error)
-        .finally(() => setFetching(false));
-    }
-  }, [loading, isAuthenticated]);
 
   const categories = useMemo(() => {
     const cats = Array.from(new Set(products.map((p) => p.category)));
