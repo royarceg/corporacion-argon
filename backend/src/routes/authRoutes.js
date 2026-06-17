@@ -24,6 +24,10 @@ router.post('/request-reset', requestReset);
 // Establecer nueva contraseña con token
 router.post('/reset-password', resetPassword);
 
+// POST /api/auth/logout
+// Cerrar sesión (limpiar la cookie httpOnly)
+router.post('/logout', authController.logout);
+
 // =====================================================
 // RUTAS PROTEGIDAS (requieren autenticación)
 // =====================================================

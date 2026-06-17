@@ -6,20 +6,23 @@ const jwt = require('jsonwebtoken');
 
 // Verificar si el usuario tiene un token válido
 const verifyToken = (req, res, next) => {
-  // 1. Buscar el token en los headers
-  const token = req.headers['authorization'];
+  // 1. Buscar el token: primero la cookie httpOnly, luego el header Authorization
+  //    (el header se mantiene por compatibilidad con clientes API / transición)
+  const cookieToken = req.cookies && req.cookies.token;
+  const headerToken = req.headers['authorization'];
+  const rawToken = cookieToken || headerToken;
 
   // Si no hay token, rechazar
-  if (!token) {
-    return res.status(401).json({ 
-      error: 'Acceso denegado. No hay token.' 
+  if (!rawToken) {
+    return res.status(401).json({
+      error: 'Acceso denegado. No hay token.'
     });
   }
 
   try {
-    // 2. Remover la palabra "Bearer" del token
+    // 2. Remover la palabra "Bearer" si viene del header
     // Ejemplo: "Bearer abc123xyz" -> "abc123xyz"
-    const tokenWithoutBearer = token.replace('Bearer ', '');
+    const tokenWithoutBearer = rawToken.replace('Bearer ', '');
 
     // 3. Verificar que el token sea válido
     const decoded = jwt.verify(tokenWithoutBearer, process.env.JWT_SECRET);

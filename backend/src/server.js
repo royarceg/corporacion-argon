@@ -6,6 +6,7 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const cookieParser = require('cookie-parser');
 require('dotenv').config();
 
 const app = express();
@@ -59,6 +60,9 @@ app.use(cors({
 
 // Permite recibir JSON en las peticiones
 app.use(express.json());
+
+// Parsear cookies (necesario para leer la cookie httpOnly de sesión)
+app.use(cookieParser());
 
 // Permite recibir datos de formularios
 app.use(express.urlencoded({ extended: true }));

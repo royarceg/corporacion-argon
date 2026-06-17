@@ -10,12 +10,13 @@ export interface User {
 }
 
 export interface LoginResponse {
-  token: string;
+  success: boolean;
   user: User;
 }
 
 export const authService = {
   async login(username: string, password: string): Promise<LoginResponse> {
+    // El backend setea la cookie httpOnly con el JWT; aquí solo recibimos el user.
     const { data } = await api.post<LoginResponse>("/auth/login", {
       username,
       password,
@@ -26,5 +27,10 @@ export const authService = {
   async verify(): Promise<User> {
     const { data } = await api.get<User>("/auth/verify");
     return data;
+  },
+
+  async logout(): Promise<void> {
+    // El backend limpia la cookie httpOnly
+    await api.post("/auth/logout");
   },
 };

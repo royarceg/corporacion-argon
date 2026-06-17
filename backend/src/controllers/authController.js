@@ -6,6 +6,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const pool = require('../config/database');
 const emailService = require('../services/emailService');
+const authCookieOptions = require('../utils/cookieOptions');
 const {
   validateRequired,
   validateEmail,
@@ -80,10 +81,12 @@ const login = async (req, res) => {
       { expiresIn: '24h' } // El token expira en 24 horas
     );
 
-    // 5. Responder con el token y datos del usuario
+    // 5. Guardar el token en una cookie httpOnly (no accesible por JS) y responder
+    //    Ya NO devolvemos el token en el body: la cookie es la credencial.
+    res.cookie('token', token, authCookieOptions());
+
     res.json({
       success: true,
-      token,
       user: {
         id: user.id,
         user_name: user.user_name,
@@ -292,10 +295,24 @@ const resetPassword = async (req, res) => {
   }
 };
 
+// =====================================================
+// LOGOUT - Cerrar sesión (limpiar la cookie httpOnly)
+// =====================================================
+const logout = (req, res) => {
+  res.clearCookie('token', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    path: '/',
+  });
+  res.json({ success: true, message: 'Sesión cerrada' });
+};
+
 module.exports = {
   login,
   register,
   verifyTokenRoute,
   requestReset,
   resetPassword,
+  logout,
 };
