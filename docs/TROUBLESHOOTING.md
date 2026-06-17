@@ -114,7 +114,7 @@ Verifica las credenciales en `backend/.env`:
 ```
 DB_HOST=localhost
 DB_PORT=5432
-DB_NAME=argom_db
+DB_NAME=argon_db
 DB_USER=postgres
 DB_PASSWORD=tu_password
 ```

@@ -1,7 +1,7 @@
 {
-  "name": "corporacion-argom-backend",
+  "name": "corporacion-argon-backend",
   "version": "1.0.1",
-  "description": "Backend para sistema de órdenes de compra - Corporación Argom",
+  "description": "Backend para sistema de órdenes de compra - Corporación Argon",
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
@@ -13,7 +13,7 @@
     "purchase-orders",
     "b2b"
   ],
-  "author": "Corporación Argom",
+  "author": "Corporación Argon",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",

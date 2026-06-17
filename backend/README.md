@@ -1,6 +1,6 @@
-# Backend - Corporación Argom
+# Backend - Corporación Argon
 
-Sistema de gestión de órdenes de compra B2B para Corporación Argom.
+Sistema de gestión de órdenes de compra B2B para Corporación Argon.
 
 ## Tecnologías
 
@@ -33,7 +33,7 @@ cp .env.example .env
 ```
 DB_HOST=localhost
 DB_PORT=5432
-DB_NAME=corporacion_argom
+DB_NAME=corporacion_argon
 DB_USER=postgres
 DB_PASSWORD=tu_password
 JWT_SECRET=tu_clave_secreta
@@ -47,13 +47,13 @@ EMAIL_PASSWORD=tu_app_password
 psql -U postgres
 
 # Crear base de datos
-CREATE DATABASE corporacion_argom;
+CREATE DATABASE corporacion_argon;
 
 # Salir
 \q
 
 # Ejecutar el schema
-psql -U postgres -d corporacion_argom -f ../database/schema.sql
+psql -U postgres -d corporacion_argon -f ../database/schema.sql
 ```
 
 ## Ejecutar el proyecto
@@ -92,7 +92,7 @@ El servidor correrá en: `http://localhost:5000`
 Después de ejecutar el schema, tendrás estos usuarios:
 
 **Admin:**
-- Email: admin@corporacionargom.com
+- Email: admin@corporacionargon.com
 - Password: (debes cambiar el hash en la base de datos)
 
 **Clientes:**
