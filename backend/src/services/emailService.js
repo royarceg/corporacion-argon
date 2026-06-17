@@ -134,21 +134,12 @@ const sendOrderAcknowledgement = async (orderId) => {
       </html>
     `;
 
-    // TODO: Adjuntar PDF (implementar después)
-    // const pdfBuffer = await pdfService.generateOrderAcknowledgementPDF(orderId);
-
     // Enviar email
     const mailOptions = {
       from: EMAIL_FROM,
       to: order.user_email,
       subject: subject,
       html: htmlContent,
-      // attachments: [
-      //   {
-      //     filename: `Acuse_Orden_${order.order_number}.pdf`,
-      //     content: pdfBuffer
-      //   }
-      // ]
     };
 
     const { data, error } = await resend.emails.send(mailOptions);
@@ -316,21 +307,12 @@ const sendOrderConfirmation = async (orderId) => {
       </html>
     `;
 
-    // TODO: Adjuntar PDF (implementar después)
-    // const pdfBuffer = await pdfService.generateOrderConfirmationPDF(orderId);
-
     // Enviar email
     const mailOptions = {
       from: EMAIL_FROM,
       to: order.user_email,
       subject: subject,
       html: htmlContent,
-      // attachments: [
-      //   {
-      //     filename: `Confirmacion_Orden_${order.order_number}.pdf`,
-      //     content: pdfBuffer
-      //   }
-      // ]
     };
 
     const { data, error } = await resend.emails.send(mailOptions);
